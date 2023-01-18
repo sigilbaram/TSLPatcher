@@ -1,222 +1,224 @@
 #line 1 "Bioware/ERF.pm"
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::ERF; #~~~~~~~~~~~~~~~
+package Bioware::ERF;    #~~~~~~~~~~~~~~~
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #use strict;
 use File::Temp qw( tempfile );
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
-$VERSION=0.21;
+$VERSION = 0.21;
 
 #line 87
 
-@ISA    = qw(Exporter);
+@ISA = qw(Exporter);
 
 # export functions/variables
 @EXPORT = qw(  );
 
-
 # define globals (use vars)
 
 #private vars
-our %res_types =(
-0x0000 => 'res', 	#Misc. GFF resources
-0x0001 => 'bmp', 	#Microsoft Windows Bitmap
-0x0002 => 'mve',
-0x0003 => 'tga', 	#Targa Graphics Format
-0x0004 => 'wav', 	#Wave
-0x0006 => 'plt', 	#Bioware Packed Layer Texture
-0x0007 => 'ini', 	#Windows INI
-0x0008 => 'mp3', 	#MP3
-0x0009 => 'mpg', 	#MPEG
-0x000A => 'txt', 	#Text file
-0x000B => 'wma', 	#Windows Media audio?
-0x000C => 'wmv', 	#Windows Media video?
-0x000D => 'xmv',
-0x07D0 => 'plh',
-0x07D1 => 'tex',
-0x07D2 => 'mdl', 	#Model
-0x07D3 => 'thg',
-0x07D5 => 'fnt', 	#Font
-0x07D7 => 'lua',
-0x07D8 => 'slt',
-0x07D9 => 'nss', 	#NWScript source code
-0x07DA => 'ncs', 	#NWScript bytecode
-0x07DB => 'mod', 	#Module
-0x07DC => 'are', 	#Area (GFF)
-0x07DD => 'set', 	#Tileset (unused in KOTOR?)
-0x07DE => 'ifo', 	#Module information
-0x07DF => 'bic', 	#Character sheet (unused)
-0x07E0 => 'wok', 	# walk-mesh
-0x07E1 => '2da', 	#2-dimensional array
-0x07E2 => 'tlk', 	#conversation file
-0x07E6 => 'txi', 	#Texture information
-0x07E7 => 'git', 	#Dynamic area information, game instance file, all area and objects that are scriptable
-0x07E8 => 'bti',
-0x07E9 => 'uti', 	#item blueprint
-0x07EA => 'btc',
-0x07EB => 'utc', 	#Creature blueprint
-0x07ED => 'dlg', 	#Dialogue
-0x07EE => 'itp', 	#tile blueprint pallet file
-0x07EF => 'btt',
-0x07F0 => 'utt', 	#trigger blueprint
-0x07F1 => 'dds', 	#compressed texture file
-0x07F2 => 'bts',
-0x07F3 => 'uts', 	#sound blueprint
-0x07F4 => 'ltr', 	#letter combo probability info
-0x07F5 => 'gff', 	#Generic File Format
-0x07F6 => 'fac', 	#faction file
-0x07F7 => 'bte',
-0x07F8 => 'ute', 	#encounter blueprint
-0x07F9 => 'btd',
-0x07FA => 'utd', 	#door blueprint
-0x07FB => 'btp',
-0x07FC => 'utp', 	#placeable object blueprint
-0x07FD => 'dft', 	#default values file (text-ini)
-0x07FE => 'gic', 	#game instance comments
-0x07FF => 'gui', 	#GUI definition (GFF)
-0x0800 => 'css',
-0x0801 => 'ccs',
-0x0802 => 'btm',
-0x0803 => 'utm', 	#store merchant blueprint
-0x0804 => 'dwk', 	#door walkmesh
-0x0805 => 'pwk', 	#placeable object walkmesh
-0x0806 => 'btg',
-0x0807 => 'utg',
-0x0808 => 'jrl', 	#Journal
-0x0809 => 'sav', 	#Saved game (ERF)
-0x080A => 'utw', 	#waypoint blueprint
-0x080B => '4pc',
-0x080C => 'ssf', 	#sound set file
-0x080D => 'hak', 	#Hak pak (unused)
-0x080E => 'nwm',
-0x080F => 'bik', 	#movie file (bik format)
-0x0810 => 'ndb',        #script debugger file
-0x0811 => 'ptm',        #plot manager/plot instance
-0x0812 => 'ptt',        #plot wizard blueprint
-0x0BB8 => 'lyt',
-0x0BB9 => 'vis',
-0x0BBA => 'rim', 	#See RIM File Format
-0x0BBB => 'pth', 	#Path information? (GFF)
-0x0BBC => 'lip',
-0x0BBD => 'bwm',
-0x0BBE => 'txb',
-0x0BBF => 'tpc', 	#Texture
-0x0BC0 => 'mdx',
-0x0BC1 => 'rsv',
-0x0BC2 => 'sig',
-0x0BC3 => 'xbx',
-0x270D => 'erf', 	#Encapsulated Resource Format
-0x270E => 'bif',
-0x270F => 'key');
+our %res_types = (
+    0x0000 => 'res',    #Misc. GFF resources
+    0x0001 => 'bmp',    #Microsoft Windows Bitmap
+    0x0002 => 'mve',
+    0x0003 => 'tga',    #Targa Graphics Format
+    0x0004 => 'wav',    #Wave
+    0x0006 => 'plt',    #Bioware Packed Layer Texture
+    0x0007 => 'ini',    #Windows INI
+    0x0008 => 'mp3',    #MP3
+    0x0009 => 'mpg',    #MPEG
+    0x000A => 'txt',    #Text file
+    0x000B => 'wma',    #Windows Media audio?
+    0x000C => 'wmv',    #Windows Media video?
+    0x000D => 'xmv',
+    0x07D0 => 'plh',
+    0x07D1 => 'tex',
+    0x07D2 => 'mdl',    #Model
+    0x07D3 => 'thg',
+    0x07D5 => 'fnt',    #Font
+    0x07D7 => 'lua',
+    0x07D8 => 'slt',
+    0x07D9 => 'nss',    #NWScript source code
+    0x07DA => 'ncs',    #NWScript bytecode
+    0x07DB => 'mod',    #Module
+    0x07DC => 'are',    #Area (GFF)
+    0x07DD => 'set',    #Tileset (unused in KOTOR?)
+    0x07DE => 'ifo',    #Module information
+    0x07DF => 'bic',    #Character sheet (unused)
+    0x07E0 => 'wok',    # walk-mesh
+    0x07E1 => '2da',    #2-dimensional array
+    0x07E2 => 'tlk',    #conversation file
+    0x07E6 => 'txi',    #Texture information
+    0x07E7 => 'git'
+    , #Dynamic area information, game instance file, all area and objects that are scriptable
+    0x07E8 => 'bti',
+    0x07E9 => 'uti',    #item blueprint
+    0x07EA => 'btc',
+    0x07EB => 'utc',    #Creature blueprint
+    0x07ED => 'dlg',    #Dialogue
+    0x07EE => 'itp',    #tile blueprint pallet file
+    0x07EF => 'btt',
+    0x07F0 => 'utt',    #trigger blueprint
+    0x07F1 => 'dds',    #compressed texture file
+    0x07F2 => 'bts',
+    0x07F3 => 'uts',    #sound blueprint
+    0x07F4 => 'ltr',    #letter combo probability info
+    0x07F5 => 'gff',    #Generic File Format
+    0x07F6 => 'fac',    #faction file
+    0x07F7 => 'bte',
+    0x07F8 => 'ute',    #encounter blueprint
+    0x07F9 => 'btd',
+    0x07FA => 'utd',    #door blueprint
+    0x07FB => 'btp',
+    0x07FC => 'utp',    #placeable object blueprint
+    0x07FD => 'dft',    #default values file (text-ini)
+    0x07FE => 'gic',    #game instance comments
+    0x07FF => 'gui',    #GUI definition (GFF)
+    0x0800 => 'css',
+    0x0801 => 'ccs',
+    0x0802 => 'btm',
+    0x0803 => 'utm',    #store merchant blueprint
+    0x0804 => 'dwk',    #door walkmesh
+    0x0805 => 'pwk',    #placeable object walkmesh
+    0x0806 => 'btg',
+    0x0807 => 'utg',
+    0x0808 => 'jrl',    #Journal
+    0x0809 => 'sav',    #Saved game (ERF)
+    0x080A => 'utw',    #waypoint blueprint
+    0x080B => '4pc',
+    0x080C => 'ssf',    #sound set file
+    0x080D => 'hak',    #Hak pak (unused)
+    0x080E => 'nwm',
+    0x080F => 'bik',    #movie file (bik format)
+    0x0810 => 'ndb',    #script debugger file
+    0x0811 => 'ptm',    #plot manager/plot instance
+    0x0812 => 'ptt',    #plot wizard blueprint
+    0x0BB8 => 'lyt',
+    0x0BB9 => 'vis',
+    0x0BBA => 'rim',    #See RIM File Format
+    0x0BBB => 'pth',    #Path information? (GFF)
+    0x0BBC => 'lip',
+    0x0BBD => 'bwm',
+    0x0BBE => 'txb',
+    0x0BBF => 'tpc',    #Texture
+    0x0BC0 => 'mdx',
+    0x0BC1 => 'rsv',
+    0x0BC2 => 'sig',
+    0x0BC3 => 'xbx',
+    0x270D => 'erf',    #Encapsulated Resource Format
+    0x270E => 'bif',
+    0x270F => 'key'
+);
 
 my %res_types_opp = reverse %res_types;
 
-sub make_new_from_folder
-{
+sub make_new_from_folder {
 
-	my ($folder, $type, $saveas) = @_;
-#print "Folder: $folder\nType: $type\nSaveas: $saveas\n\n";
-	my %file_data = ();
+    my ( $folder, $type, $saveas ) = @_;
 
-	my $res_id       = 0;
-	my $loc_off      = 160;
-	my $loc_count    = 0;
-	my $loc_size     = 0;
-	my $entry_count  = 0;
-	my $key_off      = 160;
-	my $resource_off = 0;
-	my $build_year   = 0;
-	my $build_day    = 0;
+    #print "Folder: $folder\nType: $type\nSaveas: $saveas\n\n";
+    my %file_data = ();
 
-	($build_year, $build_day) = (localtime(time))[5, 7];
+    my $res_id       = 0;
+    my $loc_off      = 160;
+    my $loc_count    = 0;
+    my $loc_size     = 0;
+    my $entry_count  = 0;
+    my $key_off      = 160;
+    my $resource_off = 0;
+    my $build_year   = 0;
+    my $build_day    = 0;
 
-	open ERF, ">", $saveas;
-	binmode ERF;
-	
-	print ERF (uc $type) . " V1.0";
-	print ERF pack("V", 0);
-	print ERF pack("V", 0);
-	
-	$_ = $folder;
-	s/\\/\//g;
-	$folder = $_;
-	opendir DIR, $folder;
-	my @files = grep { -f } map {"$folder/$_"} readdir DIR;
-	closedir DIR;
+    ( $build_year, $build_day ) = ( localtime(time) )[ 5, 7 ];
 
-	my $s = 0;
-	
-	my $file = undef;
-	my ($name, $ext) = (undef, undef);
-	foreach $file (@files)
-	{
-		$_ = $file;
-		s/\\/\//g;
-		$file = $_;
+    open ERF, ">", $saveas;
+    binmode ERF;
 
-		my $filename = (split(/\//, $file))[-1];
-		$_ = $filename;
-		/(.*)\.(.*)/;
-		$name = $1;
-		$ext  = $2;
-		
-		$file_data{$res_id}{ResRef}  = $name;
-		$file_data{$res_id}{ResType} = $res_types_opp{$ext};
+    print ERF ( uc $type ) . " V1.0";
+    print ERF pack( "V", 0 );
+    print ERF pack( "V", 0 );
 
-#		print "File: $file - Size: " . (-s $file) . "\n\n";		
-		#$s += (-s $file);
-		
-		open FH, "<", $file;
-		binmode FH;
-#		print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
-		sysread FH, $file_data{$res_id}{Data}, (-s $file);
-		$file_data{$res_id}{Size} = (-s $file);
+    $_ = $folder;
+    s/\\/\//g;
+    $folder = $_;
+    opendir DIR, $folder;
+    my @files = grep { -f } map { "$folder/$_" } readdir DIR;
+    closedir DIR;
 
-		close FH;
-#		unlink($file);
-		$res_id++;
-	}
-#	print "here: $s\n";
+    my $s = 0;
 
-	$entry_count = $res_id;
-	$res_id--;
-	$resource_off = (24 * $entry_count) + 160;
-	my $resource_offset_file = (32 * $entry_count) + 160;
-	
-	print ERF pack('V', $entry_count);
-	print ERF pack('V', $loc_off);
-	print ERF pack('V', $key_off);
-	print ERF pack('V', $resource_off);
-	print ERF pack('V', $build_year);
-	print ERF pack('V', $build_day);
-	print ERF pack('V', -1);
-	print ERF pack('x116', 0);
-	
-	foreach(0 .. $res_id)
-	{
-		print ERF pack('a16', pack('Z*', $file_data{$_}{ResRef}));
-		print ERF pack('V', $_);
-		print ERF pack('V', $file_data{$_}{ResType});
-	}
-	
-	foreach(0 .. $res_id)
-	{
-		print ERF pack('V', $resource_offset_file);
-		print ERF pack('V', $file_data{$_}{Size});
-		$resource_offset_file += $file_data{$_}{Size};
-	}
-	
-	foreach(0 .. $res_id)
-	{
-		print ERF $file_data{$_}{Data};
-	}
-	
-	close ERF;
+    my $file = undef;
+    my ( $name, $ext ) = ( undef, undef );
+    foreach $file (@files) {
+        $_ = $file;
+        s/\\/\//g;
+        $file = $_;
+
+        my $filename = ( split( /\//, $file ) )[-1];
+        $_ = $filename;
+        /(.*)\.(.*)/;
+        $name = $1;
+        $ext  = $2;
+
+        $file_data{$res_id}{ResRef}  = $name;
+        $file_data{$res_id}{ResType} = $res_types_opp{$ext};
+
+        #		print "File: $file - Size: " . (-s $file) . "\n\n";
+        #$s += (-s $file);
+
+        open FH, "<", $file;
+        binmode FH;
+
+      #		print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
+        sysread FH, $file_data{$res_id}{Data}, ( -s $file );
+        $file_data{$res_id}{Size} = ( -s $file );
+
+        close FH;
+
+        #		unlink($file);
+        $res_id++;
+    }
+
+    #	print "here: $s\n";
+
+    $entry_count = $res_id;
+    $res_id--;
+    $resource_off = ( 24 * $entry_count ) + 160;
+    my $resource_offset_file = ( 32 * $entry_count ) + 160;
+
+    print ERF pack( 'V',    $entry_count );
+    print ERF pack( 'V',    $loc_off );
+    print ERF pack( 'V',    $key_off );
+    print ERF pack( 'V',    $resource_off );
+    print ERF pack( 'V',    $build_year );
+    print ERF pack( 'V',    $build_day );
+    print ERF pack( 'V',    -1 );
+    print ERF pack( 'x116', 0 );
+
+    foreach ( 0 .. $res_id ) {
+        print ERF pack( 'a16', pack( 'Z*', $file_data{$_}{ResRef} ) );
+        print ERF pack( 'V',   $_ );
+        print ERF pack( 'V',   $file_data{$_}{ResType} );
+    }
+
+    foreach ( 0 .. $res_id ) {
+        print ERF pack( 'V', $resource_offset_file );
+        print ERF pack( 'V', $file_data{$_}{Size} );
+        $resource_offset_file += $file_data{$_}{Size};
+    }
+
+    foreach ( 0 .. $res_id ) {
+        print ERF $file_data{$_}{Data};
+    }
+
+    close ERF;
 }
 
-sub get_resource_id_by_name{
+sub get_resource_id_by_name {
+
     #-----------------------------------------------------
     # this private sub will return the resource id
     # (which is also the index in 'resources' array)
@@ -224,28 +226,27 @@ sub get_resource_id_by_name{
     # INPUTS: resource name (incl. extension)
     # OUTPUTS: index number on success, undef on failure
     #-----------------------------------------------------
-    my $self=shift;
-    my $resource_name=shift;
-    $resource_name= lc $resource_name;
-    for my $resource (@{$self->{'resources'}}) {
+    my $self          = shift;
+    my $resource_name = shift;
+    $resource_name = lc $resource_name;
+    for my $resource ( @{ $self->{'resources'} } ) {
         my $res_check = lc "$resource->{'res_ref'}.$resource->{'res_ext'}";
-        if ($resource_name eq $res_check) {
+        if ( $resource_name eq $res_check ) {
             return $resource->{'res_id'};
         }
     }
     return undef;
 }
 
-sub get_resources_by_type
-{
+sub get_resources_by_type {
     my $self = shift;
     my $type = shift;
 
     my @resources;
-    for my $resource (@{$self->{'resources'}})
-    {
-        if($resource->{'res_ext'} eq $type)
-        { push(@resources, $resource->{'res_id'}); }
+    for my $resource ( @{ $self->{'resources'} } ) {
+        if ( $resource->{'res_ext'} eq $type ) {
+            push( @resources, $resource->{'res_id'} );
+        }
     }
 
     return @resources;
@@ -254,117 +255,154 @@ sub get_resources_by_type
 #line 339
 
 sub new {
-    #this is a generic constructor method
-    
 
-    my $invocant=shift;
-    my $class=ref($invocant)||$invocant;
-    my $self={ @_ };
-    bless $self,$class;
+    #this is a generic constructor method
+
+    my $invocant = shift;
+    my $class    = ref($invocant) || $invocant;
+    my $self     = {@_};
+    bless $self, $class;
     return $self;
 }
 
 #line 361
 
 sub read_erf {
+
     #--------------------------
     #this method returns everything except acutal resource data from ERF
     #INPUTS: ERF filename
     #OUTPUTS: 1 on success, 0 on failure
     #--------------------------
-    my $self=shift;
-    my $erf_filename=shift;
-    (open my ($fh), "<", $erf_filename) or (return 0);
+    my $self         = shift;
+    my $erf_filename = shift;
+    ( open my ($fh), "<", $erf_filename ) or ( return 0 );
     binmode $fh;
+
     #aux info
-    $self->{'erf_filename'}=$erf_filename;
+    $self->{'erf_filename'} = $erf_filename;
+
     #header
-    sysread $fh,$self->{'sig'},4;
-    sysread $fh,$self->{'version'},4;
+    sysread $fh, $self->{'sig'},     4;
+    sysread $fh, $self->{'version'}, 4;
     my $tmp;
-    sysread $fh,$tmp,36;
-    ($self->{'localized_string_count'},
-     $self->{'localized_string_size'},
-     $self->{'entry_count'},
-     $self->{'offset_to_localized_string'},
-     $self->{'offset_to_key_list'},
-     $self->{'offset_to_resource_list'},
-     $self->{'build_year'},
-     $self->{'build_day'},
-     $self->{'description_str_ref'})=unpack('V9',$tmp);
+    sysread $fh, $tmp, 36;
+    (
+        $self->{'localized_string_count'},
+        $self->{'localized_string_size'},
+        $self->{'entry_count'},
+        $self->{'offset_to_localized_string'},
+        $self->{'offset_to_key_list'},
+        $self->{'offset_to_resource_list'},
+        $self->{'build_year'},
+        $self->{'build_day'},
+        $self->{'description_str_ref'}
+    ) = unpack( 'V9', $tmp );
 
     #localized string list
-    sysseek $fh,$self->{'offset_to_localized_string'},0;
-    sysread $fh,$tmp,$self->{'localized_string_size'};
+    sysseek $fh, $self->{'offset_to_localized_string'}, 0;
+    sysread $fh, $tmp, $self->{'localized_string_size'};
     my @localized_strings;
-    for (my $localized_string_index=0; $localized_string_index<$self->{'localized_string_count'}; $localized_string_index++) {
+    for (
+        my $localized_string_index = 0 ;
+        $localized_string_index < $self->{'localized_string_count'} ;
+        $localized_string_index++
+      )
+    {
         use bytes;
-        my ($lang_id, $string)=unpack('VV/a', $tmp);
-        $tmp=substr($tmp,8+length($string));
-        my $hashref={'lang_id'=>$lang_id, 'string'=>$string};
+        my ( $lang_id, $string ) = unpack( 'VV/a', $tmp );
+        $tmp = substr( $tmp, 8 + length($string) );
+        my $hashref = { 'lang_id' => $lang_id, 'string' => $string };
         push @localized_strings, $hashref;
     }
-    $self->{'localized_strings'}= [@localized_strings];
+    $self->{'localized_strings'} = [@localized_strings];
 
     #key list
-    sysseek $fh,$self->{'offset_to_key_list'},0;
-    my @resources; my @files;
-    if ($self->{version} eq 'V1.0') {
-        for (my $resource_index=0; $resource_index<$self->{'entry_count'}; $resource_index++) {
-            sysread $fh,$tmp,24;
-            my ($resref, $resid, $restype)=unpack('a16V2',$tmp);
-            $resref=unpack('Z*',$resref);
-            my $hashref={'res_ref'=>$resref,
-                         'res_id'=>$resid,
-                         'res_type'=>$restype,
-                         'res_ext'=>$res_types{$restype},
-                         'res_offset'=>undef,
-                         'res_size'=>undef};
-            push @resources,$hashref; push @files, "$resref\." . $res_types{$restype};
+    sysseek $fh, $self->{'offset_to_key_list'}, 0;
+    my @resources;
+    my @files;
+    if ( $self->{version} eq 'V1.0' ) {
+        for (
+            my $resource_index = 0 ;
+            $resource_index < $self->{'entry_count'} ;
+            $resource_index++
+          )
+        {
+            sysread $fh, $tmp, 24;
+            my ( $resref, $resid, $restype ) = unpack( 'a16V2', $tmp );
+            $resref = unpack( 'Z*', $resref );
+            my $hashref = {
+                'res_ref'    => $resref,
+                'res_id'     => $resid,
+                'res_type'   => $restype,
+                'res_ext'    => $res_types{$restype},
+                'res_offset' => undef,
+                'res_size'   => undef
+            };
+            push @resources, $hashref;
+            push @files,     "$resref\." . $res_types{$restype};
         }
     }
-    elsif ($self->{version} eq 'V1.1') {   #v1.1 has 32-char filenames
-        for (my $resource_index=0; $resource_index<$self->{'entry_count'}; $resource_index++) {
-            sysread $fh,$tmp,40;
-            my ($resref, $resid, $restype)=unpack('a32V2',$tmp);
-            $resref=unpack('Z*',$resref);
-            my $hashref={'res_ref'=>$resref,
-                         'res_id'=>$resid,
-                         'res_type'=>$restype,
-                         'res_ext'=>$res_types{$restype},
-                         'res_offset'=>undef,
-                         'res_size'=>undef};
-            push @resources,$hashref;
+    elsif ( $self->{version} eq 'V1.1' ) {    #v1.1 has 32-char filenames
+        for (
+            my $resource_index = 0 ;
+            $resource_index < $self->{'entry_count'} ;
+            $resource_index++
+          )
+        {
+            sysread $fh, $tmp, 40;
+            my ( $resref, $resid, $restype ) = unpack( 'a32V2', $tmp );
+            $resref = unpack( 'Z*', $resref );
+            my $hashref = {
+                'res_ref'    => $resref,
+                'res_id'     => $resid,
+                'res_type'   => $restype,
+                'res_ext'    => $res_types{$restype},
+                'res_offset' => undef,
+                'res_size'   => undef
+            };
+            push @resources, $hashref;
         }
 
     }
-    $self->{Files} = \@files;
-    $self->{'resources'}=[@resources];
+    $self->{Files}       = \@files;
+    $self->{'resources'} = [@resources];
 
     #resource list
-    sysseek $fh,$self->{'offset_to_resource_list'},0;
-    for (my $resource_index=0; $resource_index<$self->{'entry_count'}; $resource_index++) {
+    sysseek $fh, $self->{'offset_to_resource_list'}, 0;
+    for (
+        my $resource_index = 0 ;
+        $resource_index < $self->{'entry_count'} ;
+        $resource_index++
+      )
+    {
         sysread $fh, $tmp, 8;
-        ($self->{'resources'}[$resource_index]{'res_offset'},
-         $self->{'resources'}[$resource_index]{'res_size'})=unpack('V2',$tmp);
-         #(file data -> dynamic data)
-         $self->{'resources'}[$resource_index]{'new_offset'}=$self->{'resources'}[$resource_index]{'res_offset'};
-         $self->{'resources'}[$resource_index]{'new_size'}=$self->{'resources'}[$resource_index]{'res_size'};
+        (
+            $self->{'resources'}[$resource_index]{'res_offset'},
+            $self->{'resources'}[$resource_index]{'res_size'}
+        ) = unpack( 'V2', $tmp );
+
+        #(file data -> dynamic data)
+        $self->{'resources'}[$resource_index]{'new_offset'} =
+          $self->{'resources'}[$resource_index]{'res_offset'};
+        $self->{'resources'}[$resource_index]{'new_size'} =
+          $self->{'resources'}[$resource_index]{'res_size'};
     }
 
     close $fh;
     return 1;
 }
 
-sub getfiles
-{
+sub getfiles {
     my $self = shift;
-    my $a = $self->{Files};
-#    print "Rim:\n" . join "\n", @$a;
+    my $a    = $self->{Files};
+
+    #    print "Rim:\n" . join "\n", @$a;
     return @$a;
 }
 
-sub get_resource_id_by_type{
+sub get_resource_id_by_type {
+
     #-----------------------------------------------------
     # this private sub wil return the first resource that
     # matches the type given.
@@ -374,10 +412,10 @@ sub get_resource_id_by_type{
     my $self = shift;
     my $type = shift;
 
-    for my $resource (@{$self->{'resources'}}) {
-        if($resource->{'res_ext'} eq $type)
-        {
-            my @data = ($resource->{'res_ref'} . "\.$type", $resource->{'res_id'});
+    for my $resource ( @{ $self->{'resources'} } ) {
+        if ( $resource->{'res_ext'} eq $type ) {
+            my @data =
+              ( $resource->{'res_ref'} . "\.$type", $resource->{'res_id'} );
             return @data;
         }
     }
@@ -387,6 +425,7 @@ sub get_resource_id_by_type{
 #line 494
 
 sub export_resource {
+
     #-----------------------
     # exports a resource to hard disk.  if the data has been 'loaded'
     #  then it will be what is written to disk.  otherwise, it will
@@ -395,36 +434,36 @@ sub export_resource {
     # OUTPUTS: bytes written on success, 0 on failure
     #-----------------------
 
-    my ($self, $resource_name, $output_path)=@_;
+    my ( $self, $resource_name, $output_path ) = @_;
     return 0 unless $resource_name;
 
     my $resource;
     my $written;
 
-    if (($output_path) && (substr($output_path,-1) ne "\\")) {
-        $output_path .= "\\"
+    if ( ($output_path) && ( substr( $output_path, -1 ) ne "\\" ) ) {
+        $output_path .= "\\";
     }
 
-
-    my $res_ix=$self->get_resource_id_by_name($resource_name);
+    my $res_ix = $self->get_resource_id_by_name($resource_name);
     return 0 unless defined $res_ix;
-    $resource=$self->{'resources'}[$res_ix];
+    $resource = $self->{'resources'}[$res_ix];
 
-    (open my ($out_fh),">",$output_path.$resource_name) or
-       (return 0);
-    if($resource_name =~ /\.(txi|nss|vis|lyt)/) { }
-    else                                        { binmode $out_fh; }
+    ( open my ($out_fh), ">", $output_path . $resource_name )
+      or ( return 0 );
+    if   ( $resource_name =~ /\.(txi|nss|vis|lyt)/ ) { }
+    else                                             { binmode $out_fh; }
 
-    if ($resource->{'res_data'}) {
-        syswrite $out_fh, $resource->{'res_data'}; }
+    if ( $resource->{'res_data'} ) {
+        syswrite $out_fh, $resource->{'res_data'};
+    }
     else {
-        (open my ($in_fh),"<", $self->{'erf_filename'}) or
-          (return 0);
+        ( open my ($in_fh), "<", $self->{'erf_filename'} )
+          or ( return 0 );
         binmode $in_fh;
-        sysseek $in_fh, $resource->{'res_offset'},0;
+        sysseek $in_fh, $resource->{'res_offset'}, 0;
         my $tmp;
-        sysread $in_fh,$tmp,$resource->{'res_size'};
-        $written=syswrite $out_fh,$tmp;
+        sysread $in_fh, $tmp, $resource->{'res_size'};
+        $written = syswrite $out_fh, $tmp;
         close $in_fh;
     }
     close $out_fh;
@@ -434,27 +473,28 @@ sub export_resource {
 #line 545
 
 sub export_resource_by_index {
-    my ($self, $res_ix, $output_filepath)=@_;
+    my ( $self, $res_ix, $output_filepath ) = @_;
     return 0 unless defined $res_ix;
-    my $resource=$self->{'resources'}[$res_ix];
+    my $resource = $self->{'resources'}[$res_ix];
+
     #my $resource_name = lc "$resource->{'res_ref'}.$resource->{'res_ext'}";
 
-    (open my ($out_fh),">",$output_filepath) or (return 0);
-    if($resource_name =~ /\.(txi|nss|vis|lyt)/) { }
-    else                                        { binmode $out_fh; }
+    ( open my ($out_fh), ">", $output_filepath ) or ( return 0 );
+    if   ( $resource_name =~ /\.(txi|nss|vis|lyt)/ ) { }
+    else                                             { binmode $out_fh; }
     my $written;
-    if ($resource->{'res_data'}) {
-        $written=syswrite $out_fh, $resource->{'res_data'};
+    if ( $resource->{'res_data'} ) {
+        $written = syswrite $out_fh, $resource->{'res_data'};
     }
     else {
-        (open my ($in_fh),"<", $self->{'erf_filename'})  or (return -3);
+        ( open my ($in_fh), "<", $self->{'erf_filename'} ) or ( return -3 );
         binmode $in_fh;
-        sysseek $in_fh, $self->{'resources'}[$res_ix]{'res_offset'},0;
+        sysseek $in_fh, $self->{'resources'}[$res_ix]{'res_offset'}, 0;
         my $chunk;
-        my $bytes_to_read=$self->{'resources'}[$res_ix]{'res_size'};
-        while ($bytes_to_read>0) {
+        my $bytes_to_read = $self->{'resources'}[$res_ix]{'res_size'};
+        while ( $bytes_to_read > 0 ) {
             $bytes_to_read -= sysread $in_fh, $chunk, $bytes_to_read;
-            $written += syswrite $out_fh,$chunk;
+            $written += syswrite $out_fh, $chunk;
         }
         close $in_fh;
     }
@@ -466,7 +506,7 @@ sub export_resource_by_index {
 #    /(...)$/;
 #    my $t = $1;
 
-#    $_ = $old;
+    #    $_ = $old;
 
 #    if($t ~~ ["dlg", "utc", "utd", "ute", "uti", "utm", "utp", "uts", "utt", "utw", "fac", "are", "git", "ifo", "pth"])
 #    {
@@ -477,7 +517,9 @@ sub export_resource_by_index {
 
     return $written;
 }
+
 sub export_resource_to_temp_file {
+
     #-----------------------
     # exports a resource to hard disk.  if the data has been 'loaded'
     #  then it will be what is written to disk.  otherwise, it will
@@ -486,42 +528,44 @@ sub export_resource_to_temp_file {
     # OUTPUTS: tempfile object
     #-----------------------
 
-    my ($self, $resource_name)=@_;
+    my ( $self, $resource_name ) = @_;
     return 0 unless $resource_name;
 
     my $resource;
     my $written;
 
-
-
-    my $res_ix=$self->get_resource_id_by_name($resource_name);
+    my $res_ix = $self->get_resource_id_by_name($resource_name);
     return 0 unless defined $res_ix;
 
-    $resource=$self->{'resources'}[$res_ix];
+    $resource = $self->{'resources'}[$res_ix];
+
     #use Win32API::File::Temp;
     #my $tempfile=Win32API::File::Temp->new();
     #binmode $tempfile->{'fh'};
-     my $fh = File::Temp->new();
-     binmode $fh;
-#    my $tempfile = %tempfile;
+    my $fh = File::Temp->new();
+    binmode $fh;
 
-    if ($resource->{'res_data'}) {
-#        syswrite $tempfile->{'fh'}, $resource->{'res_data'}; }
-        syswrite $fh, $resource->{'res_data'}; }
+    #    my $tempfile = %tempfile;
+
+    if ( $resource->{'res_data'} ) {
+
+        #        syswrite $tempfile->{'fh'}, $resource->{'res_data'}; }
+        syswrite $fh, $resource->{'res_data'};
+    }
     else {
-        (open my ($in_fh),"<", $self->{'erf_filename'}) or
-          (return 0);
+        ( open my ($in_fh), "<", $self->{'erf_filename'} )
+          or ( return 0 );
         binmode $in_fh;
-        sysseek $in_fh, $resource->{'res_offset'},0;
+        sysseek $in_fh, $resource->{'res_offset'}, 0;
         my $tmp;
-        sysread $in_fh,$tmp,$resource->{'res_size'};
-#        $written=syswrite $tempfile->{'fh'},$tmp;
-        $written=syswrite $fh,$tmp;
+        sysread $in_fh, $tmp, $resource->{'res_size'};
+
+        #        $written=syswrite $tempfile->{'fh'},$tmp;
+        $written = syswrite $fh, $tmp;
         close $in_fh;
     }
     return $fh;
 }
-
 
 #line 647
 
@@ -535,60 +579,71 @@ sub import_resource {
     # INPUTS: filename, store_as
     # OUTPUTS: 1 on success, 0 on failure
     #-------------------------
-    my $self=shift;
-    my $new_resource_file=shift;
-    my $store_as=shift;
-    my $n=shift;
+    my $self              = shift;
+    my $new_resource_file = shift;
+    my $store_as          = shift;
+    my $n                 = shift;
 
     return 0 unless ($new_resource_file);
-    unless ($n) { $n = 0; }
-    unless ($store_as) { $store_as = (split /\\/,$new_resource_file)[-1] }
-    my $res_ix=$self->get_resource_id_by_name($store_as);
-    (open my ($in_fh),"<",$new_resource_file) or return 0;#die "Can't: $!\n";
+    unless ($n)        { $n        = 0; }
+    unless ($store_as) { $store_as = ( split /\\/, $new_resource_file )[-1] }
+    my $res_ix = $self->get_resource_id_by_name($store_as);
+    ( open my ($in_fh), "<", $new_resource_file )
+      or return 0;    #die "Can't: $!\n";
     binmode $in_fh;
 
-    if (defined $res_ix) {
+    if ( defined $res_ix ) {
         sysread $in_fh,
-                $self->{'resources'}[$res_ix]{'res_data'},
-                (-s $in_fh);
+          $self->{'resources'}[$res_ix]{'res_data'},
+          ( -s $in_fh );
 
     }
     else {
-        $store_as=~/(.*)\.(.*)/;
-        my $new_res_ref=$1;
-        my $new_ext=$2;
-        my %reversed = reverse %res_types;
-        unless (exists $reversed{$new_ext}) {
+        $store_as =~ /(.*)\.(.*)/;
+        my $new_res_ref = $1;
+        my $new_ext     = $2;
+        my %reversed    = reverse %res_types;
+        unless ( exists $reversed{$new_ext} ) {
             close $in_fh;
-            return 0; print "Reverse failed\n";
+            return 0;
+            print "Reverse failed\n";
         }
-        my $new_res_type=$reversed{$new_ext};
-        $res_ix=scalar @{$self->{'resources'}};
-		
-		my $new_offset = undef;
-#		if($res_ix > 0)
-#		{
-			$new_offset = $self->{resources}[$res_ix-1]{'res_offset'}+$self->{resources}[$res_ix-1]{'res_size'};
-#		}
-#		else
-#		{
-#			$new_offset = 
-#		}
-		
-        if($n == 1) { print "ResRef: $new_res_ref\nRes Type: $new_res_type\nRes Extension: $new_ext\nRes ID: $res_ix\nRes Size: " . (-s $in_fh) . "\n\n"; }
-        my $hashref={'res_ref'=>$new_res_ref,
-                     'res_id'=>$res_ix,
-                     'res_type'=>$new_res_type,
-                     'res_ext'=>$new_ext,
-                     'res_offset'=>$new_offset,
-                     'res_size'=>(-s $in_fh)};
-        push @{$self->{'resources'}}, $hashref;
+        my $new_res_type = $reversed{$new_ext};
+        $res_ix = scalar @{ $self->{'resources'} };
+
+        my $new_offset = undef;
+
+        #		if($res_ix > 0)
+        #		{
+        $new_offset = $self->{resources}[ $res_ix - 1 ]{'res_offset'} +
+          $self->{resources}[ $res_ix - 1 ]{'res_size'};
+
+        #		}
+        #		else
+        #		{
+        #			$new_offset =
+        #		}
+
+        if ( $n == 1 ) {
+            print
+"ResRef: $new_res_ref\nRes Type: $new_res_type\nRes Extension: $new_ext\nRes ID: $res_ix\nRes Size: "
+              . ( -s $in_fh ) . "\n\n";
+        }
+        my $hashref = {
+            'res_ref'    => $new_res_ref,
+            'res_id'     => $res_ix,
+            'res_type'   => $new_res_type,
+            'res_ext'    => $new_ext,
+            'res_offset' => $new_offset,
+            'res_size'   => ( -s $in_fh )
+        };
+        push @{ $self->{'resources'} }, $hashref;
         sysread $in_fh,
-                $self->{'resources'}[$res_ix]{'res_data'},
-                (-s $in_fh);
+          $self->{'resources'}[$res_ix]{'res_data'},
+          ( -s $in_fh );
     }
     close $in_fh;
-    $self->{'resources'}[$res_ix]{'is_new'}=1;
+    $self->{'resources'}[$res_ix]{'is_new'} = 1;
     $self->recalculate_packing();
     return 1;
 }
@@ -596,78 +651,82 @@ sub import_resource {
 #line 725
 
 sub import_resource_scalar {
-    my $self=shift;
-    my $resource_name_with_extension=shift;
-    my $scalar=shift;
-    $resource_name_with_extension=~/(.*)\.(.*)/;
-    my $resref=$1;
-    my $resext=$2;
-    return 0 if length($resref)>16;
-    my %res_types_rev=reverse %res_types;
-    return 0 unless exists ($res_types_rev{$resext});
+    my $self                         = shift;
+    my $resource_name_with_extension = shift;
+    my $scalar                       = shift;
+    $resource_name_with_extension =~ /(.*)\.(.*)/;
+    my $resref = $1;
+    my $resext = $2;
+    return 0 if length($resref) > 16;
+    my %res_types_rev = reverse %res_types;
+    return 0 unless exists( $res_types_rev{$resext} );
 
-    my $res_ix=$self->get_resource_id_by_name($resource_name_with_extension);
-    if (ref $scalar eq 'SCALAR') {
-        $scalar=$$scalar;
+    my $res_ix = $self->get_resource_id_by_name($resource_name_with_extension);
+    if ( ref $scalar eq 'SCALAR' ) {
+        $scalar = $$scalar;
     }
-    elsif (ref $scalar) { #something else
+    elsif ( ref $scalar ) {    #something else
         return 0;
     }
-    if (defined $res_ix) {
-        $self->{'resources'}[$res_ix]{'new_data'}=$scalar;
-        $self->{'resources'}[$res_ix]{'new_size'}=length($scalar);
-        my $i=$res_ix+1;
-        my $new_offset=$self->{'resources'}[$res_ix]{'new_offset'}+length($scalar);
-        while ($i<scalar @{$self->{'resources'}}) {
-            $self->{'resources'}[$i]{'new_offset'}=$new_offset;
+    if ( defined $res_ix ) {
+        $self->{'resources'}[$res_ix]{'new_data'} = $scalar;
+        $self->{'resources'}[$res_ix]{'new_size'} = length($scalar);
+        my $i = $res_ix + 1;
+        my $new_offset =
+          $self->{'resources'}[$res_ix]{'new_offset'} + length($scalar);
+        while ( $i < scalar @{ $self->{'resources'} } ) {
+            $self->{'resources'}[$i]{'new_offset'} = $new_offset;
             $new_offset += $self->{'resources'}[$i]{'new_size'};
             $i++;
         }
     }
     else {
-        my $new_res_type=$res_types_rev{$resext};
-        $res_ix=scalar @{$self->{'resources'}};
-        my $new_offset=$self->{resources}[$res_ix-1]{'res_offset'}+$self->{resources}[$res_ix-1]{'res_size'};
-        my $hashref={'res_ref'=>$resref,
-                     'res_id'=>$res_ix,
-                     'res_type'=>$new_res_type,
-                     'res_ext'=>$resext,
-                     'res_offset'=>0,
-                     'new_offset'=>$new_offset,
-                     'res_size'=>0,
-                     'new_size'=>length($scalar),
-                     'new_data'=>$scalar};
-        push @{$self->{'resources'}}, $hashref;
+        my $new_res_type = $res_types_rev{$resext};
+        $res_ix = scalar @{ $self->{'resources'} };
+        my $new_offset = $self->{resources}[ $res_ix - 1 ]{'res_offset'} +
+          $self->{resources}[ $res_ix - 1 ]{'res_size'};
+        my $hashref = {
+            'res_ref'    => $resref,
+            'res_id'     => $res_ix,
+            'res_type'   => $new_res_type,
+            'res_ext'    => $resext,
+            'res_offset' => 0,
+            'new_offset' => $new_offset,
+            'res_size'   => 0,
+            'new_size'   => length($scalar),
+            'new_data'   => $scalar
+        };
+        push @{ $self->{'resources'} }, $hashref;
     }
-    $self->{'resources'}[$res_ix]{'is_new'}=1;
+    $self->{'resources'}[$res_ix]{'is_new'} = 1;
     $self->recalculate_packing();
     return 1;
 }
 
 #line 786
 
-
 sub load_erf {
+
     #-----------------
     # this method will actually load the entire erf incl. resource data
     # INPUTS: filename (optional).  if read_erf has already been called
     #   and filename is omitted, the value of 'erf_filename' will be used.
     # OUTPUTS: 1 on success, 0 on failure
     #-----------------
-    my $self=shift;
-    my $erf_filename=shift;
+    my $self         = shift;
+    my $erf_filename = shift;
     if ($erf_filename) {
         $self->read_erf($erf_filename);
     }
-    (open my ($fh), "<", $self->{'erf_filename'}) or (return 0);
+    ( open my ($fh), "<", $self->{'erf_filename'} ) or ( return 0 );
     binmode $fh;
 
-    my $resource_arr_ref=$self->{'resources'};
+    my $resource_arr_ref = $self->{'resources'};
     my $resource;
     for $resource (@$resource_arr_ref) {
-        sysseek $fh,$resource->{'res_offset'},0;
-        sysread $fh,$resource->{'res_data'},$resource->{'res_size'};
-        $resource->{'is_new'}=0;
+        sysseek $fh, $resource->{'res_offset'}, 0;
+        sysread $fh, $resource->{'res_data'}, $resource->{'res_size'};
+        $resource->{'is_new'} = 0;
     }
     $self->recalculate_packing();
 
@@ -678,53 +737,53 @@ sub load_erf {
 #line 830
 
 sub load_erf_resource {
+
     #---------------------------
     # this method will load a single resource data into 'res_data' value
     # INPUTS: resource name
     # OUTPUTS: 0 or greater = resource index, <0 is failure
     #---------------------------
-    my $self=shift;
-    my $res_name=shift;
+    my $self     = shift;
+    my $res_name = shift;
     return -1 unless ($res_name);
-    my $res_ix=$self->get_resource_id_by_name($res_name);
-    (return -2) unless defined ($res_ix);
+    my $res_ix = $self->get_resource_id_by_name($res_name);
+    ( return -2 ) unless defined($res_ix);
 
-
-    (open my ($in_fh),"<", $self->{'erf_filename'})  or (return -3);
+    ( open my ($in_fh), "<", $self->{'erf_filename'} ) or ( return -3 );
     binmode $in_fh;
-    sysseek $in_fh, $self->{'resources'}[$res_ix]{'res_offset'},0;
-    my $total_read=sysread $in_fh,
-                    $self->{'resources'}[$res_ix]{'res_data'},
-                    $self->{'resources'}[$res_ix]{'res_size'};
+    sysseek $in_fh, $self->{'resources'}[$res_ix]{'res_offset'}, 0;
+    my $total_read = sysread $in_fh,
+      $self->{'resources'}[$res_ix]{'res_data'},
+      $self->{'resources'}[$res_ix]{'res_size'};
     close $in_fh;
-    $self->{'resources'}[$res_ix]{'is_new'}=0;
+    $self->{'resources'}[$res_ix]{'is_new'} = 0;
     $self->recalculate_packing();
-
 
     return $res_ix;
 
 }
 
 sub load_erf_resource_by_index {
+
     #---------------------------
     # this method will load a single resource data into 'res_data' value
     # INPUTS: resource name
     # OUTPUTS: 0 or greater = resource index, <0 is failure
     #---------------------------
-    my $self=shift;
-    my $res_ix=shift;
-    my $no_recalc=shift;
-    return -1 unless defined ($res_ix);
+    my $self      = shift;
+    my $res_ix    = shift;
+    my $no_recalc = shift;
+    return -1 unless defined($res_ix);
 
-    (open my ($in_fh),"<", $self->{'erf_filename'})  or (return -3);
+    ( open my ($in_fh), "<", $self->{'erf_filename'} ) or ( return -3 );
     binmode $in_fh;
-    sysseek $in_fh, $self->{'resources'}[$res_ix]{'res_offset'},0;
-    my $total_read=sysread $in_fh,
-                    $self->{'resources'}[$res_ix]{'res_data'},
-                    $self->{'resources'}[$res_ix]{'res_size'};
+    sysseek $in_fh, $self->{'resources'}[$res_ix]{'res_offset'}, 0;
+    my $total_read = sysread $in_fh,
+      $self->{'resources'}[$res_ix]{'res_data'},
+      $self->{'resources'}[$res_ix]{'res_size'};
     close $in_fh;
-    $self->{'resources'}[$res_ix]{'is_new'}=0;
-    unless($no_recalc) {$self->recalculate_packing() }
+    $self->{'resources'}[$res_ix]{'is_new'} = 0;
+    unless ($no_recalc) { $self->recalculate_packing() }
 
     return $total_read;
 }
@@ -732,6 +791,7 @@ sub load_erf_resource_by_index {
 #line 896
 
 sub write_erf {
+
     #---------------------------------------------
     # this subroutine writes the erf from memory
     # files are packed in the order of their resource indexing
@@ -739,83 +799,94 @@ sub write_erf {
     # INPUTS:  output file, flag of whether or not to update build date
     # OUTPUTS: total bytes written on success, 0 on failure
     #---------------------------------------------
-    my ($self, $output_file, $update_build)=@_;
-   
-   #why did I do this? vvv
-   
-   # my $working_output;  #we may need to read the original erf before we overwrite it.
-   # unless ($output_file) { $output_file=$self->{'erf_filename'} }
-   # $working_output=$output_file.'_temp';
+    my ( $self, $output_file, $update_build ) = @_;
+
+    #why did I do this? vvv
+
+# my $working_output;  #we may need to read the original erf before we overwrite it.
+# unless ($output_file) { $output_file=$self->{'erf_filename'} }
+# $working_output=$output_file.'_temp';
     if ($update_build) {
-        $self->{'build_year'}=(localtime)[5];
-        $self->{'build_day'}=(localtime)[7];
+        $self->{'build_year'} = (localtime)[5];
+        $self->{'build_day'}  = (localtime)[7];
     }
 
     $self->recalculate_packing();
 
-
     #(open my ($out_fh), ">", $working_output) or (return 0);
-    (open my ($out_fh), ">", $output_file) or (return 0);
+    ( open my ($out_fh), ">", $output_file ) or ( return 0 );
     binmode $out_fh;
-    my $total_written=0;
+    my $total_written = 0;
     my $tmp;
 
     # write header
 
     $total_written += syswrite $out_fh, $self->{'sig'};
     $total_written += syswrite $out_fh, $self->{'version'};
-    $tmp=pack('V9',($self->{'localized_string_count'},
-                    $self->{'localized_string_size'},
-                    $self->{'entry_count'},
-                    $self->{'offset_to_localized_string'},
-                    $self->{'offset_to_key_list'},
-                    $self->{'offset_to_resource_list'},
-                    $self->{'build_year'},
-                    $self->{'build_day'},
-                    $self->{'description_str_ref'},
-                   ));
+    $tmp = pack(
+        'V9',
+        (
+            $self->{'localized_string_count'},
+            $self->{'localized_string_size'},
+            $self->{'entry_count'},
+            $self->{'offset_to_localized_string'},
+            $self->{'offset_to_key_list'},
+            $self->{'offset_to_resource_list'},
+            $self->{'build_year'},
+            $self->{'build_day'},
+            $self->{'description_str_ref'},
+        )
+    );
     $total_written += syswrite $out_fh, $tmp;
     $total_written += syswrite $out_fh, "\0" x 116;
 
     # write localized strings
 
-    for my $loc_string_struct (@{$self->{'localized_strings'}}) {
-        $tmp = pack('V2',$loc_string_struct->{'lang_id'},length $loc_string_struct->{'string'});
+    for my $loc_string_struct ( @{ $self->{'localized_strings'} } ) {
+        $tmp = pack( 'V2',
+            $loc_string_struct->{'lang_id'},
+            length $loc_string_struct->{'string'} );
         $total_written += syswrite $out_fh, $tmp;
         $total_written += syswrite $out_fh, $loc_string_struct->{'string'};
     }
 
     # write key list
 
-    for my $resource (@{$self->{'resources'}}) {
-        $total_written += syswrite $out_fh, pack('a16 V V', $resource->{'res_ref'}, $resource->{'res_id'}, $resource->{'res_type'});
+    for my $resource ( @{ $self->{'resources'} } ) {
+        $total_written += syswrite $out_fh,
+          pack( 'a16 V V',
+            $resource->{'res_ref'},
+            $resource->{'res_id'}, $resource->{'res_type'} );
     }
 
     # write resource list
 
-    for my $resource (@{$self->{'resources'}}) {
-        $total_written += syswrite $out_fh, pack('V V', $resource->{'new_offset'}, $resource->{'new_size'});
+    for my $resource ( @{ $self->{'resources'} } ) {
+        $total_written += syswrite $out_fh,
+          pack( 'V V', $resource->{'new_offset'}, $resource->{'new_size'} );
     }
 
     # write resource data
     my $r = 0;
-    for my $resource (@{$self->{'resources'}}) {
-        if (length ($resource->{'new_data'})) {
-            $resource->{'res_data'}=$resource->{'new_data'};
+    for my $resource ( @{ $self->{'resources'} } ) {
+        if ( length( $resource->{'new_data'} ) ) {
+            $resource->{'res_data'} = $resource->{'new_data'};
         }
-        unless (length ($resource->{'res_data'})) {#print "F " . $resource->{'res_ref'} . "\." . $resource->{'res_ext'} . " Number: " . $resource->{'res_id'} . "\n";
-            if($resource->{'res_ext'} eq 'mdx') { }
-            else
-            {
-                my $result=$self->load_erf_resource_by_index($resource->{'res_id'},1);  #do not perform recalculation
-                return $result unless $result>0;
+        unless ( length( $resource->{'res_data'} ) )
+        { #print "F " . $resource->{'res_ref'} . "\." . $resource->{'res_ext'} . " Number: " . $resource->{'res_id'} . "\n";
+            if ( $resource->{'res_ext'} eq 'mdx' ) { }
+            else {
+                my $result =
+                  $self->load_erf_resource_by_index( $resource->{'res_id'}, 1 )
+                  ;    #do not perform recalculation
+                return $result unless $result > 0;
             }
         }
         $total_written += syswrite $out_fh, $resource->{'res_data'};
-        $resource->{'is_new'}=0;
-        $resource->{'res_offset'}=$resource->{'new_offset'};
-        $resource->{'res_size'}=$resource->{'new_size'};
-$r++;
+        $resource->{'is_new'}     = 0;
+        $resource->{'res_offset'} = $resource->{'new_offset'};
+        $resource->{'res_size'}   = $resource->{'new_size'};
+        $r++;
     }
     close $out_fh;
 
@@ -831,6 +902,7 @@ $r++;
 #line 1008
 
 sub recalculate_packing {
+
     #---------------------------------------
     # this method determines the size of each res_data,
     # adjusts the res_size accordingly, and readjusts
@@ -838,62 +910,66 @@ sub recalculate_packing {
     # INPUTS: none
     # OUTPUTS: none
     #---------------------------------------
-    my $self=shift;
+    my $self = shift;
 
     # tune localized strings
 
-    $self->{'localized_string_count'}=scalar @{$self->{'localized_strings'}};
-    my $loc_string_size_total=0;
+    $self->{'localized_string_count'} =
+      scalar @{ $self->{'localized_strings'} };
+    my $loc_string_size_total = 0;
     use bytes;
-    for my $loc_string_struct (@{$self->{'localized_strings'}}) {
+    for my $loc_string_struct ( @{ $self->{'localized_strings'} } ) {
         $loc_string_size_total += 8;
         $loc_string_size_total += length $loc_string_struct->{'string'};
     }
-    $self->{'localized_string_size'}=$loc_string_size_total;
-    $self->{'offset_to_key_list'}=$self->{'offset_to_localized_string'}+$self->{'localized_string_size'};
+    $self->{'localized_string_size'} = $loc_string_size_total;
+    $self->{'offset_to_key_list'} =
+      $self->{'offset_to_localized_string'} + $self->{'localized_string_size'};
 
     # tune entry count
 
-    $self->{'entry_count'}=scalar @{$self->{'resources'}};
-    if ($self->{version} eq 'V1.0') {
-        $self->{'offset_to_resource_list'}=$self->{'offset_to_key_list'}+(24* $self->{'entry_count'});
+    $self->{'entry_count'} = scalar @{ $self->{'resources'} };
+    if ( $self->{version} eq 'V1.0' ) {
+        $self->{'offset_to_resource_list'} =
+          $self->{'offset_to_key_list'} + ( 24 * $self->{'entry_count'} );
     }
-    elsif ($self->{version} eq 'V1.1') {
-        $self->{'offset_to_resource_list'}=$self->{'offset_to_key_list'}+(40* $self->{'entry_count'});
+    elsif ( $self->{version} eq 'V1.1' ) {
+        $self->{'offset_to_resource_list'} =
+          $self->{'offset_to_key_list'} + ( 40 * $self->{'entry_count'} );
     }
-    
-    my $offset_to_resource_data=$self->{'offset_to_resource_list'} + (8* $self->{'entry_count'});
+
+    my $offset_to_resource_data =
+      $self->{'offset_to_resource_list'} + ( 8 * $self->{'entry_count'} );
 
     # tune resource list
 
-    my $prev_resource_offset=$offset_to_resource_data;
-    my $prev_resource_length=0;
-    my $prev_resource_offset_memory=$offset_to_resource_data;
-    my $prev_resource_length_memory=0;
-    for my $resource (@{$self->{'resources'}}) {
-        $resource->{'res_offset'}=$prev_resource_offset+$prev_resource_length;
-        $resource->{'new_offset'}=$prev_resource_offset_memory+$prev_resource_length_memory;
-        if (length($resource->{'res_data'})) {
-            $resource->{'res_size'}=length $resource->{'res_data'};
-            $resource->{'new_size'}=length($resource->{'res_data'});
+    my $prev_resource_offset        = $offset_to_resource_data;
+    my $prev_resource_length        = 0;
+    my $prev_resource_offset_memory = $offset_to_resource_data;
+    my $prev_resource_length_memory = 0;
+    for my $resource ( @{ $self->{'resources'} } ) {
+        $resource->{'res_offset'} =
+          $prev_resource_offset + $prev_resource_length;
+        $resource->{'new_offset'} =
+          $prev_resource_offset_memory + $prev_resource_length_memory;
+        if ( length( $resource->{'res_data'} ) ) {
+            $resource->{'res_size'} = length $resource->{'res_data'};
+            $resource->{'new_size'} = length( $resource->{'res_data'} );
         }
-        if (length($resource->{'new_data'})) {
-            $resource->{'new_size'}=length($resource->{'new_data'});
+        if ( length( $resource->{'new_data'} ) ) {
+            $resource->{'new_size'} = length( $resource->{'new_data'} );
         }
-        $prev_resource_offset=$resource->{'res_offset'};
-        $prev_resource_offset_memory=$resource->{'new_offset'};
-        $prev_resource_length=$resource->{'res_size'};
-        $prev_resource_length_memory=$resource->{'new_size'};
+        $prev_resource_offset        = $resource->{'res_offset'};
+        $prev_resource_offset_memory = $resource->{'new_offset'};
+        $prev_resource_length        = $resource->{'res_size'};
+        $prev_resource_length_memory = $resource->{'new_size'};
     }
     return;
 }
 
 #line 1106
 
-
 1;
-
-
 
 __END__
 
