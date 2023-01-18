@@ -1,20 +1,19 @@
-#line 1 "Bioware/BIF.pm"
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::BIF;    #~~~~~~~~~~~~~~~
+package Bioware::BIF;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 use strict;
+use warnings;
+
 use Carp qw(cluck);
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
 
-#use Win32::TieRegistry;
+# use Win32::TieRegistry;
 
 $VERSION = 0.02;
 @ISA     = qw(Exporter);
 @EXPORT  = qw(  );
 
-#private vars
+# private vars
 our %res_types = (
     0x0000 => 'res',    #Misc. GFF resources
     0x0001 => 'bmp',    #Microsoft Windows Bitmap
@@ -109,22 +108,21 @@ our %res_types = (
 );
 
 sub new {
-
-    #this is a generic constructor method
     my $invocant        = shift;
     my $registered_path = shift;
-    my $bif_ix_filter   = shift;    #templates.bif=23
+    my $bif_ix_filter   = shift;    # templates.bif=23
     my $bif_type_filter = shift;
 
     unless ($registered_path) {
 
-#        eval {
-#            my  $kotor_key= new Win32::TieRegistry "LMachine/Software/Bioware/SW/Kotor",             #read registry
-#                            {Access=>Win32::TieRegistry::KEY_READ, Delimiter=>"/"};
-#            $registered_path= $kotor_key->GetValue("Path")
+        # eval {
+        #     my $kotor_key = new Win32::TieRegistry
+        #       "LMachine/Software/Bioware/SW/Kotor",    #read registry
+        #       { Access => Win32::TieRegistry::KEY_READ, Delimiter => "/" };
+        #     $registered_path = $kotor_key->GetValue("Path");
 
-        #            };
-        #        if ($@) { return }  # no path found
+        # };
+        # if ($@) { return }    # no path found
         cluck "Can't do it! No path given!";
         return;
     }
@@ -187,7 +185,7 @@ sub new {
             'ID'      => $resid
         };
 
-#        if ($resref eq "feat") { print "Resource $index_in_bif" . ":\n  Name: $resref.$res_types{$restype}\n  ID: $resid\n\n"; }
+# if ($resref eq "feat") { print "Resource $index_in_bif" . ":\n  Name: $resref.$res_types{$restype}\n  ID: $resid\n\n"; }
         $bifhash->{$bif_name}{Bif_Ix} = $bif_index;
     }
     close KEY;
@@ -209,7 +207,7 @@ sub get_files {
 
 sub extract_resource {
 
-    #    use Win32API::File::Temp;
+    # use Win32API::File::Temp;
     use File::Temp;
 
     my $self          = shift;
@@ -221,8 +219,8 @@ sub extract_resource {
     ( open BIF, "<", "$self->{path}/$bifname" ) or return;
     binmode BIF;
 
-    #    my $tmpfil=Win32API::File::Temp->new();
-    #    binmode ($tmpfil->{'fh'});
+    # my $tmpfil=Win32API::File::Temp->new();
+    # binmode ($tmpfil->{'fh'});
     my $tmpfil = tempfile();
     binmode $tmpfil;
     sysseek(
@@ -237,7 +235,7 @@ sub extract_resource {
     sysseek BIF, $res_offset, 0;
     sysread BIF, $tmp, $res_size;
 
-    #    syswrite $tmpfil->{'fh'},$tmp;
+    # syswrite $tmpfil->{'fh'},$tmp;
     syswrite $tmpfil, $tmp;
     close BIF;
     return $tmpfil;
@@ -248,7 +246,7 @@ sub get_resource {
     my $bifname       = shift;
     my $resource_name = shift;
 
-#    print "Self: $self->{path}/$bifname\nBif name: $bifname\nResource Name: $resource_name\n";
+# print "Self: $self->{path}/$bifname\nBif name: $bifname\nResource Name: $resource_name\n";
 
     unless ($bifname)                                             { return }
     unless ( $self->{BIFs}{$bifname} )                            { return }
@@ -269,4 +267,5 @@ sub get_resource {
     close BIF;
     return \$resource;
 }
+
 1;
