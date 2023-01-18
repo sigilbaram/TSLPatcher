@@ -7,10 +7,16 @@ TSLPatcherCLI provides the same functionality as TSLPatcher, but without the GUI
 ### Setup
 For Windows 10:
 * Install Strawberry Perl v5.16.3.1 32 bit (https://strawberryperl.com/releases.html). Note: `pp` will not install on 64 bit.
-* Install dependencies by opening the Command Prompt as an administrator and running: `cpan install pp && cpan install experimental && cpan install Config::IniMan && cpan install Data::Dumper`
+* Install dependencies by opening the Command Prompt as an administrator and running:
+```
+cpan install pp
+cpan install experimental
+cpan install Config::IniMan
+cpan install Data::Dumper
+```
 * In your File/Path.pm of the default Perl libraries (default path: C:\strawberry\perl\lib\File\Path.pm) on line 87 the function `getpwnam` does not work on windows. Make the following change:
-    - Before: my $uid = (getpwnam $arg->{owner})[2];
-    - After: my $uid = getlogin || (getpwnam $arg->{owner})[2];
+    - Before: `my $uid = (getpwnam $arg->{owner})[2];`
+    - After: `my $uid = getlogin || (getpwnam $arg->{owner})[2];`
 
 ### Usage
 TSLPatcherCLI takes three arguments:
@@ -28,8 +34,14 @@ Run the script locally: `perl TSLPatcherCLI.pl <swkotorDirectory> <modDirectory>
 
 Build the script to .exe: `pp -o TSLPatcherCLI.exe TSLPatcherCLI.pl`
 
-## Useful Tools
+## TSLPatcher GUI
+The following additional Perl modules are required for the GUI:
+```
+cpan install TK
+cpan install TK::HyperText
+```
 
+## Useful Tools
 Below are some useful tools for debugging TSLPatcher
 
 * ERFEdit: https://deadlystream.com/files/file/499-erfedit/
@@ -39,3 +51,10 @@ Below are some useful tools for debugging TSLPatcher
 * Data::Dumper: Installed via `cpan install Data::Dumper`
     - A useful printing library for Perl that can print scalars or reference variables in a human readable format. Ex: `print Dumper($struct)`
     - Note: Make sure to comment out this library when making a release, it will get detected as a virus.
+
+### VS Code Extensions
+Helpful extensions if using VS Code
+
+* [bscan.perlnavigator](https://marketplace.visualstudio.com/items?itemName=bscan.perlnavigator) for Perl syntax highlighting, code completion, error detection etc. without needing a separate language server.
+* [Kaktus.perltidy-more](https://marketplace.visualstudio.com/items?itemName=Kaktus.perltidy-more) for formatting Perl code via `Perl::Tidy`
+* [shd101wyy.markdown-preview-enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) for previewing `.md` files, like this one

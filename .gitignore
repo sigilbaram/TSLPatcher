@@ -6,6 +6,8 @@
 *.o
 *.pm.tdy
 *.bs
+TSLPatcher.exe
+TSLPatcherCLI.exe
 
 # Devel::Cover
 cover_db/
