@@ -1,16 +1,13 @@
-#line 1 "Bioware/ERF.pm"
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::ERF;    #~~~~~~~~~~~~~~~
+package Bioware::ERF;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# TODO: Fix undeclared variable $resource_name line ~471
+# use strict;
+use warnings;
 
-#use strict;
 use File::Temp qw( tempfile );
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
 $VERSION = 0.21;
-
-#line 87
 
 @ISA = qw(Exporter);
 
@@ -19,7 +16,7 @@ $VERSION = 0.21;
 
 # define globals (use vars)
 
-#private vars
+# private vars
 our %res_types = (
     0x0000 => 'res',    #Misc. GFF resources
     0x0001 => 'bmp',    #Microsoft Windows Bitmap
@@ -119,7 +116,7 @@ sub make_new_from_folder {
 
     my ( $folder, $type, $saveas ) = @_;
 
-    #print "Folder: $folder\nType: $type\nSaveas: $saveas\n\n";
+    # print "Folder: $folder\nType: $type\nSaveas: $saveas\n\n";
     my %file_data = ();
 
     my $res_id       = 0;
@@ -166,23 +163,23 @@ sub make_new_from_folder {
         $file_data{$res_id}{ResRef}  = $name;
         $file_data{$res_id}{ResType} = $res_types_opp{$ext};
 
-        #		print "File: $file - Size: " . (-s $file) . "\n\n";
-        #$s += (-s $file);
+        # print "File: $file - Size: " . (-s $file) . "\n\n";
+        # $s += (-s $file);
 
         open FH, "<", $file;
         binmode FH;
 
-      #		print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
+       # print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
         sysread FH, $file_data{$res_id}{Data}, ( -s $file );
         $file_data{$res_id}{Size} = ( -s $file );
 
         close FH;
 
-        #		unlink($file);
+        # unlink($file);
         $res_id++;
     }
 
-    #	print "here: $s\n";
+    # print "here: $s\n";
 
     $entry_count = $res_id;
     $res_id--;
@@ -252,11 +249,7 @@ sub get_resources_by_type {
     return @resources;
 }
 
-#line 339
-
 sub new {
-
-    #this is a generic constructor method
 
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
@@ -265,24 +258,22 @@ sub new {
     return $self;
 }
 
-#line 361
-
 sub read_erf {
 
     #--------------------------
-    #this method returns everything except acutal resource data from ERF
-    #INPUTS: ERF filename
-    #OUTPUTS: 1 on success, 0 on failure
+    # this method returns everything except acutal resource data from ERF
+    # INPUTS: ERF filename
+    # OUTPUTS: 1 on success, 0 on failure
     #--------------------------
     my $self         = shift;
     my $erf_filename = shift;
     ( open my ($fh), "<", $erf_filename ) or ( return 0 );
     binmode $fh;
 
-    #aux info
+    # aux info
     $self->{'erf_filename'} = $erf_filename;
 
-    #header
+    # header
     sysread $fh, $self->{'sig'},     4;
     sysread $fh, $self->{'version'}, 4;
     my $tmp;
@@ -299,7 +290,7 @@ sub read_erf {
         $self->{'description_str_ref'}
     ) = unpack( 'V9', $tmp );
 
-    #localized string list
+    # localized string list
     sysseek $fh, $self->{'offset_to_localized_string'}, 0;
     sysread $fh, $tmp, $self->{'localized_string_size'};
     my @localized_strings;
@@ -317,7 +308,7 @@ sub read_erf {
     }
     $self->{'localized_strings'} = [@localized_strings];
 
-    #key list
+    # key list
     sysseek $fh, $self->{'offset_to_key_list'}, 0;
     my @resources;
     my @files;
@@ -343,7 +334,7 @@ sub read_erf {
             push @files,     "$resref\." . $res_types{$restype};
         }
     }
-    elsif ( $self->{version} eq 'V1.1' ) {    #v1.1 has 32-char filenames
+    elsif ( $self->{version} eq 'V1.1' ) {    # v1.1 has 32-char filenames
         for (
             my $resource_index = 0 ;
             $resource_index < $self->{'entry_count'} ;
@@ -368,7 +359,7 @@ sub read_erf {
     $self->{Files}       = \@files;
     $self->{'resources'} = [@resources];
 
-    #resource list
+    # resource list
     sysseek $fh, $self->{'offset_to_resource_list'}, 0;
     for (
         my $resource_index = 0 ;
@@ -382,7 +373,7 @@ sub read_erf {
             $self->{'resources'}[$resource_index]{'res_size'}
         ) = unpack( 'V2', $tmp );
 
-        #(file data -> dynamic data)
+        # (file data -> dynamic data)
         $self->{'resources'}[$resource_index]{'new_offset'} =
           $self->{'resources'}[$resource_index]{'res_offset'};
         $self->{'resources'}[$resource_index]{'new_size'} =
@@ -397,7 +388,7 @@ sub getfiles {
     my $self = shift;
     my $a    = $self->{Files};
 
-    #    print "Rim:\n" . join "\n", @$a;
+    # print "Rim:\n" . join "\n", @$a;
     return @$a;
 }
 
@@ -421,8 +412,6 @@ sub get_resource_id_by_type {
     }
     return undef;
 }
-
-#line 494
 
 sub export_resource {
 
@@ -470,18 +459,20 @@ sub export_resource {
     return $written;
 }
 
-#line 545
-
 sub export_resource_by_index {
     my ( $self, $res_ix, $output_filepath ) = @_;
     return 0 unless defined $res_ix;
     my $resource = $self->{'resources'}[$res_ix];
 
-    #my $resource_name = lc "$resource->{'res_ref'}.$resource->{'res_ext'}";
+    # my $resource_name = lc "$resource->{'res_ref'}.$resource->{'res_ext'}";
 
     ( open my ($out_fh), ">", $output_filepath ) or ( return 0 );
-    if   ( $resource_name =~ /\.(txi|nss|vis|lyt)/ ) { }
-    else                                             { binmode $out_fh; }
+
+    if ( $resource_name =~ /\.(txi|nss|vis|lyt)/ ) { }
+    else {
+        binmode $out_fh;
+    }
+
     my $written;
     if ( $resource->{'res_data'} ) {
         $written = syswrite $out_fh, $resource->{'res_data'};
@@ -501,19 +492,24 @@ sub export_resource_by_index {
     close $out_fh;
 
 #    Added by Fair Strides for later projects. Commented out so as not to interfere with KSE.
-#    my $old = $_;
-#    $_ = $output_filepath;
-#    /(...)$/;
-#    my $t = $1;
+# my $old = $_;
+# $_ = $output_filepath;
+# /(...)$/;
+# my $t = $1;
 
-    #    $_ = $old;
+    # $_ = $old;
 
-#    if($t ~~ ["dlg", "utc", "utd", "ute", "uti", "utm", "utp", "uts", "utt", "utw", "fac", "are", "git", "ifo", "pth"])
-#    {
-#        my $gff = Bioware::GFF->new();
-#        $gff->read_gff_file($output_filepath);
-#        $written = $gff->write_gff_file($output_filepath);
-#    }
+    # if (
+    #     $t ~~ [
+    #         "dlg", "utc", "utd", "ute", "uti", "utm", "utp", "uts",
+    #         "utt", "utw", "fac", "are", "git", "ifo", "pth"
+    #     ]
+    #   )
+    # {
+    #     my $gff = Bioware::GFF->new();
+    #     $gff->read_gff_file($output_filepath);
+    #     $written = $gff->write_gff_file($output_filepath);
+    # }
 
     return $written;
 }
@@ -539,17 +535,17 @@ sub export_resource_to_temp_file {
 
     $resource = $self->{'resources'}[$res_ix];
 
-    #use Win32API::File::Temp;
-    #my $tempfile=Win32API::File::Temp->new();
-    #binmode $tempfile->{'fh'};
+    # use Win32API::File::Temp;
+    # my $tempfile=Win32API::File::Temp->new();
+    # binmode $tempfile->{'fh'};
     my $fh = File::Temp->new();
     binmode $fh;
 
-    #    my $tempfile = %tempfile;
+    # my $tempfile = %tempfile;
 
     if ( $resource->{'res_data'} ) {
 
-        #        syswrite $tempfile->{'fh'}, $resource->{'res_data'}; }
+        # syswrite $tempfile->{'fh'}, $resource->{'res_data'}; }
         syswrite $fh, $resource->{'res_data'};
     }
     else {
@@ -560,14 +556,12 @@ sub export_resource_to_temp_file {
         my $tmp;
         sysread $in_fh, $tmp, $resource->{'res_size'};
 
-        #        $written=syswrite $tempfile->{'fh'},$tmp;
+        # $written=syswrite $tempfile->{'fh'},$tmp;
         $written = syswrite $fh, $tmp;
         close $in_fh;
     }
     return $fh;
 }
-
-#line 647
 
 sub import_resource {
 
@@ -589,7 +583,7 @@ sub import_resource {
     unless ($store_as) { $store_as = ( split /\\/, $new_resource_file )[-1] }
     my $res_ix = $self->get_resource_id_by_name($store_as);
     ( open my ($in_fh), "<", $new_resource_file )
-      or return 0;    #die "Can't: $!\n";
+      or return 0;    # die "Can't: $!\n";
     binmode $in_fh;
 
     if ( defined $res_ix ) {
@@ -613,16 +607,14 @@ sub import_resource {
 
         my $new_offset = undef;
 
-        #		if($res_ix > 0)
-        #		{
+        # if($res_ix > 0) {
         $new_offset = $self->{resources}[ $res_ix - 1 ]{'res_offset'} +
           $self->{resources}[ $res_ix - 1 ]{'res_size'};
 
-        #		}
-        #		else
-        #		{
-        #			$new_offset =
-        #		}
+        # }
+        # else {
+        #     $new_offset =
+        # }
 
         if ( $n == 1 ) {
             print
@@ -648,8 +640,6 @@ sub import_resource {
     return 1;
 }
 
-#line 725
-
 sub import_resource_scalar {
     my $self                         = shift;
     my $resource_name_with_extension = shift;
@@ -665,7 +655,7 @@ sub import_resource_scalar {
     if ( ref $scalar eq 'SCALAR' ) {
         $scalar = $$scalar;
     }
-    elsif ( ref $scalar ) {    #something else
+    elsif ( ref $scalar ) {    # something else
         return 0;
     }
     if ( defined $res_ix ) {
@@ -703,8 +693,6 @@ sub import_resource_scalar {
     return 1;
 }
 
-#line 786
-
 sub load_erf {
 
     #-----------------
@@ -733,8 +721,6 @@ sub load_erf {
     close $fh;
     return 1;
 }
-
-#line 830
 
 sub load_erf_resource {
 
@@ -788,8 +774,6 @@ sub load_erf_resource_by_index {
     return $total_read;
 }
 
-#line 896
-
 sub write_erf {
 
     #---------------------------------------------
@@ -804,8 +788,8 @@ sub write_erf {
     #why did I do this? vvv
 
 # my $working_output;  #we may need to read the original erf before we overwrite it.
-# unless ($output_file) { $output_file=$self->{'erf_filename'} }
-# $working_output=$output_file.'_temp';
+# unless ($output_file) { $output_file = $self->{'erf_filename'} }
+# $working_output = $output_file . '_temp';
     if ($update_build) {
         $self->{'build_year'} = (localtime)[5];
         $self->{'build_day'}  = (localtime)[7];
@@ -890,16 +874,14 @@ sub write_erf {
     }
     close $out_fh;
 
-    #if (rename $working_output, $output_file) {
-    #    return $total_written;
-    #}
-    #else {
-    #    return 0;
-    #}
+    # if ( rename $working_output, $output_file ) {
+    #     return $total_written;
+    # }
+    # else {
+    #     return 0;
+    # }
     return $total_written;
 }
-
-#line 1008
 
 sub recalculate_packing {
 
@@ -966,8 +948,6 @@ sub recalculate_packing {
     }
     return;
 }
-
-#line 1106
 
 1;
 
