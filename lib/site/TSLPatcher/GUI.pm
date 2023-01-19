@@ -1,5 +1,10 @@
 package TSLPatcher::GUI;
 
+# TODO: This file generates 7 warnings about re-defining subroutines
+#   Is it overriding the ones from TSLPatcher::Functions?
+use strict;
+use warnings;
+
 use experimental qw/smartmatch autoderef switch/;
 
 use Math::Round;
@@ -56,12 +61,21 @@ sub Create {
     print "Height: $height " . ( round( $height * 0.8 ) ) . "\n";
     print "Width: $width " .   ( round( $width / 7 ) ) . "\n";
 
-#print "Height: " . round(($height * 0.8) / 14) . " \tWidth: " . round($width / 7) . "\n";
+    # print "Height: "
+    #   . round( ( $height * 0.8 ) / 14 )
+    #   . " \tWidth: "
+    #   . round( $width / 7 ) . "\n";
 
     $GUI{mwTextFrame} = $GUI{mw}->Frame( -height => round( $height * 0.8 ) )
       ->pack( -fill => 'y', -expand => 1 );
 
-#	$GUI{mwInfoText}     = $GUI{mwTextFrame}->Scrolled("ROText", -scrollbars=>'oe', -height=>round(($height * 0.8) / 14), -width=>round($width / 7), -wrap=>'word')->pack(-pady=>10, -fill=>'both', -expand=>1);
+    # $GUI{mwInfoText} = $GUI{mwTextFrame}->Scrolled(
+    #     "ROText",
+    #     -scrollbars => 'oe',
+    #     -height     => round( ( $height * 0.8 ) / 14 ),
+    #     -width      => round( $width / 7 ),
+    #     -wrap       => 'word'
+    # )->pack( -pady => 10, -fill => 'both', -expand => 1 );
     $GUI{mwInstallText} = $GUI{mwTextFrame}->Scrolled(
         "ROText",
         -scrollbars => 'oe',
