@@ -1,24 +1,18 @@
-#line 1 "Bioware/GFF.pm"
+package Bioware::GFF;
 
-# Define package name
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::GFF;    #~~~~~~~~~~~~~~~
+use strict;
+use warnings;    # TODO: This file generates 2 warnings
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#line 81
-
-# use strict;
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
 
 # set version
-$VERSION = 0.69; #Added a check to only add Substrings to a Bioware::GFF::CExoLocString field if the StringRef is -1 (Games use locals over globals...)
+$VERSION = 0.69; # Added a check to only add Substrings to a Bioware::GFF::CExoLocString field if the StringRef is -1 (Games use locals over globals...)
 
-#0.68; #Made more robust in the Bioware::GFF::Field::writeField sub for Lists that have only 1 or 0 structs
-#0.67; #added check for array ref in get_field_ix_by_label
-#0.66; #support for STRREF field (Jade Empire)
-#0.65; #support for unicode RESREF, CEXOSTRING, CEXOLOCSTRING fields
+# 0.68; # Made more robust in the Bioware::GFF::Field::writeField sub for Lists that have only 1 or 0 structs
+# 0.67; # added check for array ref in get_field_ix_by_label
+# 0.66; # support for STRREF field (Jade Empire)
+# 0.65; # support for unicode RESREF, CEXOSTRING, CEXOLOCSTRING fields
 @ISA = qw(Exporter);
 
 # export functions/variables
@@ -62,8 +56,7 @@ our %fieldindices_hash   = ();
 our %listindices_hash    = ();
 
 #define functions for export
-############################################################################################################
-
+#########################################
 sub FIELD_BYTE          { 0 }
 sub FIELD_CHAR          { 1 }
 sub FIELD_WORD          { 2 }
@@ -84,8 +77,6 @@ sub FIELD_ORIENTATION   { 16 }
 sub FIELD_POSITION      { 17 }
 sub FIELD_STRREF        { 18 }
 
-#line 170
-
 sub new {
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
@@ -103,19 +94,22 @@ sub new {
 sub copy_gff($) {
     my @gff_objects = @_;
 
-    #print join "\n", @gff_objects;
+    # print join "\n", @gff_objects;
     my $gff_object  = $gff_objects[1];
     my $gff_object2 = Bioware::GFF::new();
 
-    #print "h\n";
+    # print "h\n";
     $gff_object2->{Main} = $gff_object->{Main};
 
     return $gff_object2;
 }
 
-sub write_gff($$;$) {    #DEPRECATED FUNCTION...
-        #writes gff to file
-        #this function should be called by a struct, not a GFF object
+sub write_gff($$;$) {
+
+    # DEPRECATED FUNCTION...
+    # writes gff to file
+    # this function should be called by a struct, not a GFF object
+
     my ( $struct, $fn, $fh ) = @_;
     unless ( ref $struct == "Bioware::GFF::Struct" ) {
         die "Not a Struct reference, use a different function --TK\n"
@@ -126,8 +120,11 @@ sub write_gff($$;$) {    #DEPRECATED FUNCTION...
     return $total_written;
 }
 
-sub write_gff2($) {    #writes gff to file, GFF object
-                       #warning uses File::Temp!
+sub write_gff2($) {
+
+    # writes gff to file, GFF object
+    # warning uses File::Temp!
+
     my ( $gff, $fn ) = @_;
     unless ( ref $gff == "Bioware::GFF" ) {
         die "Not a GFF reference, use a different function --TK\n"
@@ -140,7 +137,10 @@ sub write_gff2($) {    #writes gff to file, GFF object
     return $total_written;
 }
 
-sub write_gff3($) {    #same as write_gff2 but uses Win32API::File::Temp
+sub write_gff3($) {
+
+    # same as write_gff2 but uses Win32API::File::Temp
+
     my ( $gff, $fn ) = @_;
     unless ( ref $gff == "Bioware::GFF" ) {
         die "Not a GFF reference, use a different function --TK\n"
@@ -152,8 +152,6 @@ sub write_gff3($) {    #same as write_gff2 but uses Win32API::File::Temp
       $struct->writeHeader2( $fn, $gff->{sig} . $gff->{version} );
     return $total_written;
 }
-
-#line 241
 
 sub read_gff_file($) {
     my ( $gff, $fn ) = @_;
@@ -180,7 +178,6 @@ sub read_gff_scalar($) {
     close $fh;
     return 1;
 }
-#line 278
 
 sub write_gff_file($;$) {
     my ( $gff, $fn, $use_native_file_temp ) = @_;
@@ -194,12 +191,9 @@ sub write_gff_file($;$) {
     return $total_written;
 }
 
-#line 302
+sub read_gff_from_scalar($) {
 
-#line 313
-
-sub read_gff_from_scalar($)
-{    #creates an struct from a gff memory stream (scalar ref)
+    # creates an struct from a gff memory stream (scalar ref)
     my $gffref = shift;
     unless ( ref $gffref eq 'SCALAR' ) { return; }
     my $gff = $$gffref;
@@ -218,10 +212,9 @@ sub read_gff_from_scalar($)
     return ( $struct0, $tot_written );
 }
 
-#line 341
+sub read_gff_from_scalar2($) {
 
-sub read_gff_from_scalar2($)
-{    #creates a Bioware::GFF::Struct object from a scalar ref
+    # creates a Bioware::GFF::Struct object from a scalar ref
     use IO::Scalar;
     my $scalarref = shift;
     unless ( ref $scalarref eq 'SCALAR' ) { return; }
@@ -234,26 +227,25 @@ sub read_gff_from_scalar2($)
     return $struct0;
 }
 
-#line 369
+sub write_gff_to_scalar($$) {
 
-sub write_gff_to_scalar($$) {    #creates a memory stream from an gff struct
+    # creates a memory stream from an gff struct
+
     my ( $struct0, $sig ) = @_;
     my $gff_scalar;
     %write_info = ();
     $struct0->writeStruct();
     use File::Temp qw /tempfile/;
 
-    #use Win32API::File::Temp;
-    #my $tempf=Win32API::File::Temp->new();
-    my $fh = tempfile();    #$tempf->{'fh'};
+    # use Win32API::File::Temp;
+    # my $tempf=Win32API::File::Temp->new();
+    my $fh = tempfile();    # $tempf->{'fh'};
     $struct0->writeHeader( undef, $fh, $sig );
     sysseek $fh, 0, 0;
     sysread $fh, $gff_scalar, ( -s $fh );
     close $fh;
     return \$gff_scalar;
 }
-
-#line 393
 
 sub as_scalar() {
     use IO::Scalar;
@@ -266,7 +258,7 @@ sub as_scalar() {
         $self->{sig} . $self->{version} );
     return $gff_scalar;
 }
-########################################################################################################
+#########################################
 
 sub unpackquad($) {
     my ($str) = @_;
@@ -283,8 +275,8 @@ sub packquad($) {
     my $str;
     if ( !eval { $str = pack( 'Q', $big ); 1; } ) {
         my $hival = $big / ( 2**32 );
-        $hival =~ s/(\.\d+)$//;            #drop decimal
-        if ( $hival < 0 ) { $hival--; }    #if neg then round down
+        $hival =~ s/(\.\d+)$//;            # drop decimal
+        if ( $hival < 0 ) { $hival--; }    # if neg then round down
         my $hi = pack( 'V', $hival );
         my $lo = pack( 'V', ( $big % ( 2**32 ) ) );
         $str = $lo . $hi;
@@ -311,9 +303,8 @@ sub unpacksquad($) {
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::GFF::CExoLocSubString;    #~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package Bioware::GFF::CExoLocSubString;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sub new {
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
@@ -327,9 +318,8 @@ sub new {
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::GFF::CExoLocString;    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package Bioware::GFF::CExoLocString;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sub new {
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
@@ -343,9 +333,8 @@ sub new {
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::GFF::Field;    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package Bioware::GFF::Field;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sub writeField;
 
 sub new {
@@ -365,7 +354,7 @@ sub new {
 
 sub writeField {
 
-    #Purpose: writes a field to a temporary file for fields,
+    # Purpose: writes a field to a temporary file for fields,
 
     my $field = shift;
     my $type  = $field->{'Type'};
@@ -378,69 +367,69 @@ sub writeField {
     # Write Field's 2nd DWORD
     #~~~~~~~~~~~~~~~~~~~~~~~~
     if ( $label_memory{ $field->{'Label'} } )
-    {    #if we've recorded an index for this label,
+    {    # if we've recorded an index for this label,
         syswrite $write_info{'fh_field'},
           pack( 'V', $label_memory{ $field->{'Label'} } );
-    }    #then use it now
-    else {    #otherwise,
+    }    # then use it now
+    else {    # otherwise,
         syswrite $write_info{'fh_label'},
-          pack( 'a16', $field->{'Label'} );    #we create a new label entry,
-        $write_info{'label_cnt'}++;            #increment label count
+          pack( 'a16', $field->{'Label'} );    # we create a new label entry,
+        $write_info{'label_cnt'}++;            # increment label count
         syswrite $write_info{'fh_field'},
           pack( 'V', ( $write_info{'label_cnt'} - 1 ) )
-          ;                                    #write the new index=count-1
+          ;                                    # write the new index=count-1
         $label_memory{ $field->{'Label'} } =
-          $write_info{'label_cnt'} - 1;        #and remember it for next time
+          $write_info{'label_cnt'} - 1;        # and remember it for next time
     }
 
     # Write Field's 3rd DWORD
     #~~~~~~~~~~~~~~~~~~~~~~~~
 
     if ( $type < 6 )
-    {    #byte, char, word, short, dword, int  -- all nullpadded to 4 bytes
+    {    # byte, char, word, short, dword, int  -- all nullpadded to 4 bytes
         syswrite $write_info{'fh_field'}, pack( 'V', $field->{'Value'} );
     }
-    elsif ( $type < 8 ) {    #DWORD64, INT64
+    elsif ( $type < 8 ) {    # DWORD64, INT64
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                  #write the field data offset
+          ;                  # write the field data offset
         syswrite $write_info{'fh_fielddata'},
           Bioware::GFF::packquad( $field->{'Value'} );
     }
-    elsif ( $type == 8 ) {    #float
+    elsif ( $type == 8 ) {    # float
         syswrite $write_info{'fh_field'}, pack( 'f', $field->{'Value'} );
     }
-    elsif ( $type == 9 ) {    #double
+    elsif ( $type == 9 ) {    # double
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                   #write the field data offset
+          ;                   # write the field data offset
         syswrite $write_info{'fh_fielddata'}, pack( 'd', $field->{'Value'} );
     }
-    elsif ( $type == 10 ) {    #CExoString
+    elsif ( $type == 10 ) {    # CExoString
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                    #write the field data offset
+          ;                    # write the field data offset
         my $cexostring_packed =
           pack( 'V', length( $field->{'Value'} ) ) . $field->{'Value'};
         syswrite $write_info{'fh_fielddata'}, $cexostring_packed;
     }
-    elsif ( $type == 11 ) {    #Resref
+    elsif ( $type == 11 ) {    # Resref
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                    #write the field data offset
+          ;                    # write the field data offset
         my $resref_packed =
           pack( 'C', length( $field->{'Value'} ) ) . $field->{'Value'};
         syswrite $write_info{'fh_fielddata'}, $resref_packed;
     }
-    elsif ( $type == 12 ) {    #CExoLocString
+    elsif ( $type == 12 ) {    # CExoLocString
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                    #write the field data offset
+          ;                    # write the field data offset
         my $exolocstr        = $field->{'Value'};
         my $exolocsubstr_ref = $exolocstr->{'Substrings'};
         my @exolocsubstrs    = @$exolocsubstr_ref;
 
-     #print "# of Exos: $field->{'Label'}" . "_" . scalar @exolocsubstrs . "\n";
+    # print "# of Exos: $field->{'Label'}" . "_" . scalar @exolocsubstrs . "\n";
         my $packed_substrs = undef;
         for my $exolocsubstr (@exolocsubstrs) {
             my $exolocsubstr_len = length $exolocsubstr->{'Value'};
@@ -450,32 +439,32 @@ sub writeField {
         }
         my $substrs_len = do { use bytes; length $packed_substrs; };
         syswrite $write_info{'fh_fielddata'}
-          ,    #writing cexolocstring to fielddata
+          ,    # writing cexolocstring to fielddata
           pack( 'V V V',
             ( $substrs_len + 8 ),
             $exolocstr->{'StringRef'},
             scalar @exolocsubstrs )
           . $packed_substrs;
     }
-    elsif ( $type == 13 ) {    #void/binary
+    elsif ( $type == 13 ) {    # void/binary
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                    #write the field data offset
+          ;                    # write the field data offset
         my $binary_length = do { use bytes; length $field->{'Value'}; };
         syswrite $write_info{'fh_fielddata'},
           pack( 'V', $binary_length ) . $field->{'Value'};
-    }    #write binary data with length prefix
+    }    # write binary data with length prefix
     elsif ( $type == 14 ) {    #struct
         my $struct = $field->{'Value'};
         syswrite $write_info{'fh_field'},
           pack( 'V', $write_info{'struct_cnt'} )
-          ; #our new struct index=current struct count because the new struct hasn't been written yet
+          ; # our new struct index=current struct count because the new struct hasn't been written yet
         $struct->writeStruct();
     }
-    elsif ( $type == 15 ) {    #list\
+    elsif ( $type == 15 ) {    # list\
         my $struct_array_ref = $field->{'Value'};
 
-        #added v0.68...
+        # added v0.68...
         if ( ref($struct_array_ref) =~ /Bioware/ ) {
             $struct_array_ref = [$struct_array_ref];
         }
@@ -483,47 +472,48 @@ sub writeField {
             $struct_array_ref = [];
         }
 
-        #...end v0.68
-        my $list_id = $list_cnt;    #remember who we are
+        # ...end v0.68
+        my $list_id = $list_cnt;    # remember who we are
         $list_cnt++;
         syswrite $write_info{'fh_field'},
           pack( 'V', $sizeof_listindices )
-          ;    #write the current offset of list indices
-               #we must increment the offset before writing any structs
+          ;    # write the current offset of list indices
+               # we must increment the offset before writing any structs
         $sizeof_listindices += 4 * ( 1 + scalar(@$struct_array_ref) )
-          ;    #each list index is a DWORD plus one for length
+          ;    # each list index is a DWORD plus one for length
         my $listindices_pack = pack( 'V', ( scalar @$struct_array_ref ) )
-          ; #write first element of new list index into a new variable to keep separated
-        for my $struct (@$struct_array_ref) {    #scroll through each struct
+          ; # write first element of new list index into a new variable to keep separated
+        for my $struct (@$struct_array_ref) {    # scroll through each struct
             $listindices_pack .= pack( 'V', $write_info{'struct_cnt'} )
-              ;                                  #write its index to our scalar
-            $struct->writeStruct();    #now handle writing the structure
+              ;                                  # write its index to our scalar
+            $struct->writeStruct();    # now handle writing the structure
         }
         $listindices_hash{$list_id} = $listindices_pack;
-    }    #store the new list indices in global array
-    elsif ( ( $type == 16 ) || ( $type == 17 ) ) {    #float16 array [4] or [3]
+    }    # store the new list indices in global array
+    elsif ( ( $type == 16 ) || ( $type == 17 ) ) {    # float16 array [4] or [3]
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;    #write the field data offset
+          ;    # write the field data offset
         my $float_array_ref = $field->{'Value'};
         for my $float (@$float_array_ref) {
             syswrite $write_info{'fh_fielddata'}, pack( 'f', $float );
         }
     }
-    elsif ( $type == 18 ) {    #STRREF
+    elsif ( $type == 18 ) {    # STRREF
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                    #write the field data offset
+          ;                    # write the field data offset
         syswrite $write_info{'fh_fielddata'},
           pack( 'V V', ( 4, $field->{'Value'} ) )
-          ;                    #write size (4bytes) + STRREF (4bytes)
+          ;                    # write size (4bytes) + STRREF (4bytes)
     }
 
 }
 
 sub writeFieldScalar {
 
-#Purpose: for use with writeStructScalar (memory streams) (( -s, sizeof operator, cannot be used ))
+    # Purpose: for use with writeStructScalar (memory streams)
+    # (( -s, sizeof operator, cannot be used ))
 
     my $field = shift;
     my $type  = $field->{'Type'};
@@ -536,19 +526,19 @@ sub writeFieldScalar {
     # Write Field's 2nd DWORD
     #~~~~~~~~~~~~~~~~~~~~~~~~
     if ( $label_memory{ $field->{'Label'} } )
-    {    #if we've recorded an index for this label,
+    {    # if we've recorded an index for this label,
         syswrite $write_info{'fh_field'},
           pack( 'V', $label_memory{ $field->{'Label'} } );
-    }    #then use it now
-    else {    #otherwise,
+    }    # then use it now
+    else {    # otherwise,
         syswrite $write_info{'fh_label'},
-          pack( 'a16', $field->{'Label'} );    #we create a new label entry,
-        $write_info{'label_cnt'}++;            #increment label count
+          pack( 'a16', $field->{'Label'} );    # we create a new label entry,
+        $write_info{'label_cnt'}++;            # increment label count
         syswrite $write_info{'fh_field'},
           pack( 'V', ( $write_info{'label_cnt'} - 1 ) )
-          ;                                    #write the new index=count-1
+          ;                                    # write the new index=count-1
         $label_memory{ $field->{'Label'} } =
-          $write_info{'label_cnt'} - 1;        #and remember it for next time
+          $write_info{'label_cnt'} - 1;        # and remember it for next time
     }
 
     # Write Field's 3rd DWORD
@@ -557,40 +547,40 @@ sub writeFieldScalar {
     my $temp_size = length ${ $write_info{'fh_fielddata'}->sref };
 
     if ( $type < 6 )
-    {    #byte, char, word, short, dword, int  -- all nullpadded to 4 bytes
+    {    # byte, char, word, short, dword, int  -- all nullpadded to 4 bytes
         syswrite $write_info{'fh_field'}, pack( 'V', $field->{'Value'} );
     }
-    elsif ( $type < 8 ) {    #DWORD64, INT64
+    elsif ( $type < 8 ) {    # DWORD64, INT64
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         syswrite $write_info{'fh_fielddata'},
           Bioware::GFF::packquad( $field->{'Value'} );
     }
-    elsif ( $type == 8 ) {            #float
+    elsif ( $type == 8 ) {            # float
         syswrite $write_info{'fh_field'}, pack( 'f', $field->{'Value'} );
     }
-    elsif ( $type == 9 ) {            #double
+    elsif ( $type == 9 ) {            # double
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         syswrite $write_info{'fh_fielddata'}, pack( 'd', $field->{'Value'} );
     }
-    elsif ( $type == 10 ) {           #CExoString
+    elsif ( $type == 10 ) {           # CExoString
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         my $cexostring_packed =
           pack( 'V', length( $field->{'Value'} ) ) . $field->{'Value'};
         syswrite $write_info{'fh_fielddata'}, $cexostring_packed;
     }
-    elsif ( $type == 11 ) {           #Resref
+    elsif ( $type == 11 ) {           # Resref
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         my $resref_packed =
           pack( 'C', length( $field->{'Value'} ) ) . $field->{'Value'};
         syswrite $write_info{'fh_fielddata'}, $resref_packed;
     }
-    elsif ( $type == 12 ) {           #CExoLocString
+    elsif ( $type == 12 ) {           # CExoLocString
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         my $exolocstr        = $field->{'Value'};
         my $exolocsubstr_ref = $exolocstr->{'Substrings'};
         my @exolocsubstrs    = @$exolocsubstr_ref;
@@ -603,76 +593,73 @@ sub writeFieldScalar {
         }
         my $substrs_len = do { use bytes; length $packed_substrs; };
         syswrite $write_info{'fh_fielddata'}
-          ,    #writing cexolocstring to fielddata
+          ,    # writing cexolocstring to fielddata
           pack( 'V V V',
             ( $substrs_len + 8 ),
             $exolocstr->{'StringRef'},
             scalar @exolocsubstrs )
           . $packed_substrs;
     }
-    elsif ( $type == 13 ) {    #void/binary
+    elsif ( $type == 13 ) {    # void/binary
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         my $binary_length = do { use bytes; length $field->{'Value'}; };
         syswrite $write_info{'fh_fielddata'},
           pack( 'V', $binary_length ) . $field->{'Value'};
-    }    #write binary data with length prefix
-    elsif ( $type == 14 ) {    #struct
+    }    # write binary data with length prefix
+    elsif ( $type == 14 ) {    # struct
         my $struct = $field->{'Value'};
         syswrite $write_info{'fh_field'},
           pack( 'V', $write_info{'struct_cnt'} )
-          ; #our new struct index=current struct count because the new struct hasn't been written yet
+          ; # our new struct index=current struct count because the new struct hasn't been written yet
         $struct->writeStruct();
     }
-    elsif ( $type == 15 ) {    #list
+    elsif ( $type == 15 ) {    # list
         my $struct_array_ref = $field->{'Value'};
-        my $list_id          = $list_cnt;           #remember who we are
+        my $list_id          = $list_cnt;           # remember who we are
         $list_cnt++;
         syswrite $write_info{'fh_field'},
           pack( 'V', $sizeof_listindices )
-          ;    #write the current offset of list indices
-               #we must increment the offset before writing any structs
+          ;    # write the current offset of list indices
+               # we must increment the offset before writing any structs
         $sizeof_listindices += 4 * ( 1 + scalar(@$struct_array_ref) )
-          ;    #each list index is a DWORD plus one for length
+          ;    # each list index is a DWORD plus one for length
         my $listindices_pack = pack( 'V', ( scalar @$struct_array_ref ) )
-          ; #write first element of new list index into a new variable to keep separated
-        for my $struct (@$struct_array_ref) {    #scroll through each struct
+          ; # write first element of new list index into a new variable to keep separated
+        for my $struct (@$struct_array_ref) {    # scroll through each struct
             $listindices_pack .= pack( 'V', $write_info{'struct_cnt'} )
-              ;                                  #write its index to our scalar
-            $struct->writeStructScalar();    #now handle writing the structure
+              ;                                  # write its index to our scalar
+            $struct->writeStructScalar();    # now handle writing the structure
         }
         $listindices_hash{$list_id} = $listindices_pack;
-    }    #store the new list indices in global array
-    elsif ( ( $type == 16 ) || ( $type == 17 ) ) {    #float16 array [4] or [3]
+    }    # store the new list indices in global array
+    elsif ( ( $type == 16 ) || ( $type == 17 ) ) {    # float16 array [4] or [3]
         syswrite $write_info{'fh_field'},
-          pack( 'V', $temp_size );    #write the field data offset
+          pack( 'V', $temp_size );    # write the field data offset
         my $float_array_ref = $field->{'Value'};
         for my $float (@$float_array_ref) {
             syswrite $write_info{'fh_fielddata'}, pack( 'f', $float );
         }
     }
-    elsif ( $type == 18 ) {           #STRREF
+    elsif ( $type == 18 ) {           # STRREF
         syswrite $write_info{'fh_field'},
           pack( 'V', ( -s $write_info{'fh_fielddata'} ) )
-          ;                           #write the field data offset
+          ;                           # write the field data offset
         syswrite $write_info{'fh_fielddata'},
           pack( 'V V', ( 4, $field->{'Value'} ) )
-          ;                           #write size (4bytes) + STRREF (4bytes)
+          ;                           # write size (4bytes) + STRREF (4bytes)
     }
 
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::GFF::Struct;    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package Bioware::GFF::Struct;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#use File::Temp qw /tempfile/;
+# use File::Temp qw /tempfile/;
 sub new;
 sub writeStruct;
 sub writeHeader;
 sub buildStruct;
-
-#line 730
 
 sub new {
     my $invocant = shift;
@@ -690,10 +677,8 @@ sub new {
 sub delete_struct {
     my $struct = shift;
 
-    #delete $$struct;
+    # delete $$struct;
 }
-
-#line 804
 
 sub createField {
     my $struct     = shift;
@@ -701,11 +686,12 @@ sub createField {
     my %testhash   = @params;
     my $fields_ref = $struct->{Fields};
     my $new_field;
-    if ( $testhash{'Type'} == 12 ) {    #special case for CExoLocString
+    if ( $testhash{'Type'} == 12 ) {    # special case for CExoLocString
         my $cexoloc;
         my $cexolocsub = undef;
-        if ( $testhash{'StringRef'} == -1 )
-        {    #print "Test Hash says: " . $testhash{'StringRef'} . "\n";
+        if ( $testhash{'StringRef'} == -1 ) {
+
+            # print "Test Hash says: " . $testhash{'StringRef'} . "\n";
             $cexolocsub = Bioware::GFF::CExoLocSubString->new(
                 'StringID' => 0,
                 'Value'    => $testhash{'Value'}
@@ -732,14 +718,16 @@ sub createField {
     else {
         $new_field = Bioware::GFF::Field->new(@params);
     }
-    if ( ref($fields_ref) eq 'Bioware::GFF::Field' )
-    {    #special case -- if only one field exists, we must make this an array
+    if ( ref($fields_ref) eq 'Bioware::GFF::Field' ) {
+
+        # special case -- if only one field exists, we must make this an array
         my $old_field = $fields_ref;
         $struct->{Fields} = [ $old_field, $new_field ];
     }
     elsif ( ref($fields_ref) eq 'ARRAY' ) {
-        if ( scalar(@$fields_ref) == 0 )
-        {    #special case -- array is empty, we must make this a field
+        if ( scalar(@$fields_ref) == 0 ) {
+
+            # special case -- array is empty, we must make this a field
             $struct->{Fields} = $new_field;
         }
         else {
@@ -747,8 +735,6 @@ sub createField {
         }
     }
 }
-
-#line 848
 
 sub deleteField {
     my $struct   = shift;
@@ -763,9 +749,10 @@ sub deleteField {
     $struct->{Fields} = [@new_field_arr];
 }
 
-#line 871
+sub get_field_ix_by_label {
 
-sub get_field_ix_by_label {    #assumes array of fields, not single field
+    # assumes array of fields, not single field
+
     my $struct  = shift;
     my $label   = shift;
     my $ix      = 0;
@@ -804,28 +791,32 @@ sub get_field_by_label {
     else            { return undef; }
 }
 
-sub fbl {    #shorthand for the above function
+sub fbl {
+
+    # shorthand for the above function
+
     return get_field_ix_by_label(@_);
 }
 
 sub writeStruct {
 
-    #Purpose: writes the structure to disk
-    #Input: self
-    #side effects: populates write_info and creates temp files
-    #    use Win32API::File::Temp;
+    # Purpose: writes the structure to disk
+    # Input: self
+    # side effects: populates write_info and creates temp files
+    # use Win32API::File::Temp;
+
     my ($struct) = shift;
     unless ( $write_info{'fh_struct'} ) {
-        $write_info{'temp_struct'} =    #Win32API::File::Temp->new();
+        $write_info{'temp_struct'} =    # Win32API::File::Temp->new();
           $write_info{'fh_struct'} = tempfile();
 
-        $write_info{'temp_field'} =     #Win32API::File::Temp->new();
+        $write_info{'temp_field'} =     # Win32API::File::Temp->new();
           $write_info{'fh_field'} = tempfile();
 
-        $write_info{'temp_label'} =     #Win32API::File::Temp->new();
+        $write_info{'temp_label'} =     # Win32API::File::Temp->new();
           $write_info{'fh_label'} = tempfile();
 
-        $write_info{'temp_fielddata'} =    #Win32API::File::Temp->new();
+        $write_info{'temp_fielddata'} =    # Win32API::File::Temp->new();
           $write_info{'fh_fielddata'} = tempfile();
     }
     syswrite $write_info{'fh_struct'}, pack( 'V', $struct->{'ID'} );
@@ -837,7 +828,7 @@ sub writeStruct {
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'}, pack( 'V', 1 );
         $write_info{'struct_cnt'}++
-          ;    #we have written a stuct, so increment count
+          ;    # we have written a stuct, so increment count
         my $field = $struct->{'Fields'};
         $field->writeField();
     }
@@ -850,39 +841,40 @@ sub writeStruct {
             $struct_dword2 = pack( 'V', $sizeof_fieldindices );
         }
 
-      #we've written the current offset, to make sure the next struct is handled
-      #properly, we have to increment the offset before writing any fields
+     # we've written the current offset, to make sure the next struct is handled
+     # properly, we have to increment the offset before writing any fields
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'},
           pack( 'V', ( scalar @$temp_fields_arr_ref ) );
-        my $struct_index = $write_info{'struct_cnt'};    #remember who we are
+        my $struct_index = $write_info{'struct_cnt'};    # remember who we are
         $write_info{'struct_cnt'}++
-          ;    #we have written a struct, so increment count
+          ;    # we have written a struct, so increment count
 
         my $fields_arr_ref = $struct->{'Fields'};
         $sizeof_fieldindices +=
-          4 * ( scalar @$temp_fields_arr_ref );    #each fieldindex is a DWORD
+          4 * ( scalar @$temp_fields_arr_ref );    # each fieldindex is a DWORD
         my $fieldindices_pack
-          ; #we need to store this struct's fieldindices separate from other structs
+          ; # we need to store this struct's fieldindices separate from other structs
         for my $field (@$temp_fields_arr_ref) {
             $fieldindices_pack .= pack( 'V', $write_info{'field_cnt'} )
-              ;    #write the field index (field count)
+              ;    # write the field index (field count)
             $field->writeField();
         }
         $fieldindices_hash{$struct_index} =
-          $fieldindices_pack;    #put in global array for safe keeping
+          $fieldindices_pack;    # put in global array for safe keeping
     }
 
 }
 
 sub writeStruct2 {
 
-    #Purpose: writes the structure to disk
-    #Input: self
-    #side effects: populates write_info and creates temp files
+    # Purpose: writes the structure to disk
+    # Input: self
+    # side effects: populates write_info and creates temp files
 
-#note: this version of writeStruct uses File::Temp instead of Win32API::File::Temp
-# this module possibly causes SIGALARM(14) to occur on WinXP!
+    # note: this version of writeStruct uses
+    #   File::Temp instead of Win32API::File::Temp
+    # this module possibly causes SIGALARM(14) to occur on WinXP!
 
     use File::Temp qw/ tempfile /;
     my ($struct) = shift;
@@ -892,10 +884,10 @@ sub writeStruct2 {
         $write_info{'fh_label'}     = tempfile();
         $write_info{'fh_fielddata'} = tempfile();
 
-#($write_info{'fh_struct'}      ,undef)=tempfile('strXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_struct'};
-#($write_info{'fh_field'}       ,undef)=tempfile('fieXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_field'};
-#($write_info{'fh_label'}       ,undef)=tempfile('lblXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_label'};
-#($write_info{'fh_fielddata'}   ,undef)=tempfile('fdaXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_fielddata'};
+# ($write_info{'fh_struct'}      ,undef)=tempfile('strXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_struct'};
+# ($write_info{'fh_field'}       ,undef)=tempfile('fieXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_field'};
+# ($write_info{'fh_label'}       ,undef)=tempfile('lblXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_label'};
+# ($write_info{'fh_fielddata'}   ,undef)=tempfile('fdaXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_fielddata'};
     }
     syswrite $write_info{'fh_struct'}, pack( 'V', $struct->{'ID'} );
     my $temp_fields_arr_ref = $struct->{'Fields'};
@@ -906,7 +898,7 @@ sub writeStruct2 {
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'}, pack( 'V', 1 );
         $write_info{'struct_cnt'}++
-          ;    #we have written a stuct, so increment count
+          ;    # we have written a stuct, so increment count
         my $field = $struct->{'Fields'};
         $field->writeField();
     }
@@ -919,53 +911,55 @@ sub writeStruct2 {
             $struct_dword2 = pack( 'V', $sizeof_fieldindices );
         }
 
-      #we've written the current offset, to make sure the next struct is handled
-      #properly, we have to increment the offset before writing any fields
+        # we've written the current offset, to make sure the
+        # next struct is handled properly, we have to increment
+        # the offset before writing any fields
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'},
           pack( 'V', ( scalar @$temp_fields_arr_ref ) );
-        my $struct_index = $write_info{'struct_cnt'};    #remember who we are
+        my $struct_index = $write_info{'struct_cnt'};    # remember who we are
         $write_info{'struct_cnt'}++
-          ;    #we have written a struct, so increment count
+          ;    # we have written a struct, so increment count
 
         my $fields_arr_ref = $struct->{'Fields'};
         $sizeof_fieldindices +=
-          4 * ( scalar @$temp_fields_arr_ref );    #each fieldindex is a DWORD
+          4 * ( scalar @$temp_fields_arr_ref );    # each fieldindex is a DWORD
         my $fieldindices_pack
-          ; #we need to store this struct's fieldindices separate from other structs
+          ; # we need to store this struct's fieldindices separate from other structs
         for my $field (@$temp_fields_arr_ref) {
             $fieldindices_pack .= pack( 'V', $write_info{'field_cnt'} )
-              ;    #write the field index (field count)
+              ;    # write the field index (field count)
             $field->writeField();
         }
         $fieldindices_hash{$struct_index} =
-          $fieldindices_pack;    #put in global array for safe keeping
+          $fieldindices_pack;    # put in global array for safe keeping
     }
 }
 
 sub writeStructScalar {
 
-    #Purpose: writes the structure to scalar
-    #Input: self
-    #side effects: populates write_info and creates scalar file handles
+    # Purpose: writes the structure to scalar
+    # Input: self
+    # side effects: populates write_info and creates scalar file handles
     use IO::Scalar;
     my ($struct) = shift;
-    unless ( $write_info{'fh_struct'} )
-    {    #create new IO scalars if not already created...
-         #$write_info{'temp_struct'}   =Win32API::File::Temp->new();
+    unless ( $write_info{'fh_struct'} ) {
+
+        # create new IO scalars if not already created...
+        # $write_info{'temp_struct'}   =Win32API::File::Temp->new();
         $write_info{'fh_struct'} = new IO::Scalar;
 
-        #$write_info{'temp_field'}    =Win32API::File::Temp->new();
+        # $write_info{'temp_field'}    =Win32API::File::Temp->new();
         $write_info{'fh_field'} =
-          new IO::Scalar;    #$write_info{'temp_field'}{'fh'};
+          new IO::Scalar;    # $write_info{'temp_field'}{'fh'};
 
-        #$write_info{'temp_label'}    =Win32API::File::Temp->new();
+        # $write_info{'temp_label'}    =Win32API::File::Temp->new();
         $write_info{'fh_label'} =
-          new IO::Scalar;    #$write_info{'temp_label'}{'fh'};
+          new IO::Scalar;    # $write_info{'temp_label'}{'fh'};
 
-        #$write_info{'temp_fielddata'}=Win32API::File::Temp->new();
+        # $write_info{'temp_fielddata'}=Win32API::File::Temp->new();
         $write_info{'fh_fielddata'} =
-          new IO::Scalar;    #$write_info{'temp_fielddata'}{'fh'};
+          new IO::Scalar;    # $write_info{'temp_fielddata'}{'fh'};
     }
     syswrite $write_info{'fh_struct'}, pack( 'V', $struct->{'ID'} );
     my $temp_fields_arr_ref = $struct->{'Fields'};
@@ -976,7 +970,7 @@ sub writeStructScalar {
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'}, pack( 'V', 1 );
         $write_info{'struct_cnt'}++
-          ;                  #we have written a stuct, so increment count
+          ;                  # we have written a stuct, so increment count
         my $field = $struct->{'Fields'};
         $field->writeFieldScalar();
     }
@@ -989,41 +983,42 @@ sub writeStructScalar {
             $struct_dword2 = pack( 'V', $sizeof_fieldindices );
         }
 
-      #we've written the current offset, to make sure the next struct is handled
-      #properly, we have to increment the offset before writing any fields
+        # we've written the current offset, to make sure the
+        # next struct is handled properly, we have to increment
+        # the offset before writing any fields
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'},
           pack( 'V', ( scalar @$temp_fields_arr_ref ) );
-        my $struct_index = $write_info{'struct_cnt'};    #remember who we are
+        my $struct_index = $write_info{'struct_cnt'};    # remember who we are
         $write_info{'struct_cnt'}++
-          ;    #we have written a struct, so increment count
+          ;    # we have written a struct, so increment count
 
         my $fields_arr_ref = $struct->{'Fields'};
         $sizeof_fieldindices +=
-          4 * ( scalar @$temp_fields_arr_ref );    #each fieldindex is a DWORD
+          4 * ( scalar @$temp_fields_arr_ref );    # each fieldindex is a DWORD
         my $fieldindices_pack
-          ; #we need to store this struct's fieldindices separate from other structs
+          ; # we need to store this struct's fieldindices separate from other structs
         for my $field (@$temp_fields_arr_ref) {
             $fieldindices_pack .= pack( 'V', $write_info{'field_cnt'} )
-              ;    #write the field index (field count)
+              ;    # write the field index (field count)
             $field->writeFieldScalar();
         }
         $fieldindices_hash{$struct_index} =
-          $fieldindices_pack;    #put in global array for safe keeping
+          $fieldindices_pack;    # put in global array for safe keeping
     }
 
 }
 
 sub writeHeader {
     my ( undef, $fn, $fh, $sig, $literal ) = @_
-      ; #input: calling struct (discarded), filename, filehandle (one or the other)
+      ; # input: calling struct (discarded), filename, filehandle (one or the other)
     my $total_written = 0;
 
     if ($fn) {
         ( open $fh, ">", $fn ) or die "$!";
     }
 
-    #binmode $fh;
+    # binmode $fh;
     $fh->binmode;
     if ($literal) {
         $total_written += syswrite $fh, $literal;
@@ -1037,7 +1032,7 @@ sub writeHeader {
     elsif ( $fn =~ /globalvars/i ) {
         $total_written += syswrite $fh, "GVT V3.2";
     }
-    else {    #if only filehandle was supplied, we need $sig info
+    else {    # if only filehandle was supplied, we need $sig info
         if ( $sig eq 'ifo' ) {
             $total_written += syswrite $fh, "IFO V3.2";
         }
@@ -1090,7 +1085,7 @@ sub writeHeader {
     }
     if ($fn) {
         close $fh;
-    }    #close file if a filename was supplied instead of a filehandle
+    }    # close file if a filename was supplied instead of a filehandle
     close $write_info{'fh_struct'};
     close $write_info{'fh_field'};
     close $write_info{'fh_label'};
@@ -1114,10 +1109,12 @@ sub writeHeader {
     return $total_written;
 }
 
-sub writeHeaderScalar
-{    #for use with writeStructScalar (using IO::Scalar handles)
+sub writeHeaderScalar {
+
+    #for use with writeStructScalar (using IO::Scalar handles)
+
     my ( undef, $fn, $fh, $sig, $literal ) = @_
-      ; #input: calling struct (discarded), filename, filehandle (one or the other)
+      ; # input: calling struct (discarded), filename, filehandle (one or the other)
     my $total_written = 0;
 
     if ($fn) {
@@ -1136,7 +1133,7 @@ sub writeHeaderScalar
     elsif ( $fn =~ /globalvars/i ) {
         $total_written += syswrite $fh, "GVT V3.2";
     }
-    else {    #if only filehandle was supplied, we need $sig info
+    else {    # if only filehandle was supplied, we need $sig info
         if ( $sig eq 'ifo' ) {
             $total_written += syswrite $fh, "IFO V3.2";
         }
@@ -1165,20 +1162,20 @@ sub writeHeaderScalar
         $fieldindices_offset, $sizeof_fieldindices,
         $listindices_offset,  $sizeof_listindices );
 
-#sysseek $write_info{'fh_struct'},0,0;
-#sysread $write_info{'fh_struct'},my $struct_data,length ${$write_info{'fh_struct'}->sref};
+# sysseek $write_info{'fh_struct'},0,0;
+# sysread $write_info{'fh_struct'},my $struct_data,length ${$write_info{'fh_struct'}->sref};
     $total_written += syswrite $fh, ${ $write_info{'fh_struct'}->sref };
 
-    #sysseek $write_info{'fh_field'},0,0;
-    #sysread $write_info{'fh_field'},my ($field_data),$fh_field_len;
+    # sysseek $write_info{'fh_field'},0,0;
+    # sysread $write_info{'fh_field'},my ($field_data),$fh_field_len;
     $total_written += syswrite $fh, ${ $write_info{'fh_field'}->sref };
 
-    #sysseek $write_info{'fh_label'},0,0;
-    #sysread $write_info{'fh_label'},my ($label_data),$fh_label_len;
+    # sysseek $write_info{'fh_label'},0,0;
+    # sysread $write_info{'fh_label'},my ($label_data),$fh_label_len;
     $total_written += syswrite $fh, ${ $write_info{'fh_label'}->sref };
 
-#sysseek $write_info{'fh_fielddata'},0,0;
-#sysread $write_info{'fh_fielddata'},my ($fielddata_data),(-s $write_info{'fh_fielddata'});
+# sysseek $write_info{'fh_fielddata'},0,0;
+# sysread $write_info{'fh_fielddata'},my ($fielddata_data),(-s $write_info{'fh_fielddata'});
     $total_written += syswrite $fh, ${ $write_info{'fh_fielddata'}->sref };
     for my $fieldindex ( sort { $a <=> $b } keys %fieldindices_hash ) {
         $total_written += syswrite $fh, $fieldindices_hash{$fieldindex};
@@ -1189,7 +1186,7 @@ sub writeHeaderScalar
     }
     if ($fn) {
         close $fh;
-    }    #close file if a filename was supplied instead of a filehandle
+    }    # close file if a filename was supplied instead of a filehandle
     close $write_info{'fh_struct'};
     close $write_info{'fh_field'};
     close $write_info{'fh_label'};
@@ -1213,9 +1210,12 @@ sub writeHeaderScalar
     return $total_written;
 }
 
-sub writeHeader2 {    #for use with File::Temp or Win32API::File::Temp
+sub writeHeader2 {
+
+    # for use with File::Temp or Win32API::File::Temp
+
     my ( undef, $fn, $sig ) = @_
-      ; #input: calling struct (discarded), filename, filehandle (one or the other)
+      ; # input: calling struct (discarded), filename, filehandle (one or the other)
     my $total_written = 0;
     ( open my ($fh), ">", $fn ) or die "Could not open $fn for writing.";
 
@@ -1244,7 +1244,7 @@ sub writeHeader2 {    #for use with File::Temp or Win32API::File::Temp
       ( -s $write_info{'fh_struct'} );
     $total_written += syswrite $fh, $struct_data;
 
-    #open my ($temp_fh),"<",$write_info{'temp_field'}{'fn'};
+    # open my ($temp_fh),"<",$write_info{'temp_field'}{'fn'};
     sysseek $write_info{'fh_field'}, 0, 0;
     sysread $write_info{'fh_field'}, my $field_data,
       ( -s $write_info{'fh_field'} );
@@ -1268,7 +1268,7 @@ sub writeHeader2 {    #for use with File::Temp or Win32API::File::Temp
     }
     if ($fn) {
         close $fh;
-    }    #close file if a filename was supplied instead of a filehandle
+    }    # close file if a filename was supplied instead of a filehandle
     close $write_info{'fh_struct'};
     close $write_info{'fh_field'};
     close $write_info{'fh_label'};
@@ -1293,9 +1293,8 @@ sub writeHeader2 {    #for use with File::Temp or Win32API::File::Temp
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::GFF::gffReader;    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package Bioware::GFF::gffReader;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sub Readgff;
 sub Header;
 sub ReadStruct;
@@ -1305,9 +1304,12 @@ sub ReadLabel;
 
 sub Readgff {
 
-#Purpose to read entire gff file into memory and store with objStructs and objFields
-#Inputs: a filehandle opened for read access at the header position, offset from beginning of SAV file if any
-#Outputs: ref to populated struct0
+    # Purpose to read entire gff file into memory and store
+    #   with objStructs and objFields
+    # Inputs: a filehandle opened for read access at the
+    #   header position, offset from beginning of SAV file if any
+    # Outputs: ref to populated struct0
+
     my ( $fh, $sav_offset ) = @_;
     my $header_ref = Header( $fh, $sav_offset );
     my $struct0    = Bioware::GFF::Struct->new();
@@ -1317,9 +1319,12 @@ sub Readgff {
 
 sub Readgff2 {
 
-#Purpose to read entire gff file into memory and store with objStructs and objFields
-#Inputs: a filehandle opened for read access at the header position, offset from beginning of SAV file if any
-#Outputs: ref to populated struct0
+    # Purpose to read entire gff file into memory and store
+    #   with objStructs and objFields
+    # Inputs: a filehandle opened for read access at the header
+    #   position, offset from beginning of SAV file if any
+    # Outputs: ref to populated struct0
+
     my ( $fh, $sav_offset ) = @_;
     my $header_ref = Header2( $fh, $sav_offset );
     my $struct0    = Bioware::GFF::Struct->new();
@@ -1329,9 +1334,11 @@ sub Readgff2 {
 
 sub Header {
 
-#Purpose to read gff header into memory
-#Inputs: a filehandle opened for read access at the header position, offset from beginning of SAV file if any
-#Outputs: ref to header hash
+    # Purpose to read gff header into memory
+    # Inputs: a filehandle opened for read access at the header
+    #   position, offset from beginning of SAV file if any
+    # Outputs: ref to header hash
+
     my ( $fh, $extra_offset ) = @_;
     my $header_packed;
     sysread $fh, $header_packed, 56;
@@ -1351,9 +1358,11 @@ sub Header {
 
 sub Header2 {
 
-#Purpose to read gff header into memory
-#Inputs: a filehandle opened for read access at the header position, offset from beginning of SAV file if any
-#Outputs: ref to header hash
+    # Purpose to read gff header into memory
+    # Inputs: a filehandle opened for read access at the
+    #   header position, offset from beginning of SAV file if any
+    # Outputs: ref to header hash
+
     my ( $fh, $extra_offset ) = @_;
     my $header_packed;
     read $fh, $header_packed, 56;
@@ -1373,9 +1382,10 @@ sub Header2 {
 
 sub ReadStruct {
 
-    #Purpose: populates struct object with data
-    #Inputs: fh, headerhashref, struct object, struct index
-    #Outputs: none
+    # Purpose: populates struct object with data
+    # Inputs: fh, headerhashref, struct object, struct index
+    # Outputs: none
+
     my ( $fh, $hhr, $struct, $struct_index, $gff ) = @_;
     my ($struct_packed);
     sysseek $fh,
@@ -1410,9 +1420,10 @@ sub ReadStruct {
 
 sub ReadStruct2 {
 
-    #Purpose: populates struct object with data
-    #Inputs: fh, headerhashref, struct object, struct index
-    #Outputs: none
+    # Purpose: populates struct object with data
+    # Inputs: fh, headerhashref, struct object, struct index
+    # Outputs: none
+
     my ( $fh, $hhr, $struct, $struct_index ) = @_;
     my ($struct_packed);
     seek $fh,
@@ -1437,9 +1448,11 @@ sub ReadStruct2 {
 
 sub ReadFields {
 
-#Purpose: to return array reference of field objects for a structure
-#Inputs: fh, headerhashref, struct object, struct's field data offset, struct's field count
-#Outputs: reference to array of field objects
+    # Purpose: to return array reference of field objects for a structure
+    # Inputs: fh, headerhashref, struct object,
+    #   struct's field data offset, struct's field count
+    # Outputs: reference to array of field objects
+
     my ( $fh, $hhr, $struct, $fielddata_offset, $fieldcount ) = @_;
     sysseek $fh,
       $hhr->{'gffOffset'} + $hhr->{'FieldIndicesOffset'} + $fielddata_offset, 0;
@@ -1459,9 +1472,11 @@ sub ReadFields {
 
 sub ReadFields2 {
 
-#Purpose: to return array reference of field objects for a structure
-#Inputs: fh, headerhashref, struct object, struct's field data offset, struct's field count
-#Outputs: reference to array of field objects
+    # Purpose: to return array reference of field objects for a structure
+    # Inputs: fh, headerhashref, struct object,
+    #   struct's field data offset, struct's field count
+    # Outputs: reference to array of field objects
+
     my ( $fh, $hhr, $struct, $fielddata_offset, $fieldcount ) = @_;
     seek $fh,
       $hhr->{'gffOffset'} + $hhr->{'FieldIndicesOffset'} + $fielddata_offset, 0;
@@ -1477,9 +1492,10 @@ sub ReadFields2 {
 
 sub ReadField {
 
-    #Purpose: to create a populated field object for a given field index
-    #Inputs: fh, headerhashref, field index
-    #Outputs: field object
+    # Purpose: to create a populated field object for a given field index
+    # Inputs: fh, headerhashref, field index
+    # Outputs: field object
+
     my ( $fh, $hhr, $field_index ) = @_;
     my ( $field_packed, $field_data );
     my $objField = Bioware::GFF::Field->new( 'FieldIndex' => $field_index );
@@ -1491,23 +1507,23 @@ sub ReadField {
 
     $objField->{'Label'} = ReadLabel( $fh, $hhr, $label_index );
 
-    #$objField->{'Type'}=$data_types{$field_type};
+    # $objField->{'Type'} = $data_types{$field_type};
     $objField->{'Type'} = $field_type;
     if ( ( $field_type < 3 ) || ( $field_type == 4 ) )
-    {    #BYTE, CHAR, WORD, DWORD
+    {    # BYTE, CHAR, WORD, DWORD
         my $data = unpack( 'V', $field_data )
-          ; #print "Label: " . $objField->{'Label'} . " Type: $field_type Data: $data\n";
+          ; # print "Label: " . $objField->{'Label'} . " Type: $field_type Data: $data\n";
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 3 ) {    #SHORT
+    elsif ( $field_type == 3 ) {    # SHORT
         my $data = unpack( 's', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 5 ) {    #INT
+    elsif ( $field_type == 5 ) {    # INT
         my $data = unpack( 'i', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 6 ) {    #DWORD64
+    elsif ( $field_type == 6 ) {    # DWORD64
         my $data_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1516,7 +1532,7 @@ sub ReadField {
         sysread $fh, $data_packed, 8;
         $objField->{'Value'} = Bioware::GFF::unpackquad($data_packed);
     }
-    elsif ( $field_type == 7 ) {    #INT64
+    elsif ( $field_type == 7 ) {    # INT64
         my $data_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1525,11 +1541,11 @@ sub ReadField {
         sysread $fh, $data_packed, 8;
         $objField->{'Value'} = Bioware::GFF::unpacksquad($data_packed);
     }
-    elsif ( $field_type == 8 ) {    #float
+    elsif ( $field_type == 8 ) {    # float
         my $data = unpack( 'f', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 9 ) {    #double
+    elsif ( $field_type == 9 ) {    # double
         my $data_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1538,7 +1554,7 @@ sub ReadField {
         sysread $fh, $data_packed, 8;
         $objField->{'Value'} = unpack( 'd', $data_packed );
     }
-    elsif ( $field_type == 10 ) {    #CExoString
+    elsif ( $field_type == 10 ) {    # CExoString
         my ( $data, $data_length_packed );
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1548,7 +1564,7 @@ sub ReadField {
         sysread $fh, $data,               unpack( 'V', $data_length_packed );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 11 ) {    #ResRef
+    elsif ( $field_type == 11 ) {    # ResRef
         my $data_length_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1557,7 +1573,7 @@ sub ReadField {
         sysread $fh, $data_length_packed, 17;
         $objField->{'Value'} = unpack( 'C/a', $data_length_packed );
     }
-    elsif ( $field_type == 12 ) {    #CExoLocString
+    elsif ( $field_type == 12 ) {    # CExoLocString
         sysseek $fh,
           $hhr->{'gffOffset'} +
           $hhr->{'FieldDataOffset'} +
@@ -1583,7 +1599,7 @@ sub ReadField {
         $objCExoLocString->{'Substrings'} = \@substr_arr;
         $objField->{'Value'}              = $objCExoLocString;
     }
-    elsif ( $field_type == 13 ) {    #VOID/binary
+    elsif ( $field_type == 13 ) {    # VOID/binary
         my ( $size_packed, $data_size );
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1593,19 +1609,19 @@ sub ReadField {
         sysread $fh, $size_packed, 4;
         $data_size = unpack( 'V', $size_packed );
         my $data_position = sysseek $fh, 0,
-          1;    #need this for inplace edits later
+          1;    # need this for inplace edits later
         sysread $fh, $objField->{'Value'}, $data_size;
         $objField->{'Location'} = $data_position;
-    }    #this is an extra hash key
+    }    # this is an extra hash key
 
-    #sysread $fh, my ($binary_temp),$data_size;
-    #$objField->{'Value'}=$binary_temp; }
-    elsif ( $field_type == 14 ) {    #struct
+    # sysread $fh, my ($binary_temp),$data_size;
+    # $objField->{'Value'}=$binary_temp; }
+    elsif ( $field_type == 14 ) {    # struct
         my $struct = Bioware::GFF::Struct->new();
         ReadStruct( $fh, $hhr, $struct, unpack( 'V', $field_data ) );
         $objField->{'Value'} = $struct;
     }
-    elsif ( $field_type == 15 ) {    #list
+    elsif ( $field_type == 15 ) {    # list
         my ( $number_of_struct_indices_packed, $struct_indices_packed );
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1625,7 +1641,7 @@ sub ReadField {
         }
         $objField->{'Value'} = \@struct_arr;
     }
-    elsif ( $field_type == 16 ) {    #float array [4]
+    elsif ( $field_type == 16 ) {    # float array [4]
         my $data_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1634,7 +1650,7 @@ sub ReadField {
         sysread $fh, $data_packed, 16;
         $objField->{'Value'} = [ unpack( 'f4', $data_packed ) ];
     }
-    elsif ( $field_type == 17 ) {    #float array [3]
+    elsif ( $field_type == 17 ) {    # float array [3]
         my $data_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1643,7 +1659,7 @@ sub ReadField {
         sysread $fh, $data_packed, 12;
         $objField->{'Value'} = [ unpack( 'f3', $data_packed ) ];
     }
-    elsif ( $field_type == 18 ) {    #STRREF
+    elsif ( $field_type == 18 ) {    # STRREF
         my $data_packed;
         sysseek $fh,
           $hhr->{'gffOffset'} +
@@ -1658,9 +1674,10 @@ sub ReadField {
 
 sub ReadField2 {
 
-    #Purpose: to create a populated field object for a given field index
-    #Inputs: fh, headerhashref, field index
-    #Outputs: field object
+    # Purpose: to create a populated field object for a given field index
+    # Inputs: fh, headerhashref, field index
+    # Outputs: field object
+
     my ( $fh, $hhr, $field_index ) = @_;
     my ( $field_packed, $field_data );
     my $objField = Bioware::GFF::Field->new( 'FieldIndex' => $field_index );
@@ -1672,22 +1689,22 @@ sub ReadField2 {
 
     $objField->{'Label'} = ReadLabel2( $fh, $hhr, $label_index );
 
-    #$objField->{'Type'}=$data_types{$field_type};
+    # $objField->{'Type'} = $data_types{$field_type};
     $objField->{'Type'} = $field_type;
     if ( ( $field_type < 3 ) || ( $field_type == 4 ) )
-    {    #BYTE, CHAR, WORD, DWORD
+    {    # BYTE, CHAR, WORD, DWORD
         my $data = unpack( 'V', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 3 ) {    #SHORT
+    elsif ( $field_type == 3 ) {    # SHORT
         my $data = unpack( 's', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 5 ) {    #INT
+    elsif ( $field_type == 5 ) {    # INT
         my $data = unpack( 'i', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 6 ) {    #DWORD64
+    elsif ( $field_type == 6 ) {    # DWORD64
         my $data_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1696,7 +1713,7 @@ sub ReadField2 {
         read $fh, $data_packed, 8;
         $objField->{'Value'} = Bioware::GFF::unpackquad($data_packed);
     }
-    elsif ( $field_type == 7 ) {    #INT64
+    elsif ( $field_type == 7 ) {    # INT64
         my $data_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1705,11 +1722,11 @@ sub ReadField2 {
         read $fh, $data_packed, 8;
         $objField->{'Value'} = Bioware::GFF::unpacksquad($data_packed);
     }
-    elsif ( $field_type == 8 ) {    #float
+    elsif ( $field_type == 8 ) {    # float
         my $data = unpack( 'f', $field_data );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 9 ) {    #double
+    elsif ( $field_type == 9 ) {    # double
         my $data_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1718,7 +1735,7 @@ sub ReadField2 {
         read $fh, $data_packed, 8;
         $objField->{'Value'} = unpack( 'd', $data_packed );
     }
-    elsif ( $field_type == 10 ) {    #CExoString
+    elsif ( $field_type == 10 ) {    # CExoString
         my ( $data, $data_length_packed );
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1728,7 +1745,7 @@ sub ReadField2 {
         read $fh, $data,               unpack( 'V', $data_length_packed );
         $objField->{'Value'} = $data;
     }
-    elsif ( $field_type == 11 ) {    #ResRef
+    elsif ( $field_type == 11 ) {    # ResRef
         my $data_length_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1737,7 +1754,7 @@ sub ReadField2 {
         read $fh, $data_length_packed, 17;
         $objField->{'Value'} = unpack( 'C/a', $data_length_packed );
     }
-    elsif ( $field_type == 12 ) {    #CExoLocString
+    elsif ( $field_type == 12 ) {    # CExoLocString
         seek $fh,
           $hhr->{'gffOffset'} +
           $hhr->{'FieldDataOffset'} +
@@ -1763,7 +1780,7 @@ sub ReadField2 {
         $objCExoLocString->{'Substrings'} = \@substr_arr;
         $objField->{'Value'}              = $objCExoLocString;
     }
-    elsif ( $field_type == 13 ) {    #VOID/binary
+    elsif ( $field_type == 13 ) {    # VOID/binary
         my ( $size_packed, $data_size );
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1772,19 +1789,19 @@ sub ReadField2 {
 
         read $fh, $size_packed, 4;
         $data_size = unpack( 'V', $size_packed );
-        my $data_position = seek $fh, 0, 1;   #need this for inplace edits later
+        my $data_position = seek $fh, 0, 1;  # need this for inplace edits later
         read $fh, $objField->{'Value'}, $data_size;
         $objField->{'Location'} = $data_position;
-    }    #this is an extra hash key
+    }    # this is an extra hash key
 
-    #read $fh, my ($binary_temp),$data_size;
-    #$objField->{'Value'}=$binary_temp; }
-    elsif ( $field_type == 14 ) {    #struct
+    # read $fh, my ($binary_temp),$data_size;
+    # $objField->{'Value'}=$binary_temp; }
+    elsif ( $field_type == 14 ) {    # struct
         my $struct = Bioware::GFF::Struct->new();
         ReadStruct2( $fh, $hhr, $struct, unpack( 'V', $field_data ) );
         $objField->{'Value'} = $struct;
     }
-    elsif ( $field_type == 15 ) {    #list
+    elsif ( $field_type == 15 ) {    # list
         my ( $number_of_struct_indices_packed, $struct_indices_packed );
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1804,7 +1821,7 @@ sub ReadField2 {
         }
         $objField->{'Value'} = \@struct_arr;
     }
-    elsif ( $field_type == 16 ) {    #float array [4]
+    elsif ( $field_type == 16 ) {    # float array [4]
         my $data_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1813,7 +1830,7 @@ sub ReadField2 {
         read $fh, $data_packed, 16;
         $objField->{'Value'} = [ unpack( 'f4', $data_packed ) ];
     }
-    elsif ( $field_type == 17 ) {    #float array [3]
+    elsif ( $field_type == 17 ) {    # float array [3]
         my $data_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1822,7 +1839,7 @@ sub ReadField2 {
         read $fh, $data_packed, 12;
         $objField->{'Value'} = [ unpack( 'f3', $data_packed ) ];
     }
-    elsif ( $field_type == 18 ) {    #STRREF
+    elsif ( $field_type == 18 ) {    # STRREF
         my $data_packed;
         seek $fh,
           $hhr->{'gffOffset'} +
@@ -1837,9 +1854,10 @@ sub ReadField2 {
 
 sub ReadLabel {
 
-    #Purpose returns a label for a field
-    #Inputs: $fh, $hhr, $label_index
-    #Outputs: label
+    # Purpose returns a label for a field
+    # Inputs: $fh, $hhr, $label_index
+    # Outputs: label
+
     my ( $fh, $hhr, $label_index ) = @_;
     my $label_packed;
     sysseek $fh,
@@ -1851,9 +1869,10 @@ sub ReadLabel {
 
 sub ReadLabel2 {
 
-    #Purpose returns a label for a field
-    #Inputs: $fh, $hhr, $label_index
-    #Outputs: label
+    # Purpose returns a label for a field
+    # Inputs: $fh, $hhr, $label_index
+    # Outputs: label
+
     my ( $fh, $hhr, $label_index ) = @_;
     my $label_packed;
     seek $fh,
@@ -1862,7 +1881,5 @@ sub ReadLabel2 {
     my $label = unpack( 'Z*', $label_packed );
     return $label;
 }
-
-#line 1787
 
 1;
