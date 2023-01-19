@@ -1,9 +1,8 @@
-#line 1 "Bioware/RIM.pm"
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::RIM;    #~~~~~~~~~~~~~~~
+package Bioware::RIM;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 use strict;
+use warnings;
+
 use Bioware::GFF;
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
@@ -16,7 +15,7 @@ $VERSION = 0.01;
 
 # define globals (use vars)
 
-#private vars
+# private vars
 our %res_types = (
     0x0000 => 'res',    #Misc. GFF resources
     0x0001 => 'bmp',    #Microsoft Windows Bitmap
@@ -145,19 +144,19 @@ sub make_new_from_folder {
         $file_data{$res_id}{ResRef}  = $name;
         $file_data{$res_id}{ResType} = $res_types{$ext};
 
-        #		print "File: $file - Size: " . (-s $file) . "\n\n";
+        # print "File: $file - Size: " . (-s $file) . "\n\n";
         $s += ( -s $file );
 
         open FH, "<", $file;
         binmode FH;
 
-        #		print "File: $file - Size: " . (-s FH) . "\n\n";
+        # print "File: $file - Size: " . (-s FH) . "\n\n";
         sysread FH, $file_data{$res_id}{Data}, ( -s FH );
         $file_data{$res_id}{Size} = ( -s FH );
 
         close FH;
 
-        #unlink($file);
+        # unlink($file);
         $res_id++;
     }
     $s += ( ( 32 * $res_id ) + 120 );
@@ -165,7 +164,7 @@ sub make_new_from_folder {
 
     $entry_count = $res_id;
     $res_id--;
-    $resource_off = 120;    #(32 * $entry_count) + 120;
+    $resource_off = 120;    # (32 * $entry_count) + 120;
     my $resource_fileoff = ( 32 * $entry_count ) + 120;
 
     open RIM, ">", $saveas;
@@ -177,9 +176,9 @@ sub make_new_from_folder {
     syswrite RIM, pack( 'V',    $resource_off );
     syswrite RIM, pack( "x100", 0 );
 
-    foreach ( sort { $a <=> $b } keys %file_data )    #0 .. $res_id)
+    foreach ( sort { $a <=> $b } keys %file_data )    # 0 .. $res_id)
     {
-#print "Res $res_id " . $file_data{$_}{ResRef} . " Type " . $file_data{$_}{ResType} . " Offset before is $resource_fileoff\n";
+# print "Res $res_id " . $file_data{$_}{ResRef} . " Type " . $file_data{$_}{ResType} . " Offset before is $resource_fileoff\n";
         syswrite RIM, pack( 'a16', pack( 'Z16', $file_data{$_}{ResRef} ) );
         syswrite RIM, pack( 'V',   $file_data{$_}{ResType} );
         syswrite RIM, pack( 'V',   $_ );
@@ -188,7 +187,7 @@ sub make_new_from_folder {
 
         $resource_fileoff += $file_data{$_}{Size};
 
-        #print "Res $res_id Offset now $resource_fileoff\n";
+        # print "Res $res_id Offset now $resource_fileoff\n";
     }
 
     foreach ( sort { $a <=> $b } keys %file_data ) {
@@ -201,8 +200,6 @@ sub make_new_from_folder {
 }
 
 sub new {
-
-    #this is a generic constructor method
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
     my $self     = {@_};
@@ -213,24 +210,25 @@ sub new {
 sub read_rim {
 
     #--------------------------
-    #this method returns everything except acutal resource data from ERF
-    #INPUTS: ERF filename
-    #OUTPUTS: 1 on success, 0 on failure
+    # this method returns everything except acutal resource data from ERF
+    # INPUTS: ERF filename
+    # OUTPUTS: 1 on success, 0 on failure
     #--------------------------
+
     my $self         = shift;
     my $rim_filename = shift;
     my $y            = shift;
     ( open my ($fh), "<", $rim_filename ) or ( return 0 );
     binmode $fh;
 
-    #aux info
+    # aux info
     $self->{'rim_filename'} = $rim_filename;
 
-    #header
-    sysread $fh, $self->{'sig'},     4;       #offset 0
-    sysread $fh, $self->{'version'}, 4;       #offset 4
+    # header
+    sysread $fh, $self->{'sig'},     4;       # offset 0
+    sysread $fh, $self->{'version'}, 4;       # offset 4
     sysseek $fh, 4, 1;
-    sysread $fh, my ($rim_info_packed), 8;    #offset 12
+    sysread $fh, my ($rim_info_packed), 8;    # offset 12
     ( $self->{'res_count'}, $self->{'keyoffset'} ) =
       unpack( 'V2', $rim_info_packed );
     my @resources;
@@ -264,7 +262,7 @@ sub getfiles {
     my $self = shift;
     my $a    = $self->{Files};
 
-    #    print "Rim:\n" . join "\n", @$a;
+    # print "Rim:\n" . join "\n", @$a;
     return @$a;
 }
 
@@ -289,7 +287,7 @@ sub export_resource_by_index {
     return 0 unless defined $res_ix;
     my $resource = $self->{'resources'}[$res_ix];
 
-    #my $resource_name = lc "$resource->{'res_ref'}.$resource->{'res_ext'}";
+    # my $resource_name = lc "$resource->{'res_ref'}.$resource->{'res_ext'}";
     ( open my ($out_fh), ">", $output_filepath ) or ( return 0 );
     binmode $out_fh;
     my $written;
@@ -311,19 +309,24 @@ sub export_resource_by_index {
     }
     close $out_fh;
 
-#   Added by Fair Strides later for future projects. Commented out to avoid interfering with KSE.
-#    my $old = $_;
-#    $_ = $output_filepath;
-#    /(...)$/;
-#    my $t = $1;
-#    $_ = $old;
+# Added by Fair Strides later for future projects. Commented out to avoid interfering with KSE.
+# my $old = $_;
+# $_ = $output_filepath;
+# /(...)$/;
+# my $t = $1;
+# $_ = $old;
 
-#    if($t ~~ ["dlg", "utc", "utd", "ute", "uti", "utm", "utp", "uts", "utt", "utw", "fac", "are", "git", "ifo", "vis", "pth"])
-#    {
-#        my $gff = Bioware::GFF->new();
-#        $gff->read_gff_file($output_filepath);
-#        $written = $gff->write_gff_file($output_filepath);
-#    }
+    # if (
+    #     $t ~~ [
+    #         "dlg", "utc", "utd", "ute", "uti", "utm", "utp", "uts",
+    #         "utt", "utw", "fac", "are", "git", "ifo", "vis", "pth"
+    #     ]
+    #   )
+    # {
+    #     my $gff = Bioware::GFF->new();
+    #     $gff->read_gff_file($output_filepath);
+    #     $written = $gff->write_gff_file($output_filepath);
+    # }
 
     return $written;
 
@@ -338,6 +341,7 @@ sub get_resource_id_by_name {
     # INPUTS: resource name (incl. extension)
     # OUTPUTS: index number on success, undef on failure
     #-----------------------------------------------------
+
     my $self          = shift;
     my $resource_name = shift;
     $resource_name = lc $resource_name;
@@ -358,6 +362,7 @@ sub get_resource_id_by_type {
     # INPUTS: resource type(extension)'
     # OUTPUTS: index number on success, undef on failure
     #-----------------------------------------------------
+
     my $self = shift;
     my $type = shift;
 
@@ -399,6 +404,7 @@ sub import_resource {
     # INPUTS: filename, store_as
     # OUTPUTS: 1 on success, 0 on failure
     #-------------------------
+
     my $self              = shift;
     my $new_resource_file = shift;
     my $store_as          = shift;
@@ -455,6 +461,7 @@ sub recalculate_packing {
     # INPUTS: none
     # OUTPUTS: none
     #---------------------------------------
+
     my $self = shift;
 
     # tune entry count
