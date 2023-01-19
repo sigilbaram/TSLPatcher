@@ -1,7 +1,7 @@
 ﻿package TSLPatcher::Functions;
 
-use strict;      # TODO: Fix errors caused by this
-use warnings;    # TODO: This file produces many warnings
+use strict;
+use warnings;
 
 use Bioware::BIF;
 use Bioware::ERF;

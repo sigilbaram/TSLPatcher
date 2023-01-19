@@ -1,7 +1,5 @@
 package TSLPatcher::GUI;
 
-# TODO: This file generates 7 warnings about re-defining subroutines
-#   Is it overriding the ones from TSLPatcher::Functions?
 use strict;
 use warnings;
 

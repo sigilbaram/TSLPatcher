@@ -1,7 +1,7 @@
 package Bioware::TwoDA;
 
 use strict;
-use warnings;    # TODO: This file generates 1 warning
+use warnings;
 
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);

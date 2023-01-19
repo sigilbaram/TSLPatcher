@@ -1,7 +1,5 @@
 ﻿package TSLPatcher::FunctionsCLI;
 
-# TODO: Fix errors caused by these, most of the ones
-#   left are missing/wrong variable names
 use strict;
 use warnings;
 

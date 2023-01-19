@@ -1,7 +1,6 @@
 package Bioware::ERF;
 
-# TODO: Fix undeclared variable $resource_name line ~471
-# use strict;
+use strict;
 use warnings;
 
 use File::Temp qw( tempfile );
