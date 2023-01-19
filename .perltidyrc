@@ -1,0 +1,6 @@
+# There are instances of long strings and comments in the code,
+# which perltide will normally outdent. This often isn't needed
+# or actually looks worse and can break things like code folding.
+
+--no-outdent-long-quotes
+--no-outdent-long-comments
