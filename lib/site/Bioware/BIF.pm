@@ -185,7 +185,7 @@ sub new {
             'ID'      => $resid
         };
 
-# if ($resref eq "feat") { print "Resource $index_in_bif" . ":\n  Name: $resref.$res_types{$restype}\n  ID: $resid\n\n"; }
+        # if ($resref eq "feat") { print "Resource $index_in_bif" . ":\n  Name: $resref.$res_types{$restype}\n  ID: $resid\n\n"; }
         $bifhash->{$bif_name}{Bif_Ix} = $bif_index;
     }
     close KEY;
@@ -246,7 +246,7 @@ sub get_resource {
     my $bifname       = shift;
     my $resource_name = shift;
 
-# print "Self: $self->{path}/$bifname\nBif name: $bifname\nResource Name: $resource_name\n";
+    # print "Self: $self->{path}/$bifname\nBif name: $bifname\nResource Name: $resource_name\n";
 
     unless ($bifname)                                             { return }
     unless ( $self->{BIFs}{$bifname} )                            { return }

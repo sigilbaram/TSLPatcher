@@ -169,7 +169,7 @@ sub make_new_from_folder {
         open FH, "<", $file;
         binmode FH;
 
-       # print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
+        # print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
         sysread FH, $file_data{$res_id}{Data}, ( -s $file );
         $file_data{$res_id}{Size} = ( -s $file );
 
@@ -468,6 +468,8 @@ sub export_resource_by_index {
 
     ( open my ($out_fh), ">", $output_filepath ) or ( return 0 );
 
+    # TODO $resource_name was not defined here?
+    my $resource_name = undef;
     if ( $resource_name =~ /\.(txi|nss|vis|lyt)/ ) { }
     else {
         binmode $out_fh;
@@ -491,11 +493,11 @@ sub export_resource_by_index {
     }
     close $out_fh;
 
-#    Added by Fair Strides for later projects. Commented out so as not to interfere with KSE.
-# my $old = $_;
-# $_ = $output_filepath;
-# /(...)$/;
-# my $t = $1;
+    #    Added by Fair Strides for later projects. Commented out so as not to interfere with KSE.
+    # my $old = $_;
+    # $_ = $output_filepath;
+    # /(...)$/;
+    # my $t = $1;
 
     # $_ = $old;
 
@@ -618,7 +620,7 @@ sub import_resource {
 
         if ( $n == 1 ) {
             print
-"ResRef: $new_res_ref\nRes Type: $new_res_type\nRes Extension: $new_ext\nRes ID: $res_ix\nRes Size: "
+              "ResRef: $new_res_ref\nRes Type: $new_res_type\nRes Extension: $new_ext\nRes ID: $res_ix\nRes Size: "
               . ( -s $in_fh ) . "\n\n";
         }
         my $hashref = {
@@ -787,9 +789,9 @@ sub write_erf {
 
     #why did I do this? vvv
 
-# my $working_output;  #we may need to read the original erf before we overwrite it.
-# unless ($output_file) { $output_file = $self->{'erf_filename'} }
-# $working_output = $output_file . '_temp';
+    # my $working_output;  #we may need to read the original erf before we overwrite it.
+    # unless ($output_file) { $output_file = $self->{'erf_filename'} }
+    # $working_output = $output_file . '_temp';
     if ($update_build) {
         $self->{'build_year'} = (localtime)[5];
         $self->{'build_day'}  = (localtime)[7];

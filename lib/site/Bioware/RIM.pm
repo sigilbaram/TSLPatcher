@@ -178,7 +178,7 @@ sub make_new_from_folder {
 
     foreach ( sort { $a <=> $b } keys %file_data )    # 0 .. $res_id)
     {
-# print "Res $res_id " . $file_data{$_}{ResRef} . " Type " . $file_data{$_}{ResType} . " Offset before is $resource_fileoff\n";
+        # print "Res $res_id " . $file_data{$_}{ResRef} . " Type " . $file_data{$_}{ResType} . " Offset before is $resource_fileoff\n";
         syswrite RIM, pack( 'a16', pack( 'Z16', $file_data{$_}{ResRef} ) );
         syswrite RIM, pack( 'V',   $file_data{$_}{ResType} );
         syswrite RIM, pack( 'V',   $_ );
@@ -309,12 +309,12 @@ sub export_resource_by_index {
     }
     close $out_fh;
 
-# Added by Fair Strides later for future projects. Commented out to avoid interfering with KSE.
-# my $old = $_;
-# $_ = $output_filepath;
-# /(...)$/;
-# my $t = $1;
-# $_ = $old;
+    # Added by Fair Strides later for future projects. Commented out to avoid interfering with KSE.
+    # my $old = $_;
+    # $_ = $output_filepath;
+    # /(...)$/;
+    # my $t = $1;
+    # $_ = $old;
 
     # if (
     #     $t ~~ [

@@ -44,7 +44,7 @@ sub Create {
         $options{Geometry} = '550x500';
     }
 
-# Begin coding the Main Window, which will also be the window used for mod installation progress.
+    # Begin coding the Main Window, which will also be the window used for mod installation progress.
     $GUI{mw} = Tk::MainWindow->new( -title => $options{Title} );
     $GUI{mw}->geometry( $options{Geometry} );
     $GUI{mw}->resizable( 0, 0 );
@@ -217,7 +217,7 @@ sub Create {
 
     $GUI{bmLabel} = $GUI{bm}->Label(
         -text =>
-"No 'tslpatchdata' folder was found. However, the following folder were found to be installable mods. Please select from one of the folders below:\n\n",
+          "No 'tslpatchdata' folder was found. However, the following folder were found to be installable mods. Please select from one of the folders below:\n\n",
         -wraplength => 360,
         -width      => 60,
         -font       => [ -size => 12 ]

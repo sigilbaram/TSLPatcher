@@ -2,6 +2,9 @@
 # Main script. Will use libraries TSLPatcher::FunctionsCLI.
 ###############################################################################
 
+use strict;
+use warnings;
+
 use lib 'lib/site';    # links the Bioware packages
 use TSLPatcher::FunctionsCLI;
 

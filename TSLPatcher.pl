@@ -2,6 +2,9 @@
 # Main script. Will use libraries TSLPatcher::GUI and TSLPatcher::Functions.
 ###############################################################################
 
+use strict;
+use warnings;
+
 use experimental qw/smartmatch autoderef switch/;
 
 use Config::IniMan;
@@ -10,7 +13,7 @@ use Cwd;
 use TSLPatcher::Functions;
 use TSLPatcher::GUI;
 
-my $base       = getcwd;
+my $base       = getcwd();
 my $main_ini   = Config::IniMan->new("$base/tslpatcher.ini");
 my $build_menu = 0;
 my $answer     = 0;
