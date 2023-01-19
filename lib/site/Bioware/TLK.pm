@@ -1,28 +1,24 @@
-#line 1 "Bioware/TLK.pm"
-#
 #  NOTES ~~ Fair Strides, not Tk102
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#	1. Seek starts from the beginning of the file every time...
-#	2. There is no ending to the file, except the last StrRef.
-#	3. You have the header, then two tables: String data, and String.
-#	4. To access the string data, you need to count 20 + (StrRef*40) from the beginning of the file.
-#	5. The string data for any given StrRef is 40 bytes.
+#    1. Seek starts from the beginning of the file every time...
+#    2. There is no ending to the file, except the last StrRef.
+#    3. You have the header, then two tables: String data, and String.
+#    4. To access the string data, you need to count 20 + (StrRef*40) from the beginning of the file.
+#    5. The string data for any given StrRef is 40 bytes.
 
-# Define package name
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::TLK;    #~~~~~~~~~~~~~~~
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package Bioware::TLK;
 
 use strict;
+use warnings;
+
 use bytes;
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
 
 # set version
-$VERSION = 0.04;         #SUPPORT FOR TLK V4.0 files (Jade Empire)
+$VERSION = 0.04;    # SUPPORT FOR TLK V4.0 files (Jade Empire)
 
-#$VERSION=0.03; #changed > to >= in if ($resrefnum>=$string_count)
+# $VERSION=0.03; # changed > to >= in if ($resrefnum>=$string_count)
 
 @ISA = qw(Exporter);
 
@@ -35,7 +31,7 @@ sub string_from_resref($$;$) {
     my $resrefnum  = shift;
     my $breadcrumb = shift;
 
-    #print "TLK: $resrefnum\n";
+    # print "TLK: $resrefnum\n";
     return '' if $resrefnum < 0;
 
     ( open TLK, "<", "$tlk_path\\dialog.tlk" ) || (return);
@@ -47,13 +43,14 @@ sub string_from_resref($$;$) {
         read TLK, ( my $string_count_packed ), 4;
         my $string_count = unpack( 'V', $string_count_packed );
         if ( $resrefnum >= $string_count ) {
-##            $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-##            ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-##            "Dialog.tlk error",0);
+
+# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+# "Dialog.tlk error",0);
             return "Bad StrRef";
 
-#            die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-#            ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
         }
         seek TLK, 32 + ( 10 * $resrefnum ) + 4, 0;
         read TLK, ( my $info_packed ), 6;
@@ -66,18 +63,19 @@ sub string_from_resref($$;$) {
     read TLK, ( my $string_count_packed ), 4;
     my $string_count = unpack( 'V', $string_count_packed );
     if ( $resrefnum >= $string_count ) {
-##      $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-##      ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-##     "Dialog.tlk error",0);
+
+# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+# "Dialog.tlk error",0);
         return "Bad StrRef";
 
-#      die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-#        ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
     }
     read TLK, ( my $offset_packed ), 4;
     my $offset = unpack( 'V', $offset_packed );
 
-    #    print "\$resref is $resrefnum\n\$offset is $offset\n";
+    # print "\$resref is $resrefnum\n\$offset is $offset\n";
     seek TLK, 20 + ( 40 * $resrefnum ) + 28, 0;
     read TLK, ( my $info_packed ), 8;
     my ( $offset2, $size ) = unpack( 'V2', $info_packed );
@@ -87,44 +85,44 @@ sub string_from_resref($$;$) {
     my $math_info = 20 + ( 40 * $resrefnum ) + 28;
     my $file_size = $offset + $offset2;
 
-    #    print "Beginning TLK output:\n";
-    #    print "TLK Size: " . -s "$tlk_path\\dialog.tlk";
-    #    print "\nVersion: $tlkversion\n";
-    #    print "Resref: $resrefnum\n";
-    #    print "String Count: $string_count\n";
-    #    print "Offset of file: $offset\n";
-    #    print "Offset of in String table: $offset2\n\n";
+    # print "Beginning TLK output:\n";
+    # print "TLK Size: " . -s "$tlk_path\\dialog.tlk";
+    # print "\nVersion: $tlkversion\n";
+    # print "Resref: $resrefnum\n";
+    # print "String Count: $string_count\n";
+    # print "Offset of file: $offset\n";
+    # print "Offset of in String table: $offset2\n\n";
 
-    #    print "Area of String: $file_size\n";
-    #    print "Size of string: $size\n";
-    #    print "String: $string\n\n";
+    # print "Area of String: $file_size\n";
+    # print "Size of string: $size\n";
+    # print "String: $string\n\n";
 
-    #    print "Info area: $math_info\n";
-    #    print "Ending TLK output.\n\n";
+    # print "Info area: $math_info\n";
+    # print "Ending TLK output.\n\n";
 
     seek TLK, 12, 0;
     read TLK, ( my $string_count_packed ), 4;
     my $string_count = unpack( 'V', $string_count_packed );
     if ( $resrefnum >= $string_count ) {
 
-#      $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-#      ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-#      "Dialog.tlk error",0);
+# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+# "Dialog.tlk error",0);
 
-#      die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-#        ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
     }
     read TLK, ( my $offset_packed ), 4;
     my $offset = unpack( 'V', $offset_packed );
 
-    #    print "\$offset is $offset\n";
+    # print "\$offset is $offset\n";
     seek TLK, 20 + ( 40 * $resrefnum ), 0;
     read TLK, ( my $bits_packed ), 4;
 
-    #    print "\$bits_packed is $bits_packed\n";
+    # print "\$bits_packed is $bits_packed\n";
     my $bits = unpack( 'V', $bits_packed );
 
-    #    print "\$bits is $bits\n";
+    # print "\$bits is $bits\n";
     close TLK;
     return $string;
 }
@@ -147,17 +145,17 @@ sub GetStringInfo($$;$) {
     my $string_count = unpack( 'V', $string_count_packed );
     if ( $resrefnum >= $string_count ) {
 
-#      $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-#      ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-#      "Dialog.tlk error",0);
+# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+# "Dialog.tlk error",0);
 
-#      die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-#        ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
     }
     read TLK, ( my $offset_packed ), 4;
     my $offset = unpack( 'V', $offset_packed );
 
-    #    print "\$resref is $resrefnum\n\$offset is $offset\n";
+    # print "\$resref is $resrefnum\n\$offset is $offset\n";
     seek TLK, 20 + ( 40 * $resrefnum ), 0;
     read TLK, ( my $flags_packed ), 4;
     read TLK, ( my $sound_file ),   16;
@@ -253,69 +251,69 @@ sub new_tlk {
     syswrite TLK, $info{'scount'};
     syswrite TLK, $info{'soffset'};
 
-    #    close FILE;
+    # close FILE;
     return \*FILE;
 }
 
 sub add_new_entry {
 
-    #    my $tlk = shift;
+    # my $tlk = shift;
     my $tlk_path = shift;
 
-    #    my $num_entries = shift;
+    # my $num_entries = shift;
     my $entry = shift;
 
-    #    open TLK, "<", "$tlk_path\\dialog.tlk" or die("$!");
-    #    my $num_entry = number_of_strings($tlk_path);
+    # open TLK, "<", "$tlk_path\\dialog.tlk" or die("$!");
+    # my $num_entry = number_of_strings($tlk_path);
 
-    #    seek TLK, 16, 0;
-    #    read TLK,(my $offset_packed),4;
-    #    my $offset=unpack('V',$offset_packed);
-    #    read TLK, (my $of), 4;
-    #    my $off=unpack('V',$of);
-    #    print "\$off is $off\n";
+    # seek TLK, 16, 0;
+    # read TLK,(my $offset_packed),4;
+    # my $offset=unpack('V',$offset_packed);
+    # read TLK, (my $of), 4;
+    # my $off=unpack('V',$of);
+    # print "\$off is $off\n";
 
-    #    seek TLK,20+($num_entries*40), 0;
-    #    read TLK, (my $one), 4;
-    #    read TLK, (my $two), 16;
-    #    read TLK, (my $three), 4;
-    #    read TLK, (my $four), 4;
-    #    read TLK, (my $five), 4;
-    #    read TLK, (my $six), 4;
-    #    read TLK, (my $seven), 4;
+    # seek TLK,20+($num_entries*40), 0;
+    # read TLK, (my $one), 4;
+    # read TLK, (my $two), 16;
+    # read TLK, (my $three), 4;
+    # read TLK, (my $four), 4;
+    # read TLK, (my $five), 4;
+    # read TLK, (my $six), 4;
+    # read TLK, (my $seven), 4;
 
-    #    print "Flags: $one\n";
-    #    print "Flags: $two\n";
-    #    print "Flags: $three\n";
-    #    print "Flags: $four\n";
-    #    print "Flags: $five\n";
-    #    print "Flags: $six\n";
-    #    print "Flags: $seven\n";
+    # print "Flags: $one\n";
+    # print "Flags: $two\n";
+    # print "Flags: $three\n";
+    # print "Flags: $four\n";
+    # print "Flags: $five\n";
+    # print "Flags: $six\n";
+    # print "Flags: $seven\n";
 
-    #    print "Flags: " . unpack('V', $one) . "\n";
-    #    print "Hex: " . hex($one) . "\n";
-    #    print "Flags: " . unpack('A*', $two) . "\n";
-    #    print "Flags: " . unpack('V', $three) . "\n";
-    #    print "Flags: " . unpack('V', $four) . "\n";
-    #    print "Flags: " . unpack('V', $five) . "\n";
-    #    print "Flags: " . unpack('V', $six) . "\n";
-    #    print "Flags: " . unpack('V', $seven) . "\n";
+    # print "Flags: " . unpack('V', $one) . "\n";
+    # print "Hex: " . hex($one) . "\n";
+    # print "Flags: " . unpack('A*', $two) . "\n";
+    # print "Flags: " . unpack('V', $three) . "\n";
+    # print "Flags: " . unpack('V', $four) . "\n";
+    # print "Flags: " . unpack('V', $five) . "\n";
+    # print "Flags: " . unpack('V', $six) . "\n";
+    # print "Flags: " . unpack('V', $seven) . "\n";
 
-    #    seek TLK, 20+(40*$num_entries)+28,0;
-    #    read TLK,(my $info_packed),8;
-    #    my ($offset2,$size)=unpack('V2',$info_packed);
-    #    seek TLK,$offset+$offset2+$size,0;
+    # seek TLK, 20+(40*$num_entries)+28,0;
+    # read TLK,(my $info_packed),8;
+    # my ($offset2,$size)=unpack('V2',$info_packed);
+    # seek TLK,$offset+$offset2+$size,0;
 
-    #    seek TLK,20+($num_entries*40)+40, 0;
-    #    close TLK;
+    # seek TLK,20+($num_entries*40)+40, 0;
+    # close TLK;
 
-    #    my %info;
-    #    $info{'version'} = "TLK V3.0";
-    #    $info{'lang'} = pack('V', 0);
-    #    $info{'scount'} = pack('V', 0);
-    #    $info{'soffset'} = pack('V', 0);
+    # my %info;
+    # $info{'version'} = "TLK V3.0";
+    # $info{'lang'} = pack('V', 0);
+    # $info{'scount'} = pack('V', 0);
+    # $info{'soffset'} = pack('V', 0);
 
-    #    my $TLK = new_tlk("$tlk_path\\funny.tlk", %info);
+    # my $TLK = new_tlk("$tlk_path\\funny.tlk", %info);
     open( TLK, ">", "$tlk_path\\funny.tlk" );
 
     my %entry1 = %{$entry};
@@ -336,13 +334,13 @@ sub add_new_entry {
     syswrite TLK, $entry1{SoundRR};
     syswrite TLK, pack( 'V', "0" );
     syswrite TLK, pack( 'V', "0" );
-    syswrite TLK, pack( 'V', 0 );                     #$entry1{OffsetToString});
+    syswrite TLK, pack( 'V', 0 );                    # $entry1{OffsetToString});
     syswrite TLK, pack( 'V', $entry1{StringSize} );
     syswrite TLK, pack( 'V', "0" );
 
     seek TLK, 60, 0;
 
-    #    syswrite TLK, pack('V', "Carth's a moron!");
+    # syswrite TLK, pack('V', "Carth's a moron!");
     syswrite TLK, $entry1{String};
 
     close TLK;
@@ -362,10 +360,10 @@ sub new {
 sub load_tlk {
     my ( $self, $file ) = @_;
 
-    #	$_ = $file;
+    # $_ = $file;
     $file =~ s/\\/\//g;
 
-    #	$file = $_;
+    # $file = $_;
 
     $self->{'file_path'} = $file;
     $self->{'file_name'} = ( split( /\//, $file ) )[-1];
@@ -401,8 +399,8 @@ sub load_tlk {
         $self->{$entry}{Sound} = unpack( 'a16', $sound_file );
         $self->{$entry}{Size}  = $size;
 
-        #		$self->{$entry}{Volume} = 0; # unpack(, $volume);
-        #		$self->{$entry}{Pitch}  = 0; # unpack(, $pitch);
+        # $self->{$entry}{Volume} = 0; # unpack(, $volume);
+        # $self->{$entry}{Pitch}  = 0; # unpack(, $pitch);
         $self->{$entry}{Length} = unpack( 'f', $length );
     }
 
@@ -423,7 +421,7 @@ sub save_tlk {
     syswrite TLK, pack( 'V', $self->{'string_count'} );
     syswrite TLK, pack( 'V', 20 + ( 40 * $self->{'string_count'} ) );
 
-    my $string_offset = 0;    #20 + (40 * $self->{'string_count'});
+    my $string_offset = 0;    # 20 + (40 * $self->{'string_count'});
 
     foreach ( 0 .. ( $self->{'string_count'} - 1 ) ) {
         syswrite TLK, pack( 'V',   $self->{$_}{Flags} );
@@ -512,11 +510,11 @@ sub CompareEntries {
     my @entry1 = ( shift, shift, shift, shift );
     my @entry2 = @_;
 
-    #	print "Entry $entry:\n";
-    #	print "Text: " .   $entry1[0] . " " . $entry2[0] . "\n";
-    #	print "Sound: " .  $entry1[1] . " " . $entry2[1] . "\n";
-    #	print "Flags: " .  $entry1[2] . " " . $entry2[2] . "\n";
-    #	print "Length: " . $entry1[3] . " " . $entry2[3] . "\n\n";
+    # print "Entry $entry:\n";
+    # print "Text: " .   $entry1[0] . " " . $entry2[0] . "\n";
+    # print "Sound: " .  $entry1[1] . " " . $entry2[1] . "\n";
+    # print "Flags: " .  $entry1[2] . " " . $entry2[2] . "\n";
+    # print "Length: " . $entry1[3] . " " . $entry2[3] . "\n\n";
 
     # Array is: text, sound, flags, length
     if (    ( $entry1[0] eq $entry2[0] )
