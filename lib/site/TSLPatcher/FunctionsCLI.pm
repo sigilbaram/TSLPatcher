@@ -756,7 +756,6 @@ sub ProcessInstallPath {
 
     if ( ( -e "$install_path/namespaces.ini" ) && ( $namespaceProcessed eq 0 ) )
     {
-
         # print "h0a\n";
         &ProcessNamespaces;
     }
@@ -1273,7 +1272,7 @@ sub ExecuteFile {
                   )
                 {
                     print
-                      "Failed!:\n Install Path: $install_path\n  Source File: $sourcefile\n  ERF Name: $ERF_name\n  Save As: $saveas\n\n";
+                      "Failed!:\n Install Path: $install_path\n Source File: $sourcefile\nERF Name: $ERF_name\nSave As: $saveas\n\n";
 
                     # ProcessMessage(
                     #     Format( $Messages{LS_LOG_FHTEMPFILEFAILED}, $saveas ),
@@ -4729,12 +4728,12 @@ sub ChangeGFFFieldValue {
         }
 
         # print "Now doing $_\n";
-        # if(($stype eq FIELD_LIST) and (looks_like_number($_))) {
+        # if ( ( $stype eq FIELD_LIST ) and ( looks_like_number($_) ) ) {
         #     $struct = $struct->{Value}[$_];
         #     $stype  = $struct->{Type};
         # }
         # else {
-        #     $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+        #     $struct = $struct->{Fields}[ $struct->get_field_ix_by_label($_) ];
         #     $stype  = $struct->{Type};
         # }
     }

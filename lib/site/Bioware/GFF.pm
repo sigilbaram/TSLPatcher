@@ -56,7 +56,7 @@ our $list_cnt            = 0;
 our %fieldindices_hash   = ();
 our %listindices_hash    = ();
 
-#define functions for export
+# define functions for export
 #########################################
 sub FIELD_BYTE          { 0 }
 sub FIELD_CHAR          { 1 }
@@ -455,7 +455,7 @@ sub writeField {
         syswrite $write_info{'fh_fielddata'},
           pack( 'V', $binary_length ) . $field->{'Value'};
     }    # write binary data with length prefix
-    elsif ( $type == 14 ) {    #struct
+    elsif ( $type == 14 ) {    # struct
         my $struct = $field->{'Value'};
         syswrite $write_info{'fh_field'},
           pack( 'V', $write_info{'struct_cnt'} )
@@ -1112,7 +1112,7 @@ sub writeHeader {
 
 sub writeHeaderScalar {
 
-    #for use with writeStructScalar (using IO::Scalar handles)
+    # for use with writeStructScalar (using IO::Scalar handles)
 
     my ( undef, $fn, $fh, $sig, $literal ) = @_
       ; # input: calling struct (discarded), filename, filehandle (one or the other)

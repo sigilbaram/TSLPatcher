@@ -13,7 +13,7 @@ use IO::Scalar;
 use List::Util;
 
 # set library version
-$VERSION = 0.21;    #added binmode
+$VERSION = 0.21;    # added binmode
 
 @ISA = qw(Exporter);
 
@@ -543,7 +543,7 @@ sub readFS {
         chop $columnchunk;
         @columns = split /\t/, $columnchunk;
 
-        # print join "\n", @columns; print "\n";     #we now have column names
+        # print join "\n", @columns; print "\n";     # we now have column names
         read $fh, my ($rowcnt), 4;
         $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";

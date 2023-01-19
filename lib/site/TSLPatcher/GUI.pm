@@ -142,7 +142,7 @@ sub Create {
         -justify => 'center'
     )->pack( -anchor => 'c', -side => 'left', -padx => 50, -expand => 1 );
 
-    #	$GUI{mwSummaryBtn} = $GUI{mwLowerFrame}->Button(-width=>5,
+    # $GUI{mwSummaryBtn} = $GUI{mwLowerFrame}->Button(-width=>5,
     $GUI{mwInstallBtn} = $GUI{mwLowerFrame}->Button(
         -width   => 15,
         -text    => 'Install',
