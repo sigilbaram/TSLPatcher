@@ -105,29 +105,29 @@ my %Messages = (
     LS_GUI_SBARINSTALLDEST    => 'Game folder: %s1',
     LS_GUI_SBARINSTALLUSERSEL => 'User selected.',
     LS_GUI_INFOLOADERROR      =>
-'Unable to load the instructions text! Make sure the "tslpatchdata" folder containing the "%s1" file is located in the same folder as this application.',
+      'Unable to load the instructions text! Make sure the "tslpatchdata" folder containing the "%s1" file is located in the same folder as this application.',
     LS_GUI_BUTTONCAPINSTALL => 'Install Mod',
     LS_GUI_BUTTONCAPPATCH   => 'Start patching',
     LS_GUI_CONFIGLOADERROR  =>
-'Unable to load the %s1 file! Make sure the "tslpatchdata" folder is located in the same folder as this application.',
+      'Unable to load the %s1 file! Make sure the "tslpatchdata" folder is located in the same folder as this application.',
     LS_GUI_DEFAULTCONFIRMTEXT =>
-'This will start patching the necessary game files. Do you want to do this?',
+      'This will start patching the necessary game files. Do you want to do this?',
     LS_GUI_SUMMARY =>
-'The Installer is finished. Please check the progress log for details about what has been done.',
+      'The Installer is finished. Please check the progress log for details about what has been done.',
     LS_GUI_SUMMARYWARN =>
-'The Installer is finished, but %s1 warnings were encountered! The Mod may or may not be properly installed. Please check the progress log for further details.',
+      'The Installer is finished, but %s1 warnings were encountered! The Mod may or may not be properly installed. Please check the progress log for further details.',
     LS_GUI_SUMMARYERROR =>
-'The Installer is finished, but %s1 errors were encountered! The Mod has likely not been properly installed. Please check the progress log for further details.',
+      'The Installer is finished, but %s1 errors were encountered! The Mod has likely not been properly installed. Please check the progress log for further details.',
     LS_GUI_SUMMARYERRORWARN =>
-'The Installer is finished, but %s1 errors and %s2 warnings were encountered! The Mod most likely has not been properly installed. Please check the progress log for further details.',
+      'The Installer is finished, but %s1 errors and %s2 warnings were encountered! The Mod most likely has not been properly installed. Please check the progress log for further details.',
     LS_GUI_PSUMMARY =>
-'The Patcher is finished. Please check the progress log for details about what has been done.',
+      'The Patcher is finished. Please check the progress log for details about what has been done.',
     LS_GUI_PSUMMARYWARN =>
-'The Patcher is finished, but %s1 warnings were encountered! The Mod may or may not be properly installed. Please check the progress log for further details.',
+      'The Patcher is finished, but %s1 warnings were encountered! The Mod may or may not be properly installed. Please check the progress log for further details.',
     LS_GUI_PSUMMARYERROR =>
-'The Patcher is finished, but %s1 errors were encountered! The Mod has likely not been properly installed. Please check the progress log for further details.',
+      'The Patcher is finished, but %s1 errors were encountered! The Mod has likely not been properly installed. Please check the progress log for further details.',
     LS_GUI_PSUMMARYERRORWARN =>
-'The Patcher is finished, but %s1 errors and %s2 warnings were encountered! The Mod most likely has not been properly installed. Please check the progress log for further details.',
+      'The Patcher is finished, but %s1 errors and %s2 warnings were encountered! The Mod most likely has not been properly installed. Please check the progress log for further details.',
     LS_GUI_EXCEPTIONPREFIX  => 'An error occured! %s1',
     LS_GUI_UEXCEPTIONPREFIX => 'An unhandled error occured! ',
     LS_GUI_CONFIRMQUIT      => 'Are you sure you wish to quit?',
@@ -173,9 +173,9 @@ my %Messages = (
     LS_LOG_RPOSUMMARYWARN  =>
       'Done. Changes have been applied, but %s1 warnings were encountered.',
     LS_LOG_RPOSUMMARYERROR =>
-'Done. Some changes may have been applied, but %s1 errors were encountered!',
+      'Done. Some changes may have been applied, but %s1 errors were encountered!',
     LS_LOG_RPOSUMMARYWARNERROR =>
-'Done. Some changes may have been applied, but %s1 errors and %s2 warnings were encountered!',
+      'Done. Some changes may have been applied, but %s1 errors and %s2 warnings were encountered!',
     LS_LOG_RPOSUMMARY          => 'Done. All changes have been applied.',
     LS_LOG_RPOGENERALEXCEPTION => 'Unhandled exception: %s1',
 
@@ -183,10 +183,10 @@ my %Messages = (
     LS_LOG_LOADINGSTRREFTOKENS => 'Loading StrRef token table...',
     LS_LOG_LOADEDSTRREFTOKENS  => '%s1 StrRef tokens found and indexed.',
     LS_EXC_TLKFILETYPEMISMATCH =>
-'Internal error, invalid TLK file type specified. This should never happen.',
+      'Internal error, invalid TLK file type specified. This should never happen.',
     LS_LOG_APPENDFEEDBACK     => 'Appending strings to TLK file "%s1"',
     LS_LOG_TLKENTRYMATCHEXIST =>
-'Identical string for append StrRef %s1 found in %s2 StrRef %s3, reusing it instead.',
+      'Identical string for append StrRef %s1 found in %s2 StrRef %s3, reusing it instead.',
     LS_LOG_APPENDTLKENTRY => 'Appending new entry to %s1, new StrRef is %s2',
     LS_LOG_MAKETLKBACKUP  => 'Saving unaltered backup copy of %s1 file in %s2',
     LS_LOG_TLKSUMMARY1    =>
@@ -195,19 +195,19 @@ my %Messages = (
     LS_LOG_TLKSUMMARY3 =>
       '%s1 file not updated, all %s2 entries were already present.',
     LS_LOG_TLKSUMMARYWARNING =>
-'Warning: No new entries appended to %s1. Possible missing entries in append.tlk referenced in the TLKList.',
+      'Warning: No new entries appended to %s1. Possible missing entries in append.tlk referenced in the TLKList.',
     LS_LOG_TLKFILEMISSING => 'Unable to load specified %s1 file! Aborting...',
     LS_EXC_TLKFILEMISSING => 'No TLK file loaded. Unable to proceed.',
     LS_LOG_TLKNOTSELECTED => 'No %s1 file specified. Unable to proceed!',
     LS_LOG_UNKNOWNSTRREFTOKEN =>
-'Encountered StrRef token "%s1" in modifier list that was not present in the TLKList! Value set to StrRef #0.',
+      'Encountered StrRef token "%s1" in modifier list that was not present in the TLKList! Value set to StrRef #0.',
 
     # Install List Handler
     LS_LOG_INSSTART       => 'Installing unmodified files...',
     LS_LOG_INSDESTINVALID =>
-'Destination file "%s1" does not appear to be a valid ERF or RIM archive! Skipping section...',
+      'Destination file "%s1" does not appear to be a valid ERF or RIM archive! Skipping section...',
     LS_LOG_INSDESTNOTEXIST =>
-'Destination file "%s1" does not exist at the specified location! Skipping section...',
+      'Destination file "%s1" does not exist at the specified location! Skipping section...',
     LS_LOG_INSCREATEFOLDER     => 'Folder %s1 did not exist, creating it...',
     LS_LOG_INSFOLDERCREATEFAIL =>
       'Unable to create folder %s1! Skipping folder...',
@@ -216,9 +216,9 @@ my %Messages = (
     LS_LOG_INSNOEXEPLEASE =>
       'Skipping file %s1, this Installer will not overwrite EXE files!',
     LS_LOG_INSENOUGHTLK =>
-'Skipping file %s1, this Installer will not overwrite dialog.tlk directly.',
+      'Skipping file %s1, this Installer will not overwrite dialog.tlk directly.',
     LS_LOG_INSSKELETONKEY =>
-'Skipping file %s1, this Installer will not overwrite the chitin.key file.',
+      'Skipping file %s1, this Installer will not overwrite the chitin.key file.',
     LS_LOG_INSBIFTHEUNDERSTUDY =>
       'Skipping file %s1, this Installer will not overwrite BIF data files.',
     LS_LOG_INSREPLACERENAME =>
@@ -258,13 +258,13 @@ my %Messages = (
     LS_LOG_EXCLUSIVEMATCHFOUND =>
       'Matching value in column %s1 found for existing row %s2...',
     LS_LOG_NOEXCLUSIVEVALUESET =>
-'No value has been assigned to column %s1 for new 2DA line in modifier "%s2" with Exclusive checking enabled! Skipping line...',
+      'No value has been assigned to column %s1 for new 2DA line in modifier "%s2" with Exclusive checking enabled! Skipping line...',
     LS_LOG_2DAEXROWNOTFOUND =>
-'Error locating row when trying to modify existing Exclusive row in modifier "%s1".',
+      'Error locating row when trying to modify existing Exclusive row in modifier "%s1".',
     LS_LOG_2DAEXROWINDEXTOOHIGH =>
-'Too high row-number encountered when trying to modify existing Exclusive row in modifier "%s1".',
+      'Too high row-number encountered when trying to modify existing Exclusive row in modifier "%s1".',
     LS_LOG_2DAEXROWMATCH =>
-'New Exclusive row matched line %s1 in 2DA file %s2, modifying existing line instead.',
+      'New Exclusive row matched line %s1 in 2DA file %s2, modifying existing line instead.',
     LS_LOG_2DAINVALIDCOLLABEL =>
       'Invalid column label "%s1" encountered! Skipping entry...',
     LS_LOG_2DAHIGHTOKENRLFOUND =>
@@ -277,17 +277,17 @@ my %Messages = (
     LS_LOG_2DAADDROWERROR =>
       'An error occured while trying to add new line to 2DA in modifier "%s1"!',
     LS_LOG_2DANOLABELCOL =>
-'%s1 used as index when changing line in modifier "%s2" but 2DA file has no label column! Skipping...',
+      '%s1 used as index when changing line in modifier "%s2" but 2DA file has no label column! Skipping...',
     LS_LOG_2DANONEXCLUSIVECOL =>
-'Warning, multiple rows matching Label Index found! Last found row will be used...',
+      'Warning, multiple rows matching Label Index found! Last found row will be used...',
     LS_LOG_2DAMULTIMATCHINDEX =>
-'Multiple matches for specified Label Index, previously found row %s1, now found row %s2.',
+      'Multiple matches for specified Label Index, previously found row %s1, now found row %s2.',
     LS_LOG_2DAMODIFYLINE   => 'Modifying line (index %s1) in 2DA file %s2...',
     LS_LOG_2DANOINDEXFOUND =>
-'No RowIndex/RowLabel identifier for row to modify found at top of modifier list! Unable to apply modifier "%s1".',
+      'No RowIndex/RowLabel identifier for row to modify found at top of modifier list! Unable to apply modifier "%s1".',
     LS_LOG_2DAADDCOLUMN => 'Adding new column to 2DA file %s1...',
     LS_LOG_2DACOLEXISTS =>
-'A column with the label "%s1" already exists in %s1, unable to add new column!',
+      'A column with the label "%s1" already exists in %s1, unable to add new column!',
     LS_LOG_2DAINVALIDROWLABEL =>
       'Invalid row label %s1 encountered! Skipping entry...',
     LS_LOG_2DANEWROWLABELHIGH =>
@@ -295,11 +295,11 @@ my %Messages = (
     LS_LOG_2DACOPYFAILED   => 'Error! Failed to copy line in 2DA! Skipping...',
     LS_LOG_2DACOPYINGLINE  => 'Copying line %s1 to new line %s2 in %s3.',
     LS_LOG_2DAINCTOPENCOPY =>
-'Incrementing value of copied row for column %s1 by %s2, new value is %s3.',
+      'Incrementing value of copied row for column %s1 by %s2, new value is %s3.',
     LS_LOG_2DAINCFAILED =>
-'Row value increment failed! Specified modifier "%s1" is not a number. Old row value not changed.',
+      'Row value increment failed! Specified modifier "%s1" is not a number. Old row value not changed.',
     LS_LOG_2DAINCFAILEDNONUM =>
-'Row value increment failed! Specified row column does not contain a number. Old row value not changed.',
+      'Row value increment failed! Specified row column does not contain a number. Old row value not changed.',
     LS_LOG_2DACOPYHIGH =>
       'Setting copied row column %s1 to next HIGHEST value %s2.',
 
@@ -323,7 +323,7 @@ my %Messages = (
     LS_LOG_TOKENINDEXERROR1 =>
       'Invalid memory token %s1 encountered, assuming first memory slot.',
     LS_LOG_TOKENINDEXERROR2 =>
-'Invalid memory token %s1 encountered, unable to insert a proper value into cell or field!',
+      'Invalid memory token %s1 encountered, unable to insert a proper value into cell or field!',
     LS_LOG_GETTOKENVALUE =>
       'Found a %s1 value, substituting with value "%s2" in memory...',
 
@@ -331,29 +331,29 @@ my %Messages = (
     LS_LOG_OVRCHECKNOFILE =>
       'Override check: No file with name "%s1" found in override folder.',
     LS_LOG_OVRCHECKEXISTWARN =>
-'A file named %s1 already exists in the override folder! This may cause incompatibility with the one used by this mod!',
+      'A file named %s1 already exists in the override folder! This may cause incompatibility with the one used by this mod!',
     LS_LOG_OVRCHECKRENAMED =>
-'A file named %s1 already existed in the override folder! This existing file has been renamed to %s2 to allow the one in this Mod to be used!',
+      'A file named %s1 already existed in the override folder! This existing file has been renamed to %s2 to allow the one in this Mod to be used!',
     LS_LOG_OVRRENAMEFAILED =>
-'A file named %s1 already exists in the override folder! Renaming existing file to %s2 failed! The file might be write-protected or a file with the new name already exist.',
+      'A file named %s1 already exists in the override folder! Renaming existing file to %s2 failed! The file might be write-protected or a file with the new name already exist.',
     LS_LOG_OVRCHECKSILENTWARN =>
-'Warning: A file named %s1 already exists in the override folder. It will override the one in the ERF/RIM archive in-game.',
+      'Warning: A file named %s1 already exists in the override folder. It will override the one in the ERF/RIM archive in-game.',
 
     # GFF file handler
     LS_LOG_GFFSECTIONMISSING =>
-'Unable to locate section "%s1" when attempting to add GFF Field, skipping...',
+      'Unable to locate section "%s1" when attempting to add GFF Field, skipping...',
     LS_LOG_GFFPARENTALERROR =>
-'Parent field at "%s1" does not exist or is not a LIST or STRUCT! Unable to add new Field "%s2"...',
+      'Parent field at "%s1" does not exist or is not a LIST or STRUCT! Unable to add new Field "%s2"...',
     LS_LOG_GFFMISSINGLABEL =>
-'No field label has been specified for new field in section "%s1"! Unable to create field...',
+      'No field label has been specified for new field in section "%s1"! Unable to create field...',
     LS_LOG_GFFLABELEXISTS =>
       'A Field with the label "%s1" already exists at "%s2", skipping it...',
     LS_LOG_GFFLABELEXISTSMOD =>
-'A Field with the label "%s1" already exists at "%s2", modifying instead...',
+      'A Field with the label "%s1" already exists at "%s2", modifying instead...',
     LS_LOG_GFFINVALIDSTRREF =>
-'Invalid StrRef value "%s1" when attempting to add ExoLocString. Defaulting to -1...',
+      'Invalid StrRef value "%s1" when attempting to add ExoLocString. Defaulting to -1...',
     LS_LOG_GFFINVALIDTYPEDATA =>
-'Invalid field type "%s1" or data specified in section "%s2" when trying to add fields to %s3, skipping...',
+      'Invalid field type "%s1" or data specified in section "%s2" when trying to add fields to %s3, skipping...',
     LS_LOG_GFFADDEDSTRUCT   => 'Added %s1, index %s2, at position "%s3"',
     LS_LOG_GFFADDEDFIELD    => 'Added %s1 field "%s2" at position "%s3"',
     LS_LOG_GFFPROCSUBFIELDS => 'Processing new sub-fields at %s1.',
@@ -382,7 +382,7 @@ my %Messages = (
     LS_LOG_GFFCANTLOADFILE      => 'Unable to load file %s1! Skipping...',
     LS_LOG_GFFNOFILEOPENED      => 'No valid %s1 file was opened, skipping...',
     LS_LOG_GFFMISSINGLISTSTRUCT =>
-'Could not find struct to modify in parent list at %s1, unable to add new field!',
+      'Could not find struct to modify in parent list at %s1, unable to add new field!',
 
     # HACK List handler
     LS_LOG_HAKSTART         => 'Modifying binary files...',
@@ -398,7 +398,7 @@ my %Messages = (
     # Recompile file handler
     LS_LOG_NCSBEGINNING       => 'Modifying and compiling scripts...',
     LS_LOG_NCSCOMPILERMISSING =>
-'Could not locate nwnsscomp.exe in the tslpatchdata folder! Unable to compile scripts!',
+      'Could not locate nwnsscomp.exe in the tslpatchdata folder! Unable to compile scripts!',
     LS_LOG_NCSPROCESSINGTOKENS => 'Replacing tokens in script %s1...',
     LS_LOG_NCSCOMPILINGSCRIPT  => 'Compiling modified script %s1...',
     LS_LOG_NCSCOMPILEROUTPUT   => 'NWNNSSComp says: %s1',
@@ -408,9 +408,9 @@ my %Messages = (
       'File "%s1" already exists in archive "%s2", file skipped...',
     LS_LOG_NCSSAVEINERFORRIM   => 'Adding script "%s1" to archive "%s2"...',
     LS_LOG_NCSCOMPILEDNOTFOUND =>
-'Unable to find compiled version of file "%s1"! The compilation probably failed! Skipping...',
+      'Unable to find compiled version of file "%s1"! The compilation probably failed! Skipping...',
     LS_LOG_NCSINCLUDEDETECTED =>
-'Script "%s1" has no start function, assuming include file. Compile skipped...',
+      'Script "%s1" has no start function, assuming include file. Compile skipped...',
     LS_LOG_NCSPROCNSSMISSING =>
       'Unable to find processed version of file %s1; cannot compile it!',
     LS_LOG_NCSSAVEERFRIM => 'Saving changes to ERF/RIM file %s1...',
@@ -429,16 +429,16 @@ my %Messages = (
 
     # File handler
     LS_EXC_FHRENAMEFAILED =>
-'Unable to locate source file "%s1" to rename to "%s2" and install, skipping...',
+      'Unable to locate source file "%s1" to rename to "%s2" and install, skipping...',
     LS_EXC_FHNODESTPATHSET   => 'Error! No install path has been set!',
     LS_EXC_FHNOSOURCEFILESET => 'Error! No file to install is specified!',
     LS_EXC_FHSOURCEDONTEXIST =>
       'Error! File "%s1" set to be patched does not exist!',
     LS_DLG_SELECTINSTALLFOLDER =>
-'Please select the folder where your game is installed. (The folder containing the game executable.)',
+      'Please select the folder where your game is installed. (The folder containing the game executable.)',
     LS_EXC_FHINVALIDGAMEFOLDER => 'Invalid game directory specified!',
     LS_EXC_FHTALKYMANNOTFOUND  =>
-'Invalid game folder specified, dialog.tlk file not found! Make sure you have selected the correct folder.',
+      'Invalid game folder specified, dialog.tlk file not found! Make sure you have selected the correct folder.',
     LS_LOG_FHINSTALLPATHSET  => 'Install path set to %s1.',
     LS_DLG_FILETYPETLK       => 'TLK file %s1',
     LS_DLG_FILETYPE2DA       => '2DA file %s1',
@@ -462,9 +462,9 @@ my %Messages = (
     LS_EXC_FHTLKFILEMISSING =>
       'Error! Unable to locate TLK file to patch, "%s1" file not found!',
     LS_LOG_FHDESTFILENOTFOUND =>
-'Unable to locate archive "%s1" to modify or insert file "%s2" into, skipping...',
+      'Unable to locate archive "%s1" to modify or insert file "%s2" into, skipping...',
     LS_LOG_FHDESTNOTFOUNDEXC =>
-'Unable to load archive "%s1" to modify or insert file "%s2" into, skipping... (%s3)',
+      'Unable to load archive "%s1" to modify or insert file "%s2" into, skipping... (%s3)',
     LS_LOG_FHCANNOTLOADDEST =>
       'Unable to load archive "%s1" to insert file "%s2" into, skipping...',
     LS_LOG_FHDESTRESEXISTMOD =>
@@ -473,12 +473,12 @@ my %Messages = (
       'Unable to locate file "%s1" to rename to "%s2" and install, skipping...',
     LS_LOG_FHADDTODEST      => 'Adding file "%s1" to archive "%s2"...',
     LS_LOG_FHTEMPFILEFAILED =>
-'Unable to make work copy of file "%s1". File not saved to ERF/RIM archive!',
+      'Unable to make work copy of file "%s1". File not saved to ERF/RIM archive!',
     LS_LOG_FHMAKEOVERRIDE   => 'No Override folder found, creating it at %s1.',
     LS_LOG_FHMISSINGARCHIVE =>
       'Unable to locate archive "%s1" to insert script "%s2" into, skipping...',
     LS_LOG_FHLOADARCHIVEEXC =>
-'Unable to load archive "%s1" to insert script "%s2" into, skipping... (%s3)',
+      'Unable to load archive "%s1" to insert script "%s2" into, skipping... (%s3)',
     LS_LOG_FHLOADARCHIVEERR =>
       'Unable to load archive "%s1" to insert script "%s2" into, skipping...',
     LS_LOG_FHBACKUPSCRIPT =>
@@ -497,7 +497,7 @@ my %Messages = (
     LS_LOG_FHFILEEXISTSKIP =>
       'A file named "%s1" already exists in the Override folder. Skipping...',
     LS_LOG_FHNOTSLPATCHDATAFILE =>
-'No file blueprint found in tslpatchdata folder, fallback to manual source...',
+      'No file blueprint found in tslpatchdata folder, fallback to manual source...',
     LS_DLG_MANUALLOCATEFILE =>
       'File not found! Please locate the "%s1" ("%s2") file.',
     LS_LOG_FHCOPYFILEAS => 'Copying file "%s1" as "%s2" to Override folder...',
@@ -544,9 +544,9 @@ sub Format {
 sub WriteInstallLog {
     open FH, ">", "$install_path/installlog.rtf";
     print FH
-"{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\fnil\fcharset0 Courier New;}}\n";
+      "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\fnil\fcharset0 Courier New;}}\n";
     print FH
-"{\\colortbl ;\\red2\\green97\\blue17;\\red4\\green32\\blue152;\\red160\\green87\\blue2;\\red156\\green2\\blue2;\\red2\\green97\\blue17;}\n";
+      "{\\colortbl ;\\red2\\green97\\blue17;\\red4\\green32\\blue152;\\red160\\green87\\blue2;\\red156\\green2\\blue2;\\red2\\green97\\blue17;}\n";
     print FH "\\viewkind4\\uc1\\pard\\cf1\\b\\f0\\fs2";
     print FH $log_text;
     print FH "\\b0 \\par }";
@@ -1040,7 +1040,7 @@ sub Install {
         }
 
         if ( $install_dest_path =~
-/(data|docs|launcher|lips|logs|miles|modules|movies|override|rims|saves|streammusic|streamsounds|streamwaves|texturepacks|utils|streamvoices)$/i
+            /(data|docs|launcher|lips|logs|miles|modules|movies|override|rims|saves|streammusic|streamsounds|streamwaves|texturepacks|utils|streamvoices)$/i
           )
         {
             $_ = $install_dest_path;
@@ -1229,7 +1229,7 @@ sub Uninstall {
         }
 
         if ( $install_dest_path =~
-/(data|docs|launcher|lips|logs|miles|modules|movies|override|rims|saves|streammusic|streamsounds|streamwaves|texturepacks|utils|streamvoices)$/i
+            /(data|docs|launcher|lips|logs|miles|modules|movies|override|rims|saves|streammusic|streamsounds|streamwaves|texturepacks|utils|streamvoices)$/i
           )
         {
             $_ = $install_dest_path;
@@ -1371,7 +1371,7 @@ sub Uninstall {
 sub UpdateProgress {
     $log_index++;
 
- # print "$log_index / $log_count: " . (($log_index / $log_count) * 100) . "\n";
+    # print "$log_index / $log_count: " . (($log_index / $log_count) * 100) . "\n";
     $GUI->{mwProgress}
       ->configure( -value => ( $log_index / $log_count ) * 100 );
 }
@@ -1663,12 +1663,12 @@ sub ExecuteFile {
                   )
                 {
                     print
-"Failed!:\n Install Path: $install_path\n Source File: $sourcefile\nERF Name: $ERF_name\nSave As: $saveas\n\n";
+                      "Failed!:\n Install Path: $install_path\n Source File: $sourcefile\nERF Name: $ERF_name\nSave As: $saveas\n\n";
 
-# ProcessMessage(Format($Messages{LS_LOG_FHTEMPFILEFAILED}, $saveas), LOG_LEVEL_ERROR);
+                    # ProcessMessage(Format($Messages{LS_LOG_FHTEMPFILEFAILED}, $saveas), LOG_LEVEL_ERROR);
 
                     $GUI->{Popup2}{Message} =
-"The file \"$sourcefile\" was not found in the patch data folder.\n\nWould you like to use the original file from the archive the ERF, MOD, or RIM file?";
+                      "The file \"$sourcefile\" was not found in the patch data folder.\n\nWould you like to use the original file from the archive the ERF, MOD, or RIM file?";
                     if ( $GUI->{Popup2}{Widget}->Show() ne 'Yes' ) {
                         ProcessMessage(
                             Format(
@@ -1945,7 +1945,7 @@ sub MakeBackup {
 
     $folder = "\\$folder\\";
 
-# print "Making a backup at: \n" . "$base\\backup" . $folder . $filename . "\n\n";
+    # print "Making a backup at: \n" . "$base\\backup" . $folder . $filename . "\n\n";
     return File::Copy::copy( $file,
         "$backup_path\\backup" . $folder . $filename );
 }
@@ -2496,9 +2496,9 @@ sub DoInstallFiles {
                         );
                     }
 
-                   # Now pull everything into a sub-folder named after the level
-                   # itself. This way we aren't having to deal with the data in
-                   # memory...
+                    # Now pull everything into a sub-folder named after the level
+                    # itself. This way we aren't having to deal with the data in
+                    # memory...
                     $ERF_type =
                       substr( $ERF_name, ( length($ERF_name) - 3 ), 3 );
                     $ERF_name =
@@ -2604,7 +2604,7 @@ sub DoInstallFiles {
                                         1 )    # Make a backup
                                     {
                                         MakeBackup(
-"$install_dest_path\\$folder\\$file",
+                                            "$install_dest_path\\$folder\\$file",
                                             "$folder"
                                         );
                                     }
@@ -3354,7 +3354,7 @@ sub Add2daRow {
 
             $piece_value = GetMemoryToken($piece_value);
 
-# print "Row header for row $modify_row is " . $twoda->get_row_header($modify_row) . "\n";
+            # print "Row header for row $modify_row is " . $twoda->get_row_header($modify_row) . "\n";
             $twoda->change_cell( $twoda->get_row_header($modify_row),
                 $piece, $piece_value );
         }
@@ -4248,9 +4248,9 @@ sub DoGFFList {
                                     );
                                 }
 
-                   # Now pull everything into a sub-folder named after the level
-                   # itself. This way we aren't having to deal with the data in
-                   # memory...
+                                # Now pull everything into a sub-folder named after the level
+                                # itself. This way we aren't having to deal with the data in
+                                # memory...
                                 $ERF_type =
                                   substr( $ERF_name, ( length($ERF_name) - 3 ),
                                     3 );
@@ -4534,18 +4534,18 @@ sub AddGFFField {
             }
             elsif ( ( $stype eq FIELD_LIST ) and ( looks_like_number($_) ) ) {
 
-               # print "4 ";
-               # print "Number of list elements: " . scalar @{$struct->{Value}};
-               # print "\n";
-               # print $struct->{Value}[$_] . "\n";
-               # print @{$struct->{Value}}[$_] . "\n";
+                # print "4 ";
+                # print "Number of list elements: " . scalar @{$struct->{Value}};
+                # print "\n";
+                # print $struct->{Value}[$_] . "\n";
+                # print @{$struct->{Value}}[$_] . "\n";
                 $struct = @{ $struct->{Value} }[$_];  # or $struct->{Value}{$_};
                 $stype  = $struct->{Type};
                 if ( $struct->{Type} == undef or $struct->{Type} eq '' ) {
                     $stype = FIELD_STRUCT;
                 }
 
-   # print "label:_" . $struct->{Label} . "_" . DecodeFieldType($stype) . "_\n";
+                # print "label:_" . $struct->{Label} . "_" . DecodeFieldType($stype) . "_\n";
             }
             else {
                 if ( ref( $struct->{Fields} ) ne 'Bioware::GFF::Field' )
@@ -4586,8 +4586,8 @@ sub AddGFFField {
             # print DecodeFieldType($stype) . "\n";
             if ( $pcounter > 0 ) {
 
-              # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-              # $stype = $struct->{Type};
+                # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+                # $stype = $struct->{Type};
             }
 
             $pcounter++;
@@ -5068,26 +5068,26 @@ sub ChangeGFFFieldValue {
 
             if ( $pcounter > 0 ) {
 
-              # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-              # $stype = $struct->{Type};
+                # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+                # $stype = $struct->{Type};
             }
 
             # print "Type: " . DecodeFieldType($stype) . "\n";
             $pcounter++;
         }
 
-      # print "Now doing $_\n";
-      #     if(($stype eq FIELD_LIST) and (looks_like_number($_)))
-      #     {
-      #         $struct = $struct->{Value}[$_];
-      #         $stype  = $struct->{Type};
-      #     }
-      #     else
-      #     {
-      #         $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-      #         $stype  = $struct->{Type};
-      #     }
-      # }
+        # print "Now doing $_\n";
+        #     if(($stype eq FIELD_LIST) and (looks_like_number($_)))
+        #     {
+        #         $struct = $struct->{Value}[$_];
+        #         $stype  = $struct->{Type};
+        #     }
+        #     else
+        #     {
+        #         $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+        #         $stype  = $struct->{Type};
+        #     }
+        # }
     }
 
     # print "path: $path\n";
@@ -5456,7 +5456,7 @@ sub DoCompileFiles {
                                 );
                             }
                             else {
- # print "FileBase: $FileBase\nCopied to: $install_path/$ERF_name/$NCSFile\n\n";
+                                # print "FileBase: $FileBase\nCopied to: $install_path/$ERF_name/$NCSFile\n\n";
                                 ProcessMessage(
                                     Format(
                                         $Messages{LS_LOG_NCSSAVEERFRIM},
@@ -5683,7 +5683,7 @@ sub ReplaceTokensInFile {
         my $temp = $_;
 
         if ( $temp =~
-/(void main\(\)|void main \(\)|int startingconditional \(\)|int startingconditional \(\))/
+            /(void main\(\)|void main \(\)|int startingconditional \(\)|int startingconditional \(\))/
           )
         {
             $ScriptInfo{IsInclude} = 0;
@@ -6289,12 +6289,12 @@ sub ProcessRTFLine {
             my $nline = $1;
             $line = $2;
 
-# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
-# {
-#     WriteRTFLine($nline);
-# }
-# else
-# {
+            # if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
+            # {
+            #     WriteRTFLine($nline);
+            # }
+            # else
+            # {
             ProcessRTFLine($nline);
 
             # }
@@ -6330,19 +6330,19 @@ sub ProcessRTFLine {
             $ParaInfo{'inUnder'}   = 1;
             $FontInfo{'underline'} = 1;
 
-# $line = substr($line, 0, index($line, '\ul')) . substr($line, (index($line, '\ul') + 3), (length($line) - index($line, '\ul')));
-# print "line: $line\n";
+            # $line = substr($line, 0, index($line, '\ul')) . substr($line, (index($line, '\ul') + 3), (length($line) - index($line, '\ul')));
+            # print "line: $line\n";
         }
         elsif ( $ParaInfo{'inUnder'} == 1 && $line =~ /\\ulnone/ ) {
             $line =~ /(.*)\\ulnone(.*)/;
             my $nline = $1;
             $line = $2;
 
-# print "Part to be underlined: $nline\nPart to be processed: $line\n";
-# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
-#     WriteRTFLine($nline);
-# }
-# else {
+            # print "Part to be underlined: $nline\nPart to be processed: $line\n";
+            # if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
+            #     WriteRTFLine($nline);
+            # }
+            # else {
             ProcessRTFLine($nline);
 
             # }
@@ -6393,10 +6393,10 @@ sub ProcessRTFLine {
             my $nline = $1;
             $line = $2;
 
-# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
-#     WriteRTFLine($nline);
-# }
-# else {
+            # if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
+            #     WriteRTFLine($nline);
+            # }
+            # else {
             ProcessRTFLine($nline);
 
             # }
@@ -6445,10 +6445,10 @@ sub ProcessRTFLine {
             my $nline = $1;
             $line = $2;
 
-# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
-#     WriteRTFLine($nline);
-# }
-# else {
+            # if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
+            #     WriteRTFLine($nline);
+            # }
+            # else {
             ProcessRTFLine($nline);
 
             # }

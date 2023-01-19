@@ -18,94 +18,94 @@ $VERSION = 0.21;
 
 # private vars
 our %res_types = (
-    0x0000 => 'res',    #Misc. GFF resources
-    0x0001 => 'bmp',    #Microsoft Windows Bitmap
+    0x0000 => 'res',    # Misc. GFF resources
+    0x0001 => 'bmp',    # Microsoft Windows Bitmap
     0x0002 => 'mve',
-    0x0003 => 'tga',    #Targa Graphics Format
-    0x0004 => 'wav',    #Wave
-    0x0006 => 'plt',    #Bioware Packed Layer Texture
-    0x0007 => 'ini',    #Windows INI
-    0x0008 => 'mp3',    #MP3
-    0x0009 => 'mpg',    #MPEG
-    0x000A => 'txt',    #Text file
-    0x000B => 'wma',    #Windows Media audio?
-    0x000C => 'wmv',    #Windows Media video?
+    0x0003 => 'tga',    # Targa Graphics Format
+    0x0004 => 'wav',    # Wave
+    0x0006 => 'plt',    # Bioware Packed Layer Texture
+    0x0007 => 'ini',    # Windows INI
+    0x0008 => 'mp3',    # MP3
+    0x0009 => 'mpg',    # MPEG
+    0x000A => 'txt',    # Text file
+    0x000B => 'wma',    # Windows Media audio?
+    0x000C => 'wmv',    # Windows Media video?
     0x000D => 'xmv',
     0x07D0 => 'plh',
     0x07D1 => 'tex',
-    0x07D2 => 'mdl',    #Model
+    0x07D2 => 'mdl',    # Model
     0x07D3 => 'thg',
-    0x07D5 => 'fnt',    #Font
+    0x07D5 => 'fnt',    # Font
     0x07D7 => 'lua',
     0x07D8 => 'slt',
-    0x07D9 => 'nss',    #NWScript source code
-    0x07DA => 'ncs',    #NWScript bytecode
-    0x07DB => 'mod',    #Module
-    0x07DC => 'are',    #Area (GFF)
-    0x07DD => 'set',    #Tileset (unused in KOTOR?)
-    0x07DE => 'ifo',    #Module information
-    0x07DF => 'bic',    #Character sheet (unused)
+    0x07D9 => 'nss',    # NWScript source code
+    0x07DA => 'ncs',    # NWScript bytecode
+    0x07DB => 'mod',    # Module
+    0x07DC => 'are',    # Area (GFF)
+    0x07DD => 'set',    # Tileset (unused in KOTOR?)
+    0x07DE => 'ifo',    # Module information
+    0x07DF => 'bic',    # Character sheet (unused)
     0x07E0 => 'wok',    # walk-mesh
-    0x07E1 => '2da',    #2-dimensional array
-    0x07E2 => 'tlk',    #conversation file
-    0x07E6 => 'txi',    #Texture information
+    0x07E1 => '2da',    # 2-dimensional array
+    0x07E2 => 'tlk',    # conversation file
+    0x07E6 => 'txi',    # Texture information
     0x07E7 => 'git'
-    , #Dynamic area information, game instance file, all area and objects that are scriptable
+    , # Dynamic area information, game instance file, all area and objects that are scriptable
     0x07E8 => 'bti',
-    0x07E9 => 'uti',    #item blueprint
+    0x07E9 => 'uti',    # item blueprint
     0x07EA => 'btc',
-    0x07EB => 'utc',    #Creature blueprint
-    0x07ED => 'dlg',    #Dialogue
-    0x07EE => 'itp',    #tile blueprint pallet file
+    0x07EB => 'utc',    # Creature blueprint
+    0x07ED => 'dlg',    # Dialogue
+    0x07EE => 'itp',    # tile blueprint pallet file
     0x07EF => 'btt',
-    0x07F0 => 'utt',    #trigger blueprint
-    0x07F1 => 'dds',    #compressed texture file
+    0x07F0 => 'utt',    # trigger blueprint
+    0x07F1 => 'dds',    # compressed texture file
     0x07F2 => 'bts',
-    0x07F3 => 'uts',    #sound blueprint
-    0x07F4 => 'ltr',    #letter combo probability info
-    0x07F5 => 'gff',    #Generic File Format
-    0x07F6 => 'fac',    #faction file
+    0x07F3 => 'uts',    # sound blueprint
+    0x07F4 => 'ltr',    # letter combo probability info
+    0x07F5 => 'gff',    # Generic File Format
+    0x07F6 => 'fac',    # faction file
     0x07F7 => 'bte',
-    0x07F8 => 'ute',    #encounter blueprint
+    0x07F8 => 'ute',    # encounter blueprint
     0x07F9 => 'btd',
-    0x07FA => 'utd',    #door blueprint
+    0x07FA => 'utd',    # door blueprint
     0x07FB => 'btp',
-    0x07FC => 'utp',    #placeable object blueprint
-    0x07FD => 'dft',    #default values file (text-ini)
-    0x07FE => 'gic',    #game instance comments
-    0x07FF => 'gui',    #GUI definition (GFF)
+    0x07FC => 'utp',    # placeable object blueprint
+    0x07FD => 'dft',    # default values file (text-ini)
+    0x07FE => 'gic',    # game instance comments
+    0x07FF => 'gui',    # GUI definition (GFF)
     0x0800 => 'css',
     0x0801 => 'ccs',
     0x0802 => 'btm',
-    0x0803 => 'utm',    #store merchant blueprint
-    0x0804 => 'dwk',    #door walkmesh
-    0x0805 => 'pwk',    #placeable object walkmesh
+    0x0803 => 'utm',    # store merchant blueprint
+    0x0804 => 'dwk',    # door walkmesh
+    0x0805 => 'pwk',    # placeable object walkmesh
     0x0806 => 'btg',
     0x0807 => 'utg',
-    0x0808 => 'jrl',    #Journal
-    0x0809 => 'sav',    #Saved game (ERF)
-    0x080A => 'utw',    #waypoint blueprint
+    0x0808 => 'jrl',    # Journal
+    0x0809 => 'sav',    # Saved game (ERF)
+    0x080A => 'utw',    # waypoint blueprint
     0x080B => '4pc',
-    0x080C => 'ssf',    #sound set file
-    0x080D => 'hak',    #Hak pak (unused)
+    0x080C => 'ssf',    # sound set file
+    0x080D => 'hak',    # Hak pak (unused)
     0x080E => 'nwm',
-    0x080F => 'bik',    #movie file (bik format)
-    0x0810 => 'ndb',    #script debugger file
-    0x0811 => 'ptm',    #plot manager/plot instance
-    0x0812 => 'ptt',    #plot wizard blueprint
+    0x080F => 'bik',    # movie file (bik format)
+    0x0810 => 'ndb',    # script debugger file
+    0x0811 => 'ptm',    # plot manager/plot instance
+    0x0812 => 'ptt',    # plot wizard blueprint
     0x0BB8 => 'lyt',
     0x0BB9 => 'vis',
-    0x0BBA => 'rim',    #See RIM File Format
-    0x0BBB => 'pth',    #Path information? (GFF)
+    0x0BBA => 'rim',    # See RIM File Format
+    0x0BBB => 'pth',    # Path information? (GFF)
     0x0BBC => 'lip',
     0x0BBD => 'bwm',
     0x0BBE => 'txb',
-    0x0BBF => 'tpc',    #Texture
+    0x0BBF => 'tpc',    # Texture
     0x0BC0 => 'mdx',
     0x0BC1 => 'rsv',
     0x0BC2 => 'sig',
     0x0BC3 => 'xbx',
-    0x270D => 'erf',    #Encapsulated Resource Format
+    0x270D => 'erf',    # Encapsulated Resource Format
     0x270E => 'bif',
     0x270F => 'key'
 );
@@ -169,7 +169,7 @@ sub make_new_from_folder {
         open FH, "<", $file;
         binmode FH;
 
-       # print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
+        # print "File: $folder\\$file - Size: " . (-s "$folder\\$file") . "\n\n";
         sysread FH, $file_data{$res_id}{Data}, ( -s $file );
         $file_data{$res_id}{Size} = ( -s $file );
 
@@ -491,11 +491,11 @@ sub export_resource_by_index {
     }
     close $out_fh;
 
-#    Added by Fair Strides for later projects. Commented out so as not to interfere with KSE.
-# my $old = $_;
-# $_ = $output_filepath;
-# /(...)$/;
-# my $t = $1;
+    #    Added by Fair Strides for later projects. Commented out so as not to interfere with KSE.
+    # my $old = $_;
+    # $_ = $output_filepath;
+    # /(...)$/;
+    # my $t = $1;
 
     # $_ = $old;
 
@@ -618,7 +618,7 @@ sub import_resource {
 
         if ( $n == 1 ) {
             print
-"ResRef: $new_res_ref\nRes Type: $new_res_type\nRes Extension: $new_ext\nRes ID: $res_ix\nRes Size: "
+              "ResRef: $new_res_ref\nRes Type: $new_res_type\nRes Extension: $new_ext\nRes ID: $res_ix\nRes Size: "
               . ( -s $in_fh ) . "\n\n";
         }
         my $hashref = {
@@ -785,11 +785,11 @@ sub write_erf {
     #---------------------------------------------
     my ( $self, $output_file, $update_build ) = @_;
 
-    #why did I do this? vvv
+    # why did I do this? vvv
 
-# my $working_output;  #we may need to read the original erf before we overwrite it.
-# unless ($output_file) { $output_file = $self->{'erf_filename'} }
-# $working_output = $output_file . '_temp';
+    # my $working_output;  #we may need to read the original erf before we overwrite it.
+    # unless ($output_file) { $output_file = $self->{'erf_filename'} }
+    # $working_output = $output_file . '_temp';
     if ($update_build) {
         $self->{'build_year'} = (localtime)[5];
         $self->{'build_day'}  = (localtime)[7];
@@ -797,7 +797,7 @@ sub write_erf {
 
     $self->recalculate_packing();
 
-    #(open my ($out_fh), ">", $working_output) or (return 0);
+    # (open my ($out_fh), ">", $working_output) or (return 0);
     ( open my ($out_fh), ">", $output_file ) or ( return 0 );
     binmode $out_fh;
     my $total_written = 0;
@@ -857,12 +857,12 @@ sub write_erf {
             $resource->{'res_data'} = $resource->{'new_data'};
         }
         unless ( length( $resource->{'res_data'} ) )
-        { #print "F " . $resource->{'res_ref'} . "\." . $resource->{'res_ext'} . " Number: " . $resource->{'res_id'} . "\n";
+        { # print "F " . $resource->{'res_ref'} . "\." . $resource->{'res_ext'} . " Number: " . $resource->{'res_id'} . "\n";
             if ( $resource->{'res_ext'} eq 'mdx' ) { }
             else {
                 my $result =
                   $self->load_erf_resource_by_index( $resource->{'res_id'}, 1 )
-                  ;    #do not perform recalculation
+                  ;    # do not perform recalculation
                 return $result unless $result > 0;
             }
         }
@@ -956,7 +956,7 @@ __END__
 
 
 
-#private subs
+# private subs
 my $get_resource_id_by_name=sub {
     my $self=shift;
     my $res_name=shift;
@@ -1011,7 +1011,7 @@ my $increment_resource_count=sub {
     sysseek $self->{'fh'},16,0;
     syswrite $self->{'fh'},pack('V',$new_resource_count);
 };
-#public subs
+# public subs
 sub new2 {
     my ($invocant, $sourcetype, $source, $modulename) = @_;
     my $class=ref($invocant)||$invocant;
@@ -1022,7 +1022,7 @@ sub new2 {
         binmode $fh;
         $erf_size=(-s $fh); }
     elsif ($sourcetype eq 'scalar') {
-        #$fh=Win32API::File::Temp->new();
+        # $fh=Win32API::File::Temp->new();
         $fh = tempfile(UNLINK=>1);
         binmode $fh;
         if ((ref $source) eq 'SCALAR') {
@@ -1056,7 +1056,7 @@ sub read_keys {
     }
     return \@keyentries;
 }
-sub fetch_resource {  #returns a reference to a scalar that contains the requested resource
+sub fetch_resource {  # returns a reference to a scalar that contains the requested resource
     my ($self, $resource_name)=@_;
     my $res_size_read=0;
     unless ($resource_name)   { return; }
@@ -1074,7 +1074,7 @@ sub fetch_resource {  #returns a reference to a scalar that contains the request
     $res_size_read+=sysread $self->{'fh'},my ($resource),$res_data_size;
     return (\$resource,$res_size_read);
 }
-sub export_resource { #extracts resource to hard disk, returns TRUE if successful
+sub export_resource { # extracts resource to hard disk, returns TRUE if successful
     my ($self, $resource_name, $fn)=@_;
     my $res_ref = $self->fetch_resource($resource_name);
     unless ($res_ref) {return;}
@@ -1084,7 +1084,7 @@ sub export_resource { #extracts resource to hard disk, returns TRUE if successfu
     close TMP;
     return 1;
 }
-sub insert_resource { #inserts a resource from a scalar
+sub insert_resource { # inserts a resource from a scalar
     my ($self, $resource_name, $resource_ref, $replace, $resource_size_to_write)=@_;
     my $total_written=0;
     my $temp;
@@ -1138,11 +1138,11 @@ sub insert_resource { #inserts a resource from a scalar
         close $tmp;
         $new_module_size=$prev_data2_len+$new_res_size+$old_res_offset;
         # 4. truncate if not at EOF -- this doesn't work
-        #unless ( eof ($self->{'fh'}) ) {
+        # unless ( eof ($self->{'fh'}) ) {
         #    my $pos=sysseek($self->{'fh'},0,1);
         #    truncate ($self->{'fh'},$pos);
         #    select((select($self->{'fh'}), $|=1 )[0]);
-        #}
+        # }
         # 5. update resource entries' offsets
         for (my $res_entry_to_update=$new_res_id+1;$res_entry_to_update<$old_resource_count;$res_entry_to_update++) {
             sysseek $self->{'fh'},$res_offset+(8*$res_entry_to_update),0;
@@ -1214,7 +1214,7 @@ sub insert_resource { #inserts a resource from a scalar
 
 }
 
-sub import_resource { #inserts a resource from a file
+sub import_resource { # inserts a resource from a file
     my ($self, $filename, $replace)=@_;
     my @shortfn=split /\\/, $filename;
     my $shortfn1=pop @shortfn;
@@ -1226,4 +1226,4 @@ sub import_resource { #inserts a resource from a file
 }
 
 1;
-#&new &read_keys &fetch_resource &insert_resource &export_resource &import_resource
+# &new &read_keys &fetch_resource &insert_resource &export_resource &import_resource

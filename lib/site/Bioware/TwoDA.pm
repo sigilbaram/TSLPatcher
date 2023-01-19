@@ -13,7 +13,7 @@ use IO::Scalar;
 use List::Util;
 
 # set library version
-$VERSION = 0.21;    #added binmode
+$VERSION = 0.21;    # added binmode
 
 @ISA = qw(Exporter);
 
@@ -48,9 +48,9 @@ sub set_err;
 
 sub get_cell {
 
-   # PURPOSE: To return the entry for a cell of the loaded .2da file.
-   # INPUTS:  2DA Object, Row number, and the Column name
-   # OUTPUTS: Cell data, undef on failure (with error message in $self->{error})
+    # PURPOSE: To return the entry for a cell of the loaded .2da file.
+    # INPUTS:  2DA Object, Row number, and the Column name
+    # OUTPUTS: Cell data, undef on failure (with error message in $self->{error})
 
     # my $self=shift;
     # my $row = shift;
@@ -58,7 +58,7 @@ sub get_cell {
 
     if ( scalar @_ < 2 ) {
         $_[0]->set_err(
-"Routine get_cell lacks a Row Number to index, as well as a Column Header to find the cell...\n"
+            "Routine get_cell lacks a Row Number to index, as well as a Column Header to find the cell...\n"
         );
         return undef;
     }
@@ -68,19 +68,19 @@ sub get_cell {
         return undef;
     }
 
-# print "Cell data for " . $_[2] . " of row " . $_[1] . " is: " . $_[0]->{table}->{$_[1]}{$_[2]} . "\n";
+    # print "Cell data for " . $_[2] . " of row " . $_[1] . " is: " . $_[0]->{table}->{$_[1]}{$_[2]} . "\n";
     return $_[0]->{table}->{ $_[1] }{ $_[2] };
 }
 
 sub change_cell {
 
-# PURPOSE: To change the entry fro a cell of the loaded .2da file to the argument supplied
-# INPUTS:  2DA Object, Row number, Column name, and new entry for the cell.
-# OUTPUTS: None
+    # PURPOSE: To change the entry fro a cell of the loaded .2da file to the argument supplied
+    # INPUTS:  2DA Object, Row number, Column name, and new entry for the cell.
+    # OUTPUTS: None
 
     if ( scalar @_ < 2 ) {
         $_[0]->set_err(
-"Routine change_cell lacks a Row Number to index and a Column Header to find the cell...\n"
+            "Routine change_cell lacks a Row Number to index and a Column Header to find the cell...\n"
         );
         return undef;
     }
@@ -105,7 +105,7 @@ sub add_column {
 
     if ( defined($column) == 0 ) {
         $self->set_err(
-"Routine add_column lacks a Column Header to add to the .2da file...\n"
+            "Routine add_column lacks a Column Header to add to the .2da file...\n"
         );
         return undef;
     }
@@ -173,7 +173,7 @@ sub add_row {
 
     if ( defined($row_header) == 0 ) {
         $self->set_err(
-"Routine add_row lacks an index to tell where to add to the .2da file...\n"
+            "Routine add_row lacks an index to tell where to add to the .2da file...\n"
         );
         return -1;
     }
@@ -499,7 +499,7 @@ sub read2da {
                 $p              = unpack( 'v', $p );
                 seek $fh, $data_start_pos + $p, 0;
 
-# print F "Data for row $r, column $c: Packed pos is $p, total pos is " . ($data_start_pos + $p) . "\n";
+                # print F "Data for row $r, column $c: Packed pos is $p, total pos is " . ($data_start_pos + $p) . "\n";
                 $_ = <$fh>;
                 chop;
                 $table{$r}{$c} = $_;    # we now have the data for each cell
@@ -542,7 +542,7 @@ sub readFS {
         chop $columnchunk;
         @columns = split /\t/, $columnchunk;
 
-        # print join "\n", @columns; print "\n";     #we now have column names
+        # print join "\n", @columns; print "\n";     # we now have column names
         read $fh, my ($rowcnt), 4;
         $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
@@ -553,7 +553,7 @@ sub readFS {
             push @rows, $_;                  # we now have the row headers
         }
 
-  # if($file_to_read == "appearance.2da"){	print join "\n", @rows; print "\n"; }
+        # if($file_to_read == "appearance.2da"){	print join "\n", @rows; print "\n"; }
         my $pointer_cursor;
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
@@ -971,12 +971,12 @@ sub write2da {
                 syswrite FH,
                   pack( 'v', $save_hash{ $self->{table}->{$r}{$c} } );
 
-# print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
+                # print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
             }
             else {
                 $save_hash{ $self->{table}->{$r}{$c} } = $data_pos;
 
-# print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
+                # print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
 
                 $data_pos += length( $self->{table}->{$r}{$c} ) + 1;
                 push( @save_array, $self->{table}->{$r}{$c} );

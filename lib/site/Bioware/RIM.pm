@@ -17,94 +17,94 @@ $VERSION = 0.01;
 
 # private vars
 our %res_types = (
-    0x0000 => 'res',    #Misc. GFF resources
-    0x0001 => 'bmp',    #Microsoft Windows Bitmap
+    0x0000 => 'res',    # Misc. GFF resources
+    0x0001 => 'bmp',    # Microsoft Windows Bitmap
     0x0002 => 'mve',
-    0x0003 => 'tga',    #Targa Graphics Format
-    0x0004 => 'wav',    #Wave
-    0x0006 => 'plt',    #Bioware Packed Layer Texture
-    0x0007 => 'ini',    #Windows INI
-    0x0008 => 'mp3',    #MP3
-    0x0009 => 'mpg',    #MPEG
-    0x000A => 'txt',    #Text file
-    0x000B => 'wma',    #Windows Media audio?
-    0x000C => 'wmv',    #Windows Media video?
+    0x0003 => 'tga',    # Targa Graphics Format
+    0x0004 => 'wav',    # Wave
+    0x0006 => 'plt',    # Bioware Packed Layer Texture
+    0x0007 => 'ini',    # Windows INI
+    0x0008 => 'mp3',    # MP3
+    0x0009 => 'mpg',    # MPEG
+    0x000A => 'txt',    # Text file
+    0x000B => 'wma',    # Windows Media audio?
+    0x000C => 'wmv',    # Windows Media video?
     0x000D => 'xmv',
     0x07D0 => 'plh',
     0x07D1 => 'tex',
-    0x07D2 => 'mdl',    #Model
+    0x07D2 => 'mdl',    # Model
     0x07D3 => 'thg',
-    0x07D5 => 'fnt',    #Font
+    0x07D5 => 'fnt',    # Font
     0x07D7 => 'lua',
     0x07D8 => 'slt',
-    0x07D9 => 'nss',    #NWScript source code
-    0x07DA => 'ncs',    #NWScript bytecode
-    0x07DB => 'mod',    #Module
-    0x07DC => 'are',    #Area (GFF)
-    0x07DD => 'set',    #Tileset (unused in KOTOR?)
-    0x07DE => 'ifo',    #Module information
-    0x07DF => 'bic',    #Character sheet (unused)
+    0x07D9 => 'nss',    # NWScript source code
+    0x07DA => 'ncs',    # NWScript bytecode
+    0x07DB => 'mod',    # Module
+    0x07DC => 'are',    # Area (GFF)
+    0x07DD => 'set',    # Tileset (unused in KOTOR?)
+    0x07DE => 'ifo',    # Module information
+    0x07DF => 'bic',    # Character sheet (unused)
     0x07E0 => 'wok',    # walk-mesh
-    0x07E1 => '2da',    #2-dimensional array
-    0x07E2 => 'tlk',    #conversation file
-    0x07E6 => 'txi',    #Texture information
+    0x07E1 => '2da',    # 2-dimensional array
+    0x07E2 => 'tlk',    # conversation file
+    0x07E6 => 'txi',    # Texture information
     0x07E7 => 'git'
-    , #Dynamic area information, game instance file, all area and objects that are scriptable
+    , # Dynamic area information, game instance file, all area and objects that are scriptable
     0x07E8 => 'bti',
-    0x07E9 => 'uti',    #item blueprint
+    0x07E9 => 'uti',    # item blueprint
     0x07EA => 'btc',
-    0x07EB => 'utc',    #Creature blueprint
-    0x07ED => 'dlg',    #Dialogue
-    0x07EE => 'itp',    #tile blueprint pallet file
+    0x07EB => 'utc',    # Creature blueprint
+    0x07ED => 'dlg',    # Dialogue
+    0x07EE => 'itp',    # tile blueprint pallet file
     0x07EF => 'btt',
-    0x07F0 => 'utt',    #trigger blueprint
-    0x07F1 => 'dds',    #compressed texture file
+    0x07F0 => 'utt',    # trigger blueprint
+    0x07F1 => 'dds',    # compressed texture file
     0x07F2 => 'bts',
-    0x07F3 => 'uts',    #sound blueprint
-    0x07F4 => 'ltr',    #letter combo probability info
-    0x07F5 => 'gff',    #Generic File Format
-    0x07F6 => 'fac',    #faction file
+    0x07F3 => 'uts',    # sound blueprint
+    0x07F4 => 'ltr',    # letter combo probability info
+    0x07F5 => 'gff',    # Generic File Format
+    0x07F6 => 'fac',    # faction file
     0x07F7 => 'bte',
-    0x07F8 => 'ute',    #encounter blueprint
+    0x07F8 => 'ute',    # encounter blueprint
     0x07F9 => 'btd',
-    0x07FA => 'utd',    #door blueprint
+    0x07FA => 'utd',    # door blueprint
     0x07FB => 'btp',
-    0x07FC => 'utp',    #placeable object blueprint
-    0x07FD => 'dft',    #default values file (text-ini)
-    0x07FE => 'gic',    #game instance comments
-    0x07FF => 'gui',    #GUI definition (GFF)
+    0x07FC => 'utp',    # placeable object blueprint
+    0x07FD => 'dft',    # default values file (text-ini)
+    0x07FE => 'gic',    # game instance comments
+    0x07FF => 'gui',    # GUI definition (GFF)
     0x0800 => 'css',
     0x0801 => 'ccs',
     0x0802 => 'btm',
-    0x0803 => 'utm',    #store merchant blueprint
-    0x0804 => 'dwk',    #door walkmesh
-    0x0805 => 'pwk',    #placeable object walkmesh
+    0x0803 => 'utm',    # store merchant blueprint
+    0x0804 => 'dwk',    # door walkmesh
+    0x0805 => 'pwk',    # placeable object walkmesh
     0x0806 => 'btg',
     0x0807 => 'utg',
-    0x0808 => 'jrl',    #Journal
-    0x0809 => 'sav',    #Saved game (ERF)
-    0x080A => 'utw',    #waypoint blueprint
+    0x0808 => 'jrl',    # Journal
+    0x0809 => 'sav',    # Saved game (ERF)
+    0x080A => 'utw',    # waypoint blueprint
     0x080B => '4pc',
-    0x080C => 'ssf',    #sound set file
-    0x080D => 'hak',    #Hak pak (unused)
+    0x080C => 'ssf',    # sound set file
+    0x080D => 'hak',    # Hak pak (unused)
     0x080E => 'nwm',
-    0x080F => 'bik',    #movie file (bik format)
-    0x0810 => 'ndb',    #script debugger file
-    0x0811 => 'ptm',    #plot manager/plot instance
-    0x0812 => 'ptt',    #plot wizard blueprint
+    0x080F => 'bik',    # movie file (bik format)
+    0x0810 => 'ndb',    # script debugger file
+    0x0811 => 'ptm',    # plot manager/plot instance
+    0x0812 => 'ptt',    # plot wizard blueprint
     0x0BB8 => 'lyt',
     0x0BB9 => 'vis',
-    0x0BBA => 'rim',    #See RIM File Format
-    0x0BBB => 'pth',    #Path information? (GFF)
+    0x0BBA => 'rim',    # See RIM File Format
+    0x0BBB => 'pth',    # Path information? (GFF)
     0x0BBC => 'lip',
     0x0BBD => 'bwm',
     0x0BBE => 'txb',
-    0x0BBF => 'tpc',    #Texture
+    0x0BBF => 'tpc',    # Texture
     0x0BC0 => 'mdx',
     0x0BC1 => 'rsv',
     0x0BC2 => 'sig',
     0x0BC3 => 'xbx',
-    0x270D => 'erf',    #Encapsulated Resource Format
+    0x270D => 'erf',    # Encapsulated Resource Format
     0x270E => 'bif',
     0x270F => 'key'
 );
@@ -178,7 +178,7 @@ sub make_new_from_folder {
 
     foreach ( sort { $a <=> $b } keys %file_data )    # 0 .. $res_id)
     {
-# print "Res $res_id " . $file_data{$_}{ResRef} . " Type " . $file_data{$_}{ResType} . " Offset before is $resource_fileoff\n";
+        # print "Res $res_id " . $file_data{$_}{ResRef} . " Type " . $file_data{$_}{ResType} . " Offset before is $resource_fileoff\n";
         syswrite RIM, pack( 'a16', pack( 'Z16', $file_data{$_}{ResRef} ) );
         syswrite RIM, pack( 'V',   $file_data{$_}{ResType} );
         syswrite RIM, pack( 'V',   $_ );
@@ -309,12 +309,12 @@ sub export_resource_by_index {
     }
     close $out_fh;
 
-# Added by Fair Strides later for future projects. Commented out to avoid interfering with KSE.
-# my $old = $_;
-# $_ = $output_filepath;
-# /(...)$/;
-# my $t = $1;
-# $_ = $old;
+    # Added by Fair Strides later for future projects. Commented out to avoid interfering with KSE.
+    # my $old = $_;
+    # $_ = $output_filepath;
+    # /(...)$/;
+    # my $t = $1;
+    # $_ = $old;
 
     # if (
     #     $t ~~ [

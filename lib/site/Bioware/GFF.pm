@@ -13,6 +13,7 @@ $VERSION = 0.69; # Added a check to only add Substrings to a Bioware::GFF::CExoL
 # 0.67; # added check for array ref in get_field_ix_by_label
 # 0.66; # support for STRREF field (Jade Empire)
 # 0.65; # support for unicode RESREF, CEXOSTRING, CEXOLOCSTRING fields
+
 @ISA = qw(Exporter);
 
 # export functions/variables
@@ -55,7 +56,7 @@ our $list_cnt            = 0;
 our %fieldindices_hash   = ();
 our %listindices_hash    = ();
 
-#define functions for export
+# define functions for export
 #########################################
 sub FIELD_BYTE          { 0 }
 sub FIELD_CHAR          { 1 }
@@ -429,7 +430,7 @@ sub writeField {
         my $exolocsubstr_ref = $exolocstr->{'Substrings'};
         my @exolocsubstrs    = @$exolocsubstr_ref;
 
-    # print "# of Exos: $field->{'Label'}" . "_" . scalar @exolocsubstrs . "\n";
+        # print "# of Exos: $field->{'Label'}" . "_" . scalar @exolocsubstrs . "\n";
         my $packed_substrs = undef;
         for my $exolocsubstr (@exolocsubstrs) {
             my $exolocsubstr_len = length $exolocsubstr->{'Value'};
@@ -454,7 +455,7 @@ sub writeField {
         syswrite $write_info{'fh_fielddata'},
           pack( 'V', $binary_length ) . $field->{'Value'};
     }    # write binary data with length prefix
-    elsif ( $type == 14 ) {    #struct
+    elsif ( $type == 14 ) {    # struct
         my $struct = $field->{'Value'};
         syswrite $write_info{'fh_field'},
           pack( 'V', $write_info{'struct_cnt'} )
@@ -841,8 +842,8 @@ sub writeStruct {
             $struct_dword2 = pack( 'V', $sizeof_fieldindices );
         }
 
-     # we've written the current offset, to make sure the next struct is handled
-     # properly, we have to increment the offset before writing any fields
+        # we've written the current offset, to make sure the next struct is handled
+        # properly, we have to increment the offset before writing any fields
         syswrite $write_info{'fh_struct'}, $struct_dword2;
         syswrite $write_info{'fh_struct'},
           pack( 'V', ( scalar @$temp_fields_arr_ref ) );
@@ -884,10 +885,10 @@ sub writeStruct2 {
         $write_info{'fh_label'}     = tempfile();
         $write_info{'fh_fielddata'} = tempfile();
 
-# ($write_info{'fh_struct'}      ,undef)=tempfile('strXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_struct'};
-# ($write_info{'fh_field'}       ,undef)=tempfile('fieXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_field'};
-# ($write_info{'fh_label'}       ,undef)=tempfile('lblXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_label'};
-# ($write_info{'fh_fielddata'}   ,undef)=tempfile('fdaXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_fielddata'};
+        # ($write_info{'fh_struct'}      ,undef)=tempfile('strXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_struct'};
+        # ($write_info{'fh_field'}       ,undef)=tempfile('fieXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_field'};
+        # ($write_info{'fh_label'}       ,undef)=tempfile('lblXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_label'};
+        # ($write_info{'fh_fielddata'}   ,undef)=tempfile('fdaXXXX',SUFFIX=>'.dat',UNLINK=>1); binmode $write_info{'fh_fielddata'};
     }
     syswrite $write_info{'fh_struct'}, pack( 'V', $struct->{'ID'} );
     my $temp_fields_arr_ref = $struct->{'Fields'};
@@ -1111,7 +1112,7 @@ sub writeHeader {
 
 sub writeHeaderScalar {
 
-    #for use with writeStructScalar (using IO::Scalar handles)
+    # for use with writeStructScalar (using IO::Scalar handles)
 
     my ( undef, $fn, $fh, $sig, $literal ) = @_
       ; # input: calling struct (discarded), filename, filehandle (one or the other)
@@ -1162,8 +1163,8 @@ sub writeHeaderScalar {
         $fieldindices_offset, $sizeof_fieldindices,
         $listindices_offset,  $sizeof_listindices );
 
-# sysseek $write_info{'fh_struct'},0,0;
-# sysread $write_info{'fh_struct'},my $struct_data,length ${$write_info{'fh_struct'}->sref};
+    # sysseek $write_info{'fh_struct'},0,0;
+    # sysread $write_info{'fh_struct'},my $struct_data,length ${$write_info{'fh_struct'}->sref};
     $total_written += syswrite $fh, ${ $write_info{'fh_struct'}->sref };
 
     # sysseek $write_info{'fh_field'},0,0;
@@ -1174,8 +1175,8 @@ sub writeHeaderScalar {
     # sysread $write_info{'fh_label'},my ($label_data),$fh_label_len;
     $total_written += syswrite $fh, ${ $write_info{'fh_label'}->sref };
 
-# sysseek $write_info{'fh_fielddata'},0,0;
-# sysread $write_info{'fh_fielddata'},my ($fielddata_data),(-s $write_info{'fh_fielddata'});
+    # sysseek $write_info{'fh_fielddata'},0,0;
+    # sysread $write_info{'fh_fielddata'},my ($fielddata_data),(-s $write_info{'fh_fielddata'});
     $total_written += syswrite $fh, ${ $write_info{'fh_fielddata'}->sref };
     for my $fieldindex ( sort { $a <=> $b } keys %fieldindices_hash ) {
         $total_written += syswrite $fh, $fieldindices_hash{$fieldindex};

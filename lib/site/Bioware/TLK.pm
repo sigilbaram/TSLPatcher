@@ -44,13 +44,13 @@ sub string_from_resref($$;$) {
         my $string_count = unpack( 'V', $string_count_packed );
         if ( $resrefnum >= $string_count ) {
 
-# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-# "Dialog.tlk error",0);
+            # $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+            # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+            # "Dialog.tlk error",0);
             return "Bad StrRef";
 
-# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+            # die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+            # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
         }
         seek TLK, 32 + ( 10 * $resrefnum ) + 4, 0;
         read TLK, ( my $info_packed ), 6;
@@ -64,13 +64,13 @@ sub string_from_resref($$;$) {
     my $string_count = unpack( 'V', $string_count_packed );
     if ( $resrefnum >= $string_count ) {
 
-# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-# "Dialog.tlk error",0);
+        # $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+        # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+        # "Dialog.tlk error",0);
         return "Bad StrRef";
 
-# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+        # die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+        # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
     }
     read TLK, ( my $offset_packed ), 4;
     my $offset = unpack( 'V', $offset_packed );
@@ -105,12 +105,12 @@ sub string_from_resref($$;$) {
     my $string_count = unpack( 'V', $string_count_packed );
     if ( $resrefnum >= $string_count ) {
 
-# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-# "Dialog.tlk error",0);
+        # $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+        # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+        # "Dialog.tlk error",0);
 
-# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+        # die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+        # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
     }
     read TLK, ( my $offset_packed ), 4;
     my $offset = unpack( 'V', $offset_packed );
@@ -145,12 +145,12 @@ sub GetStringInfo($$;$) {
     my $string_count = unpack( 'V', $string_count_packed );
     if ( $resrefnum >= $string_count ) {
 
-# $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
-# "Dialog.tlk error",0);
+        # $msgbox->Call(0,"Attempted to read past end of end of dialog.tlk \n"
+        # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n\n$breadcrumb",
+        # "Dialog.tlk error",0);
 
-# die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
-# ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
+        # die "Dialog.tlk error: Attempted to read past end of end of dialog.tlk \n"
+        # ."(tried to read string $resrefnum but dialog.tlk only goes up to entry number " . ($string_count-1) .")"."\n$breadcrumb"
     }
     read TLK, ( my $offset_packed ), 4;
     my $offset = unpack( 'V', $offset_packed );
