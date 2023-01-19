@@ -1,5 +1,8 @@
 ﻿package TSLPatcher::Functions;
 
+# use strict; # TODO: Fix errors caused by this
+# use warnings; # TODO: This file produces many warnings
+
 use Bioware::BIF;
 use Bioware::ERF;
 use Bioware::GFF;
@@ -33,13 +36,13 @@ use File::Path qw/make_path remove_tree/;
 
 use Math::Round;
 
-#use RTF::HTMLConverter;
+# use RTF::HTMLConverter;
 
 use Scalar::Util qw/looks_like_number/;
 
 use TSLPatcher::GUI;
 
-#use XML::GDOME;
+# use XML::GDOME;
 
 use utf8;
 
@@ -625,7 +628,7 @@ sub ProcessMessage {
 
     my @yview_data = $GUI->{mwInstallText}->yview();
 
-    #print "Yview: " . $yview_data[1] . "\n";
+    # print "Yview: " . $yview_data[1] . "\n";
     if ( $yview_data[1] > 0.0 ) {
         $GUI->{mwInstallText}->yviewScroll( 1, 'units' );
     }
@@ -720,13 +723,13 @@ my $pages    = 1;
 
 sub has_subdir {
 
-    #The path of the file/dir being visited.
+    # The path of the file/dir being visited.
     my $subdir = $File::Find::name;
 
-    #Ignore if this is a file.
+    # Ignore if this is a file.
     return unless -d $subdir;
 
-    #Ignore if $subdir is $Dirname itself.
+    # Ignore if $subdir is $Dirname itself.
     return if ( $subdir eq $base );
 
     return if ( $subdir eq 'backup' );
@@ -736,7 +739,7 @@ sub has_subdir {
     return if ( $subdir eq 'source' );
 
     # if we have reached here, this is a subdirector.
-    #print "Sub directory found - $subdir\n";
+    # print "Sub directory found - $subdir\n";
     if ( -e $subdir . '/tslpatchdata' ) {
         $subdir = substr(
             $subdir,
@@ -825,10 +828,10 @@ sub BM_ScrollRight {
 sub SetInstallPath {
     my $index = shift;
 
-    #print "Base1 $base\n";
-    #$base = "$base\\" . @subdirs[$index];
-    #print "Base2 $base\n";
-    $install_path = $base . "/" . @subdirs[$index] . '/tslpatchdata';
+    # print "Base1 $base\n";
+    # $base = "$base\\" . @subdirs[$index];
+    # print "Base2 $base\n";
+    $install_path = $base . "/" . $subdirs[$index] . '/tslpatchdata';
 }
 
 sub RunInstallPath {
@@ -853,13 +856,13 @@ sub DoSSFList;
 # Normal operations required to process mods
 sub ProcessInstallPath {
 
-    #	$GUI->{mw}->withdraw;
+    # $GUI->{mw}->withdraw;
     $GUI->{ns}->withdraw;
     $GUI->{bm}->withdraw;
 
     if ( -e "$install_path/namespaces.ini" ) {
 
-        #		print "h0a\n";
+        # print "h0a\n";
         &ProcessNamespaces;
 
         $GUI->{ns}->Popup(
@@ -870,18 +873,18 @@ sub ProcessInstallPath {
         $GUI->{mw}->withdraw;
     }
     else {
-        #		print "h0b\n";
-        #		if(-e "$install_path/uninstall.ini")
-        #		{
-        #		    $GUI->{Popup2}{Message} = $Messages{LS_GUI_UNINSTALLOPT};
-        #			$answer = $GUI->{Popup2}{Widget}->Show();
+        # print "h0b\n";
+        # if(-e "$install_path/uninstall.ini")
+        # {
+        #     $GUI->{Popup2}{Message} = $Messages{LS_GUI_UNINSTALLOPT};
+        # $answer = $GUI->{Popup2}{Widget}->Show();
         #
-        #			if($answer eq 'Yes') { Uninstall(); }
-        #		}
+        # if($answer eq 'Yes') { Uninstall(); }
+        # }
 
         unless ( -e "$install_path/$install_ini" ) {
 
-            #			print "h1\n";
+            # print "h1\n";
             $GUI->{Popup1}{Message} =
               Format( $Messages{LS_GUI_CONFIGMISSING}, $install_ini );
             $answer = $GUI->{Popup1}{Widget}->Show();
@@ -890,10 +893,10 @@ sub ProcessInstallPath {
 
         if ( -e "$install_path/$install_info" ) {
 
-            #			print "h3\n";
+            # print "h3\n";
             ParseInfo("$install_path\\$install_info");
 
-            #			print "h4\n";
+            # print "h4\n";
             $ini_object->read( $install_path . "\\$install_ini" );
             $uninstall_ini->add_section("Settings");
 
@@ -910,7 +913,7 @@ sub ProcessInstallPath {
             $uninstall_ini->add_section("SSFList");
             $uninstall_ini->add_section("HACKList");
 
-            #			print "h5\n";
+            # print "h5\n";
             $InstallInfo{caption} =
               $ini_object->get( 'Settings', 'WindowCaption',
                 $Messages{LS_GUI_DEFAULTCAPTION} );
@@ -926,10 +929,10 @@ sub ProcessInstallPath {
             $InstallInfo{bLogOld} =
               $ini_object->get( 'Settings', 'PlaintextLog', 0 );
 
-            #			print "h6\n";
+            # print "h6\n";
             if ( $InstallInfo{FileExists} == 0 ) {
 
-                #				print "h7\n";
+                # print "h7\n";
                 $GUI->{Popup1}{Message} =
                   Format( $Messages{LS_GUI_CONFIGLOADERROR}, $install_ini );
                 $GUI->{Popup1}{Widget}->Show();
@@ -938,16 +941,16 @@ sub ProcessInstallPath {
 
             $GUI->{mw}->configure( -title => $InstallInfo{caption} );
 
-            #			print "h8\n";
+            # print "h8\n";
 
             if ( $InstallInfo{bInstall} == 1 ) {
 
-                #				print "h9a\n";
+                # print "h9a\n";
                 $GUI->{mwInstallBtn}
                   ->configure( -text => $Messages{LS_GUI_BUTTONCAPINSTALL} );
             }
             else {
-                #				print "h9b\n";
+                # print "h9b\n";
                 $GUI->{mwInstallBtn}
                   ->configure( -text => $Messages{LS_GUI_BUTTONCAPPATCH} );
             }
@@ -959,7 +962,7 @@ sub ProcessInstallPath {
             );
         }
         else {
-            #			print "h2\n";
+            # print "h2\n";
             $GUI->{Popup1}{Message} =
               Format( $Messages{LS_GUI_INFOLOADERROR}, $install_info );
             $answer = $GUI->{Popup1}{Widget}->Show();
@@ -982,7 +985,7 @@ sub Exit {
 sub Install {
     if ( $InstallInfo{sMessage} ne "N/A" ) {
 
-        #		print "h10 - " . $InstallInfo{sMessage} . "\n";
+        # print "h10 - " . $InstallInfo{sMessage} . "\n";
 
         $GUI->{Popup2}{Message} = $InstallInfo{sMessage};
         my $answer = $GUI->{Popup2}{Widget}->Show();
@@ -1010,10 +1013,9 @@ sub Install {
         $install_dest_path = $pathgame2;
     }
 
-    #	elsif($InstallInfo{LookGame} == 1)
-    #	{
-    #		# Need to do the registry...
-    #	}
+    # elsif($InstallInfo{LookGame} == 1) {
+    # # Need to do the registry...
+    # }
     else {
         $install_dest_path = $GUI->{mw}->chooseDirectory(
             -title => 'Select the KotOR '
@@ -1109,7 +1111,7 @@ sub Install {
     # this allows proper updates of the Progress Bar.
     GetFileCount();
 
-    #	print "FileCount: $log_count\n";
+    # print "FileCount: $log_count\n";
 
     $GUI->{mw}->update();
     DoTLKList();
@@ -1171,7 +1173,7 @@ sub Install {
 
     $bInstalled = 1;
 
-    #	$uninstall_ini->write("$install_path/uninstall.ini");
+    # $uninstall_ini->write("$install_path/uninstall.ini");
     $GUI->{mwExitBtn}->configure( -state => 'normal' );
     $GUI->{Popup1}{Widget}->Show();
 
@@ -1298,7 +1300,7 @@ sub Uninstall {
     # this allows proper updates of the Progress Bar.
     GetFileCount();
 
-    #	print "FileCount: $log_count\n";
+    # print "FileCount: $log_count\n";
 
     $GUI->{mw}->update();
     DoTLKList();
@@ -1369,7 +1371,7 @@ sub Uninstall {
 sub UpdateProgress {
     $log_index++;
 
-  #print "$log_index / $log_count: " . (($log_index / $log_count) * 100) . "\n";
+ # print "$log_index / $log_count: " . (($log_index / $log_count) * 100) . "\n";
     $GUI->{mwProgress}
       ->configure( -value => ( $log_index / $log_count ) * 100 );
 }
@@ -1570,7 +1572,7 @@ sub ExecuteFile {
                 $ERF_name = substr( $ERF_name, 0, ( length($ERF_name) - 4 ) );
             }
             else {
-                #				print "GFF adding $destination to the array.\n";
+                # print "GFF adding $destination to the array.\n";
                 push( @ERFs, $destination );
 
                 # Set whether to treat this as an ERF or a RIM
@@ -1624,10 +1626,9 @@ sub ExecuteFile {
 
             my $saveas = $ini_object->get( $filename, '!SaveAs', $filename );
 
-            #			if(-e "$install_path\\$ERF_name\\$saveas")
-            #			{
-            #				unlink("$install_path\\$ERF_name\\$saveas");
-            #			}
+            # if(-e "$install_path\\$ERF_name\\$saveas") {
+            #     unlink("$install_path\\$ERF_name\\$saveas");
+            # }
 
             if (    ( $overwrite == 0 )
                 and ( -e "$install_path/$ERF_name/$saveas" ) )
@@ -1664,7 +1665,7 @@ sub ExecuteFile {
                     print
 "Failed!:\n Install Path: $install_path\n Source File: $sourcefile\nERF Name: $ERF_name\nSave As: $saveas\n\n";
 
-#					ProcessMessage(Format($Messages{LS_LOG_FHTEMPFILEFAILED}, $saveas), LOG_LEVEL_ERROR);
+# ProcessMessage(Format($Messages{LS_LOG_FHTEMPFILEFAILED}, $saveas), LOG_LEVEL_ERROR);
 
                     $GUI->{Popup2}{Message} =
 "The file \"$sourcefile\" was not found in the patch data folder.\n\nWould you like to use the original file from the archive the ERF, MOD, or RIM file?";
@@ -1695,10 +1696,10 @@ sub ExecuteFile {
 
                 $d =~ /(.*?)\....$/;
 
-                #print "Dest1: $destination\n";
+                # print "Dest1: $destination\n";
                 $destination = "$install_path\\$1";
 
-                #print "Dest2: $destination\n";
+                # print "Dest2: $destination\n";
             }
 
             my $saveas =
@@ -1712,11 +1713,11 @@ sub ExecuteFile {
                 return ( -1, '' );
             }
 
-            #print "SaveAs: $saveas\n";
+            # print "SaveAs: $saveas\n";
             ( $temp = $saveas ) =~ s/\.nss/\.ncs/;
 
-            #print "SaveAs1: $saveas\n";
-            #print "Temp: $temp\n";
+            # print "SaveAs1: $saveas\n";
+            # print "Temp: $temp\n";
 
             if ( $overwrite == 1 ) {
                 if (    ( lc($destination) eq 'override' )
@@ -1881,9 +1882,9 @@ sub ExecuteFile {
                 Format( $Messages{LS_LOG_FHMODIFYINGFILE}, $saveasfile ),
                 LOG_LEVEL_INFORMATION );
 
-            #			print "Install Path: $install_dest_path\n";
-            #			print "Destination: $destination\n";
-            #			print "SaveAs: $saveasfile\n";
+            # print "Install Path: $install_dest_path\n";
+            # print "Destination: $destination\n";
+            # print "SaveAs: $saveasfile\n";
             return ( 1, "$install_dest_path/$destination/$saveasfile" );
         }
     }
@@ -1918,21 +1919,21 @@ sub IsValidArchive {
 sub MakeBackup {
     my ( $file, $folder ) = @_;
 
-    #	print "File: $file\n";
+    # print "File: $file\n";
     $file =~ /(.*)(\\|\/)(.*?)$/;
     my $filename    = $3;
     my $backup_path = $install_path;
     $backup_path =~ s#\\#\/#g;
     my @a = split( /\//, $backup_path );
 
-    #	print "Backup1: $backup_path\n";
+    # print "Backup1: $backup_path\n";
     my $a_count = scalar @a;
 
-    #	print "Backup_count: $a_count\n";
+    # print "Backup_count: $a_count\n";
     $a_count -= 2;
     $backup_path = join( "/", @a[ 0 .. $a_count ] );
 
-    #	print "Backup2: $backup_path\n";
+    # print "Backup2: $backup_path\n";
 
     if ( ( -e "$backup_path\\backup" ) == 0 ) {
         make_path( "$backup_path\\backup", { chmod => 0777, user => $user } );
@@ -1944,7 +1945,7 @@ sub MakeBackup {
 
     $folder = "\\$folder\\";
 
-#	print "Making a backup at: \n" . "$base\\backup" . $folder . $filename . "\n\n";
+# print "Making a backup at: \n" . "$base\\backup" . $folder . $filename . "\n\n";
     return File::Copy::copy( $file,
         "$backup_path\\backup" . $folder . $filename );
 }
@@ -2209,7 +2210,7 @@ sub DoTLKList {
                           $tlk_dialog->add_entry( $text, $sound, $flags,
                             $length );
 
-                        #						print "$entry return $return new $new\n";
+                        # print "$entry return $return new $new\n";
 
                         if ( $return == -1 ) {
                             $count++;
@@ -2305,13 +2306,13 @@ sub DoTLKList {
 
     if ( $count > 0 ) { UpdateProgress(); }
 
-    #	$tlk_append->load_tlk($install_path . '/append.tlk');
+    # $tlk_append->load_tlk($install_path . '/append.tlk');
 
-    #	my $entry = $tlk_append->add_entry("Hi!", '', 7, 0.1);
-    #	$tlk_append->edit_entry($entry, 'Text', "Goodbye!");
+    # my $entry = $tlk_append->add_entry("Hi!", '', 7, 0.1);
+    # $tlk_append->edit_entry($entry, 'Text', "Goodbye!");
 
-    #	$tlk_append->delete_entry(0);
-    #	$tlk_append->save_tlk($install_path . '/new.tlk');
+    # $tlk_append->delete_entry(0);
+    # $tlk_append->save_tlk($install_path . '/new.tlk');
 }
 
 sub GetIsStringToken {
@@ -2670,8 +2671,8 @@ sub DoInstallFiles {
                                     }
                                 }
                             }
-                            else    # The file doesn't exist, just copy it over.
-                            {
+                            else {
+                                # The file doesn't exist, just copy it over.
                                 $uninstall_ini->set( $section, "Delete$delnum",
                                     $filename );
 
@@ -2713,8 +2714,8 @@ sub DoInstallFiles {
                                 }
                             }
                         }
-                        else    # Inserting the file into an ERF or RIM
-                        {
+                        else {
+                            # Inserting the file into an ERF or RIM
                             if ( ( -e "$install_path\\$ERF_name\\$file" ) ==
                                 1 )    # It already exists in the ERF or RIM.
                             {
@@ -2770,8 +2771,8 @@ sub DoInstallFiles {
                                         );
                                     }
                                 }
-                                else    # It will not be replaced...
-                                {
+                                else {
+                                    # It will not be replaced...
                                     ProcessMessage(
                                         Format(
                                             $Messages{LS_LOG_INSLASKIPFILE},
@@ -2974,7 +2975,7 @@ sub GetMemoryToken {
         if ( $tmp >= 0 ) {
             if (    ( ( $tmp ~~ @twoda_tokens ) == 0 )
                 and ( ( scalar @twoda_tokens ) > 0 )
-              ) #(((scalar @twoda_tokens) - 1) < $tmp) and (((scalar @twoda_tokens) - 1) > 0))
+              ) # (((scalar @twoda_tokens) - 1) < $tmp) and (((scalar @twoda_tokens) - 1) > 0))
             {
                 $tmp = 1;
                 ProcessMessage(
@@ -2983,7 +2984,7 @@ sub GetMemoryToken {
             }
             elsif ( ( ( $tmp ~~ @twoda_tokens ) == 0 )
                 and ( ( scalar @twoda_tokens ) < 1 )
-              ) #if((((scalar @twoda_tokens) - 1) < $tmp) and (((scalar @twoda_tokens) - 1) <= 0))
+              ) # if((((scalar @twoda_tokens) - 1) < $tmp) and (((scalar @twoda_tokens) - 1) <= 0))
             {
                 ProcessMessage(
                     Format( $Messages{LS_LOG_TOKENINDEXERROR2}, $value ),
@@ -2991,7 +2992,7 @@ sub GetMemoryToken {
                 return $value;
             }
 
-            #$tmp -= 1;
+            # $tmp -= 1;
             if ( $tmp < 0 ) { $tmp = 0; }
         }
         else {
@@ -3032,7 +3033,7 @@ sub SetMemoryToken {
             return 0;
         }
 
-        #$tmp -= 1;
+        # $tmp -= 1;
         if ( $tmp < 0 ) { $tmp = 0; }
 
         if (   $action == ACTION_ADD_ROW
@@ -3266,7 +3267,7 @@ sub Add2daRow {
     foreach $piece (@data) {
         my $piece_value = $ini_object->get( $section, $piece, '' );
 
-        #print "Piece: $piece Value: $piece_value\n";
+        # print "Piece: $piece Value: $piece_value\n";
 
         if    ( $piece eq 'ExclusiveColumn' ) { next; }
         elsif ( lc($piece) eq 'rowlabel' ) {
@@ -3353,7 +3354,7 @@ sub Add2daRow {
 
             $piece_value = GetMemoryToken($piece_value);
 
-#print "Row header for row $modify_row is " . $twoda->get_row_header($modify_row) . "\n";
+# print "Row header for row $modify_row is " . $twoda->get_row_header($modify_row) . "\n";
             $twoda->change_cell( $twoda->get_row_header($modify_row),
                 $piece, $piece_value );
         }
@@ -3511,7 +3512,8 @@ sub Change2daRow {
             )
           )
         {
-        }    # Do nothing here
+            # Do nothing here
+        }
         elsif ( ( $index > -1 ) and ( $piece ne '' ) ) {
             if ( $piece_value eq '' ) { $piece_value = "****"; }
 
@@ -3608,7 +3610,8 @@ sub Add2daColumn {
             )
           )
         {
-        }    # Do nothing
+            # Do nothing
+        }
         elsif ( ( lc($piece) eq 'defaultvalue' ) and ( $added == 1 ) ) {
             if ( $piece_value ne '' ) {
                 if ( GetIsStringToken($piece_value) ) {
@@ -3731,7 +3734,7 @@ sub Copy2daRow {
     foreach $piece (@data) {
         my $piece_value = $ini_object->get( $section, $piece, '' );
 
-        #print "Piece: $piece Value: $piece_value\n";
+        # print "Piece: $piece Value: $piece_value\n";
 
         if (    ( lc($piece) eq 'rowindex' )
             and ( $index == -1 )
@@ -3783,7 +3786,8 @@ sub Copy2daRow {
             )
           )
         {
-        }    # Do nothing.
+            # Do nothing.
+        }
         elsif ( ( lc($piece) eq 'newrowlable' ) and ( $piece_value ne '' ) ) {
             if ( lc($piece_value) eq 'high()' ) {
                 my $val = 0;
@@ -4388,8 +4392,8 @@ sub DeleteGFFField {
                 $stype = $struct->{Type};
             }
 
-            #			$struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-            #			$stype = $struct->{Type};
+            # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+            # $stype = $struct->{Type};
         }
     }
 
@@ -4490,17 +4494,17 @@ sub AddGFFField {
         my $pcounter = 0;
         foreach ( split( /\//, $path ) ) {
 
-            #			print "$_ -> ";
+            # print "$_ -> ";
             if ( $pcounter == 0 ) {
 
-                #				print "_ $_ _\n";
+                # print "_ $_ _\n";
                 if ( ref( $struct->{Fields} ) ne 'Bioware::GFF::Field' )
 
-                  #if((scalar $struct->{Fields}) > 1)
+                  # if((scalar $struct->{Fields}) > 1)
                 {
                     if ( ref( $struct->{Fields} ) eq 'ARRAY' ) {
 
-                        #						print "1 ";
+                        # print "1 ";
                         $struct = $struct->{Fields}
                           [ $struct->get_field_ix_by_label($_) ];
                         $stype = $struct->{Type};
@@ -4510,7 +4514,7 @@ sub AddGFFField {
                         }
                     }
                     else {
-                        #						print "2 ";
+                        # print "2 ";
                         $struct = $struct->{Fields}{Value}[$_];
                         $stype  = $struct->{Type};
                         if ( $struct->{Type} == undef or $struct->{Type} eq '' )
@@ -4520,7 +4524,7 @@ sub AddGFFField {
                     }
                 }
                 else {
-                    #					print "3 ";
+                    # print "3 ";
                     $struct = $struct->{Fields};
                     $stype  = $struct->{Type};
                     if ( $struct->{Type} == undef or $struct->{Type} eq '' ) {
@@ -4530,25 +4534,25 @@ sub AddGFFField {
             }
             elsif ( ( $stype eq FIELD_LIST ) and ( looks_like_number($_) ) ) {
 
-                #print "4 ";
-                #print "Number of list elements: " . scalar @{$struct->{Value}};
-                #print "\n";
-                #				print $struct->{Value}[$_] . "\n";
-                #				print @{$struct->{Value}}[$_] . "\n";
+               # print "4 ";
+               # print "Number of list elements: " . scalar @{$struct->{Value}};
+               # print "\n";
+               # print $struct->{Value}[$_] . "\n";
+               # print @{$struct->{Value}}[$_] . "\n";
                 $struct = @{ $struct->{Value} }[$_];  # or $struct->{Value}{$_};
                 $stype  = $struct->{Type};
                 if ( $struct->{Type} == undef or $struct->{Type} eq '' ) {
                     $stype = FIELD_STRUCT;
                 }
 
-    #print "label:_" . $struct->{Label} . "_" . DecodeFieldType($stype) . "_\n";
+   # print "label:_" . $struct->{Label} . "_" . DecodeFieldType($stype) . "_\n";
             }
             else {
                 if ( ref( $struct->{Fields} ) ne 'Bioware::GFF::Field' )
 
-                  #if((scalar $struct->{Fields}) > 1)
+                  # if((scalar $struct->{Fields}) > 1)
                 {
-                    #					print "5 ";
+                    # print "5 ";
                     $struct =
                       $struct->{Fields}[ $struct->get_field_ix_by_label($_) ];
                     $stype = $struct->{Type};
@@ -4559,7 +4563,7 @@ sub AddGFFField {
                 else {
                     if ( $stype ne FIELD_STRUCT ) {
 
-                        #						print "6 ";
+                        # print "6 ";
                         $struct = $struct->{Fields};
                         $stype  = $struct->{Type};
                         if ( $struct->{Type} == undef or $struct->{Type} eq '' )
@@ -4568,7 +4572,7 @@ sub AddGFFField {
                         }
                     }
                     else {
-                        #						print "7 ";
+                        # print "7 ";
                         $struct = @{ $struct{Fields}{Value} }[$_];
                         $stype  = $struct->{Type};
                         if ( $struct->{Type} == undef or $struct->{Type} eq '' )
@@ -4579,18 +4583,18 @@ sub AddGFFField {
                 }
             }
 
-            #			print DecodeFieldType($stype) . "\n";
+            # print DecodeFieldType($stype) . "\n";
             if ( $pcounter > 0 ) {
 
-               #$struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-               #$stype = $struct->{Type};
+              # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+              # $stype = $struct->{Type};
             }
 
             $pcounter++;
         }
     }
 
-    #	print "\n\n";
+    # print "\n\n";
     if ( ( $stype ne FIELD_STRUCT ) and ( $stype ne FIELD_LIST ) ) {
         ProcessMessage(
             Format( $Messages{LS_LOG_GFFPARENTALERROR}, $path, $key ),
@@ -4967,7 +4971,7 @@ sub ChangeGFFFieldValue {
     my $struct = $gff->{Main};
     my $stype  = FIELD_STRUCT;
 
-    #	print "path1: $path\n";
+    # print "path1: $path\n";
     $path =~ s#\\#\/#g;
     my @paths = split( /\//, $path );
     $path = pop @paths;
@@ -4975,20 +4979,20 @@ sub ChangeGFFFieldValue {
 
     if ( $path ne '' ) {
 
-        #		print "path2: $path\n";
+        # print "path2: $path\n";
         my $pcounter = 0;
         foreach (@paths) {
 
-            #			print "Now doing $_: ";
+            # print "Now doing $_: ";
             if ( $pcounter == 0 ) {
                 if ( ref( $struct->{Fields} ) ne 'Bioware::GFF::Field' )
 
-                  #if((scalar keys %{$struct->{Fields}}) > 1)
+                  # if((scalar keys %{$struct->{Fields}}) > 1)
                 {
-                    #					print ref($struct->{Fields}) . "\n";
+                    # print ref($struct->{Fields}) . "\n";
                     if ( ref( $struct->{Fields} ) eq 'ARRAY' ) {
 
-                        #						print "1 ";
+                        # print "1 ";
                         $struct = $struct->{Fields}
                           [ $struct->get_field_ix_by_label($_) ];
                         $stype = $struct->{Type};
@@ -4998,7 +5002,7 @@ sub ChangeGFFFieldValue {
                         }
                     }
                     else {
-                        #						print "2 ";
+                        # print "2 ";
                         $struct = $struct->{Fields}{Value}[$_];
                         $stype  = $struct->{Type};
                         if ( $struct->{Type} == undef or $struct->{Type} eq '' )
@@ -5008,7 +5012,7 @@ sub ChangeGFFFieldValue {
                     }
                 }
                 else {
-                    #					print "3 ";
+                    # print "3 ";
                     $struct = $struct->{Fields};
                     $stype  = $struct->{Type};
                     if ( $struct->{Type} == undef or $struct->{Type} eq '' ) {
@@ -5018,7 +5022,7 @@ sub ChangeGFFFieldValue {
             }
             elsif ( ( $stype eq FIELD_LIST ) and ( looks_like_number($_) ) ) {
 
-                #				print "4 ";
+                # print "4 ";
                 $struct = @{ $struct->{Value} }[$_];  # or $struct->{Value}{$_};
                 $stype  = $struct->{Type};
                 if ( $struct->{Type} == undef or $struct->{Type} eq '' ) {
@@ -5028,9 +5032,9 @@ sub ChangeGFFFieldValue {
             else {
                 if ( ref( $struct->{Fields} ) ne 'Bioware::GFF::Field' )
 
-                  #if((scalar $struct->{Fields}) > 1)
+                  # if((scalar $struct->{Fields}) > 1)
                 {
-                    #					print "5 ";
+                    # print "5 ";
                     $struct =
                       $struct->{Fields}[ $struct->get_field_ix_by_label($_) ];
                     $stype = $struct->{Type};
@@ -5041,7 +5045,7 @@ sub ChangeGFFFieldValue {
                 else {
                     if ( $stype ne FIELD_STRUCT ) {
 
-                        #						print "6 ";
+                        # print "6 ";
                         $struct = $struct->{Fields}{Value}
                           [ $struct->{Fields}{Value}->get_field_by_label($_) ];
                         $stype = $struct->{Type};
@@ -5051,7 +5055,7 @@ sub ChangeGFFFieldValue {
                         }
                     }
                     else {
-                        #						print "7 ";
+                        # print "7 ";
                         $struct = $struct->{Fields}{Value}->[$_];
                         $stype  = $struct->{Type};
                         if ( $struct->{Type} == undef or $struct->{Type} eq '' )
@@ -5064,35 +5068,35 @@ sub ChangeGFFFieldValue {
 
             if ( $pcounter > 0 ) {
 
-               #$struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-               #$stype = $struct->{Type};
+              # $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+              # $stype = $struct->{Type};
             }
 
-            #			print "Type: " . DecodeFieldType($stype) . "\n";
+            # print "Type: " . DecodeFieldType($stype) . "\n";
             $pcounter++;
         }
 
-        #			#print "Now doing $_\n";
-        #			if(($stype eq FIELD_LIST) and (looks_like_number($_)))
-        #			{
-        #				$struct = $struct->{Value}[$_];
-        #				$stype  = $struct->{Type};
-        #			}
-        #			else
-        #			{
-        #				$struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
-        #				$stype  = $struct->{Type};
-        #			}
-        #		}
+      # print "Now doing $_\n";
+      #     if(($stype eq FIELD_LIST) and (looks_like_number($_)))
+      #     {
+      #         $struct = $struct->{Value}[$_];
+      #         $stype  = $struct->{Type};
+      #     }
+      #     else
+      #     {
+      #         $struct = $struct->{Fields}[$struct->get_field_ix_by_label($_)];
+      #         $stype  = $struct->{Type};
+      #     }
+      # }
     }
 
-    #	print "path: $path\n";
+    # print "path: $path\n";
     if ( GetIsStringToken($value) ) { $value = ProcessStrRefToken($value); }
 
     if ( $path =~ /lang(\d*)/ ) {
         $path =~ s/lang(\d*)//;
         my $ix = $struct->get_field_ix_by_label($path);
-        $id = $1;    #substr($temp1, 4, (length($temp1) - 4));
+        $id = $1;    # substr($temp1, 4, (length($temp1) - 4));
 
         $id_found = 0;
         foreach ( $struct->{Fields}[$ix]{Value}{Substrings} ) {
@@ -5126,7 +5130,7 @@ sub ChangeGFFFieldValue {
         if ( ref( $struct->{Fields} ) ne 'Bioware::GFF::Field' ) {
             $ix = $struct->get_field_ix_by_label($path);
 
-            #			print "ix: $ix\n";
+            # print "ix: $ix\n";
 
             if ( defined($ix) == 0 ) { return ( 0, '' ); }
 
@@ -5267,8 +5271,8 @@ sub ProcessHACKFile {
                     sysread FH, my $chunk, length($piece_value);
                     $uninstall_ini->set( $filename, $piece, $chunk );
 
-                    #					substr($chunk, 0, length($chunk), $piece_value);
-                    #					sysseek FH, $piece, 0;
+                    # substr($chunk, 0, length($chunk), $piece_value);
+                    # sysseek FH, $piece, 0;
                     syswrite FH, $piece_value;
 
                     ProcessMessage(
@@ -5403,8 +5407,7 @@ sub DoCompileFiles {
 
                 my $NCSFile = ( split( /\//, $FileBase ) )[-1];
 
-                if ( -e $FileBase )    #"$base/tslpatchdata/$NCSFile")
-                {
+                if ( -e $FileBase ) {    # "$base/tslpatchdata/$NCSFile")
                     my $dest = $ini_object->get( $piece_value, '!Destination',
                         $NCSDestinsation );
 
@@ -5453,7 +5456,7 @@ sub DoCompileFiles {
                                 );
                             }
                             else {
-#								print "FileBase: $FileBase\nCopied to: $install_path/$ERF_name/$NCSFile\n\n";
+ # print "FileBase: $FileBase\nCopied to: $install_path/$ERF_name/$NCSFile\n\n";
                                 ProcessMessage(
                                     Format(
                                         $Messages{LS_LOG_NCSSAVEERFRIM},
@@ -5522,9 +5525,9 @@ sub DoCompileFiles {
                                 );
                             }
 
-                   # Now pull everything into a sub-folder named after the level
-                   # itself. This way we aren't having to deal with the data in
-                   # memory...
+                            # Now pull everything into a sub-folder named
+                            # after the level itself. This way we aren't
+                            # having to deal with the data in memory...
                             $ERF_type =
                               substr( $ERF_name, ( length($ERF_name) - 3 ), 3 );
                             $ERF_name =
@@ -5655,7 +5658,7 @@ sub DoCompileFiles {
 
     @orgs = ();
 
-    #	File::Path::rmtree($work_folder);
+    # File::Path::rmtree($work_folder);
 }
 
 sub ReplaceTokensInFile {
@@ -5663,7 +5666,7 @@ sub ReplaceTokensInFile {
     my $tmp_file =
       $base . "/tslpatchdata/nsstemp/" . ( split( /(\\|\/)/, $file ) )[-1];
 
-    #	print "Replacing tokens in $file\nas $tmp_file\n\n";
+    # print "Replacing tokens in $file\nas $tmp_file\n\n";
     $ScriptInfo{ModFile}   = $tmp_file;
     $ScriptInfo{OrgFile}   = $file;
     $ScriptInfo{IsInclude} = 1;
@@ -5674,8 +5677,8 @@ sub ReplaceTokensInFile {
 
     my $out_text = "";
 
-    #	print "Infile: $tmp_file\n\n";
-    #	print "Outfile: $file\n\n";
+    # print "Infile: $tmp_file\n\n";
+    # print "Outfile: $file\n\n";
     while (<InFile>) {
         my $temp = $_;
 
@@ -5695,16 +5698,16 @@ sub ReplaceTokensInFile {
 
             $value = $Tokens{$key};
 
-            #			print "Key: $key Value: $value Index: $index\n";
-            #			print "\$temp before: $temp\n";
+            # print "Key: $key Value: $value Index: $index\n";
+            # print "\$temp before: $temp\n";
             substr( $temp, $index, ( length($key) + 2 ), $value );
 
-            #			print "\$temp after: $temp\n";
+            # print "\$temp after: $temp\n";
         }
 
         $out_text .= $temp;
 
-        #		print OutFile $temp;
+        # print OutFile $temp;
     }
 
     close InFile;
@@ -5844,13 +5847,13 @@ sub DoCleanup {
     if ( ( scalar @ERFs ) > 0 ) {
         foreach ( sort @ERFs ) {
 
-            #			print "processing ERF: $_ ";
+            # print "processing ERF: $_ ";
             /(.*)\.(.*)/;
 
             $ERF_name  = ( split( /\\/, $1 ) )[0];
             $ERF_name2 = ( split( /\\/, $1 ) )[1];
 
-            #			print "ERF1 $ERF_name ERF2 $ERF_name2\n";
+            # print "ERF1 $ERF_name ERF2 $ERF_name2\n";
             $ERF_type = $2;
             $IsERF    = 0;
             @files    = ();
@@ -5869,13 +5872,13 @@ sub DoCleanup {
                     "$install_dest_path/$ERF_name/$ERF_name2" . "_new\.rim" );
             }
 
-            #save_erfrim_package($_);
+            # save_erfrim_package($_);
         }
 
         $ERF_name = undef;
         foreach $ERF_name (@ERF_delete) {
 
-            #			print "deleting ERF_name: $ERF_name\n";
+            # print "deleting ERF_name: $ERF_name\n";
             opendir DIR, "$install_path/$ERF_name";
             @files =
               grep { -f } map { "$install_path/$ERF_name/$_" } readdir DIR;
@@ -5883,19 +5886,19 @@ sub DoCleanup {
 
             foreach (@files) { unlink($_); }
 
-            #chdir($install_path);
+            # chdir($install_path);
             rmdir("$install_path/$ERF_name");
 
-            #File::Path::remove_tree($ERF_name, {safe => 1});
-            #chdir($base);
-            #File::Path::rmtree("$install_path/$ERF_name");
-            #@files = ();
+            # File::Path::remove_tree($ERF_name, {safe => 1});
+            # chdir($base);
+            # File::Path::rmtree("$install_path/$ERF_name");
+            # @files = ();
         }
     }
 
     # NEVER un-comment this unless you want to erase the tslpatchdata folder.
     # This is just an easy copy-paste in case I need to do more clean-up.
-    #File::Path::rmtree("$install_path/");
+    # File::Path::rmtree("$install_path/");
     if ( -e "$install_path\\erftemp" ) { rmdir("$install_path/erftemp"); }
 
     # File::Path::rmtree("$install_path/erftemp"); }
@@ -5987,7 +5990,7 @@ sub ParseInfo {
     }
     else    # It's a .rtf file, so convert to HTML
     {
-        #		print "converting rtf to html\n";
+        # print "converting rtf to html\n";
         print "$path/$file\n$install_path/$file.html\n";
         system( "$base/rtf2html.exe", "$path/$file", $install_path );
 
@@ -5995,7 +5998,7 @@ sub ParseInfo {
         $_ = $file;
         s#\.rtf#\.html#;
 
-        #		print "\$_ is $_\n";
+        # print "\$_ is $_\n";
         $file = $_;
 
         open HTML, "<", "$install_path/$file";
@@ -6016,10 +6019,10 @@ sub ParseInfo {
 sub ParseRTF {
     my $file = shift;
 
-    #	my $html_code = undef;
-    #	my $rtf_parser = RTF::HTMLConverter->new(in=>$file, out=>\$html_code);
-    #
-    #	TSLPatcher::GUI::SetHTMLText(\$html_code);
+    # my $html_code = undef;
+    # my $rtf_parser = RTF::HTMLConverter->new(in=>$file, out=>\$html_code);
+
+    # TSLPatcher::GUI::SetHTMLText(\$html_code);
 
     my @colors = ();
 
@@ -6029,18 +6032,19 @@ sub ParseRTF {
         if ( $_ =~ /^\{\\rtf/ ) {
             s/(.*)\\fonttbl/\\fonttbl/;
             my @font = split( /\{/, $_ );
-            shift @font;
+            shift(@font);
 
             foreach ( 0 .. ( scalar @font - 1 ) ) {
                 my $f = $font[$_];
 
-                #				print "$_ $f\n";
-                unshift @font;
+                # print "$_ $f\n";
+                # TODO: This unshift call does nothing?
+                # unshift(@font);
 
                 $_ = $f;
                 /(.*)\\(.*)\\fcharset(\d*) (.*);/;
 
-                #				print "Pieces: $4\n";
+                # print "Pieces: $4\n";
 
                 push( @fonts, $4 );
             }
@@ -6051,12 +6055,12 @@ sub ParseRTF {
             foreach ( 0 .. ( scalar @colors - 2 ) ) {
                 my $c = $colors[$_];
 
-                #				print "$_ is $c\n";
+                # print "$_ is $c\n";
 
                 if ( $_ > 0 ) {
                     $_ = $c;
 
-                    #					print "\$_ now: $_\n";
+                    # print "\$_ now: $_\n";
 
                     /\\red(\d*)\\/;
                     my $r = $1;
@@ -6077,7 +6081,7 @@ sub ParseRTF {
 
                     $c = "#$r$g$b";
 
-                    #					print "\$c is now $c\n";
+                    # print "\$c is now $c\n";
                     push( @colorsfg, $c );
                     push( @colorsbg, $c );
                 }
@@ -6094,12 +6098,12 @@ sub ParseRTF {
 
             my $line = $_;
 
-            #			/(.*?)\\pard/;
-            #			print "\$1 is $1\n";
+            # /(.*?)\\pard/;
+            # print "\$1 is $1\n";
             s/(.*?)\\pard/\\pard/;
             s/\\pard//;
 
-            #			/(.*)\\par/;
+            # /(.*)\\par/;
             $line = $_;
 
             ProcessRTFLine($line);
@@ -6243,7 +6247,7 @@ sub ProcessRTFLine {
         if    ( $1 eq 'l' ) { $ParaInfo{'align'} = 'left'; }
         elsif ( $1 eq 'r' ) { $ParaInfo{'align'} = 'right'; }
 
-        #		elsif($1 eq 'j') { $ParaInfo{'align'} = 'justified'; }
+        # elsif($1 eq 'j') { $ParaInfo{'align'} = 'justified'; }
         else { $ParaInfo{'align'} = 'center'; }
 
         $line = join( '', split( /\\q$1/, $line ) );
@@ -6285,20 +6289,20 @@ sub ProcessRTFLine {
             my $nline = $1;
             $line = $2;
 
-#			if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
-#			{
-#				WriteRTFLine($nline);
-#			}
-#			else
-#			{
+# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
+# {
+#     WriteRTFLine($nline);
+# }
+# else
+# {
             ProcessRTFLine($nline);
 
-            #			}
+            # }
 
             $ParaInfo{'inBold'} = 0;
             $FontInfo{'weight'} = 'normal';
 
-            #			$line = join('', split(/\\b0/, $line));
+            # $line = join('', split(/\\b0/, $line));
         }
     }
 
@@ -6326,31 +6330,29 @@ sub ProcessRTFLine {
             $ParaInfo{'inUnder'}   = 1;
             $FontInfo{'underline'} = 1;
 
-#			$line = substr($line, 0, index($line, '\ul')) . substr($line, (index($line, '\ul') + 3), (length($line) - index($line, '\ul')));
-#			print "line: $line\n";
+# $line = substr($line, 0, index($line, '\ul')) . substr($line, (index($line, '\ul') + 3), (length($line) - index($line, '\ul')));
+# print "line: $line\n";
         }
         elsif ( $ParaInfo{'inUnder'} == 1 && $line =~ /\\ulnone/ ) {
             $line =~ /(.*)\\ulnone(.*)/;
             my $nline = $1;
             $line = $2;
 
-#			print "Part to be underlined: $nline\nPart to be processed: $line\n";
-#			if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
-#			{
-#				WriteRTFLine($nline);
-#			}
-#			else
-#			{
+# print "Part to be underlined: $nline\nPart to be processed: $line\n";
+# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
+#     WriteRTFLine($nline);
+# }
+# else {
             ProcessRTFLine($nline);
 
-            #			}
+            # }
 
             $ParaInfo{'inUnder'}   = 0;
             $FontInfo{'underline'} = 0;
 
             $line = ProcessRTFLine($line);
 
-            #			$line = join('', split(/\\ulnone/, $line));
+            # $line = join('', split(/\\ulnone/, $line));
         }
     }
 
@@ -6391,20 +6393,18 @@ sub ProcessRTFLine {
             my $nline = $1;
             $line = $2;
 
-#			if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
-#			{
-#				WriteRTFLine($nline);
-#			}
-#			else
-#			{
+# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
+#     WriteRTFLine($nline);
+# }
+# else {
             ProcessRTFLine($nline);
 
-            #			}
+            # }
 
             $ParaInfo{'inOver'}     = 0;
             $FontInfo{'overstrike'} = 0;
 
-            #			$line = join('', split(/\\strike0/, $line));
+            # $line = join('', split(/\\strike0/, $line));
         }
     }
 
@@ -6445,20 +6445,18 @@ sub ProcessRTFLine {
             my $nline = $1;
             $line = $2;
 
-#			if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0)
-#			{
-#				WriteRTFLine($nline);
-#			}
-#			else
-#			{
+# if($nline ne '' && ($nline =~ /\\b|\\i|\\b0|\\i0|\\strike|\\strike0|\\sa(\d*)|\\sb(\d*)|\\f(\d*)|\\fs(\d*)|\\cf(\d*)|\\cb(\d*)/) == 0) {
+#     WriteRTFLine($nline);
+# }
+# else {
             ProcessRTFLine($nline);
 
-            #			}
+            # }
 
             $ParaInfo{'inItalics'} = 0;
             $FontInfo{'slant'}     = 'roman';
 
-            #			$line = join('', split(/\\i0/, $line));
+            # $line = join('', split(/\\i0/, $line));
         }
     }
 
@@ -6477,7 +6475,7 @@ sub ProcessRTFLine {
             $_ = $line;
             s/\\pard//;
 
-            #			s/\\par/\n/;
+            # s/\\par/\n/;
 
             ResetParaInfo;
         }
@@ -6506,7 +6504,22 @@ sub WriteRTFLine {
     my $line = shift;
     my @tags = ();
 
-#	print "Writing line #" . ($tag + 1) . " $line\nBolds: " . $FontInfo{'weight'} . " Italics: " . $FontInfo{'slant'} . " Underlines: " . $FontInfo{'underline'} . " Overstriked: " . $FontInfo{'overstrike'} . " Family: " . $FontInfo{'family'} . " Size: " . $FontInfo{'size'} . " CF: " . $ParaInfo{'colorfg'} . " CB: " . $ParaInfo{'colorbg'} . "\n\n";
+    # print "Writing line #"
+    #   . ( $tag + 1 )
+    #   . " $line\nBolds: "
+    #   . $FontInfo{'weight'}
+    #   . " Italics: "
+    #   . $FontInfo{'slant'}
+    #   . " Underlines: "
+    #   . $FontInfo{'underline'}
+    #   . " Overstriked: "
+    #   . $FontInfo{'overstrike'}
+    #   . " Family: "
+    #   . $FontInfo{'family'}
+    #   . " Size: "
+    #   . $FontInfo{'size'} . " CF: "
+    #   . $ParaInfo{'colorfg'} . " CB: "
+    #   . $ParaInfo{'colorbg'} . "\n\n";
     $GUI->{'mwInfoText'}->tagConfigure(
         'Tag' . $tag,
         -background => $colorsbg[ $ParaInfo{'colorbg'} ],
