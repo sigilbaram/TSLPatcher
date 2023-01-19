@@ -1,11 +1,12 @@
-#line 1 "Bioware/TwoDA.pm"
 package Bioware::TwoDA;
 
 use strict;
+use warnings;    # TODO: This file generates 1 warning
+
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
 
-#use File::Temp qw (tempfile);
+# use File::Temp qw (tempfile);
 use File::Slurp;
 use IO::Scalar;
 
@@ -21,8 +22,8 @@ $VERSION = 0.21;    #added binmode
 
 # define globals (use vars)
 
-#private vars
-#private subs
+# private vars
+# private subs
 sub new;
 sub get_2da_rows_and_1stcol;
 sub get_column_names;
@@ -51,9 +52,9 @@ sub get_cell {
    # INPUTS:  2DA Object, Row number, and the Column name
    # OUTPUTS: Cell data, undef on failure (with error message in $self->{error})
 
-    #    my $self=shift;
-    #    my $row = shift;
-    #    my $column = shift;
+    # my $self=shift;
+    # my $row = shift;
+    # my $column = shift;
 
     if ( scalar @_ < 2 ) {
         $_[0]->set_err(
@@ -67,7 +68,7 @@ sub get_cell {
         return undef;
     }
 
-#    print "Cell data for " . $_[2] . " of row " . $_[1] . " is: " . $_[0]->{table}->{$_[1]}{$_[2]} . "\n";
+# print "Cell data for " . $_[2] . " of row " . $_[1] . " is: " . $_[0]->{table}->{$_[1]}{$_[2]} . "\n";
     return $_[0]->{table}->{ $_[1] }{ $_[2] };
 }
 
@@ -115,7 +116,7 @@ sub add_column {
         my $i     = -1;
         my @array = ();
 
-        foreach my $c ( @{ $self->{columns} } ) {    #print "C: $c\n";
+        foreach my $c ( @{ $self->{columns} } ) {    # print "C: $c\n";
             $i++;
             if ( $i == $index ) {
                 push( @array, $column );
@@ -180,15 +181,21 @@ sub add_row {
     my $index = List::Util::first { $_ == $row_header },
       @{ $self->{rows_array} };
 
-    if    ( defined($index) == 0 ) { $index = $self->{rows}; }
-    elsif ( defined($copy) )       { $index = $self->{rows}; }
-    else { return $index; }    #return @{$self->{rows_array}}[$index]; }
+    if ( defined($index) == 0 ) {
+        $index = $self->{rows};
+    }
+    elsif ( defined($copy) ) {
+        $index = $self->{rows};
+    }
+    else {
+        return $index;
+    }    # return @{$self->{rows_array}}[$index]; }
 
     if ( defined($index) == 1 && $index < $self->{rows} ) {
         my $i     = -1;
         my @array = ();
 
-        foreach my $c ( @{ $self->{rows_array} } ) {    #print "C: $c\n";
+        foreach my $c ( @{ $self->{rows_array} } ) {    # print "C: $c\n";
             $i++;
             if ( $i == $index ) {
                 push( @array, $index );
@@ -251,7 +258,6 @@ sub get_is_error {
     if   ( defined( $_[0]->{error} ) ) { return 1; }
     else                               { return 0; }
 }
-#line 289
 
 sub get_2da_rows_and_1stcol {
     my $twoda_filename = shift;
@@ -262,24 +268,24 @@ sub get_2da_rows_and_1stcol {
     read $fh, my ($header_packed), 9;
     my $header = unpack( 'a*', $header_packed );
 
-    #if ($header =~ /2DA V2\.0/) {
+    # if ($header =~ /2DA V2\.0/) {
 
     unless ( $header eq '2DA V2.b' . v10 ) { return (); }
 
     my $twoda = read_file($twoda_filename);
 
-    #null separates the rows from the columns
+    # null separates the rows from the columns
     my $the_null_pos = 0;
     while ( $twoda =~ /\0/g ) {
         if ( !$the_null_pos ) { $the_null_pos = pos $twoda }
     }
     seek $fh, $the_null_pos, 0;
 
-    #row count is next DWORD
+    # row count is next DWORD
     read $fh, my ($num_of_rows_packed), 4;
     my $num_of_rows = unpack( 'V', $num_of_rows_packed );
 
-    #columns are separated by tabs before the null position
+    # columns are separated by tabs before the null position
     my $tab_cnt = 0;
     while ( $twoda =~ /\t/g ) {
         my $this_pos = pos $twoda;
@@ -300,9 +306,9 @@ sub get_2da_rows_and_1stcol {
     }
 
     my $num_of_pointers =
-      $num_of_rows * $num_of_cols;    #number of pointers (words)
+      $num_of_rows * $num_of_cols;    # number of pointers (words)
     my $data_area = $after_rownames_pos +
-      ( $num_of_pointers * 2 ) + 2;    #this many bytes of pointers
+      ( $num_of_pointers * 2 ) + 2;    # this many bytes of pointers
 
     my $row = 0;
     my %row_to_label;
@@ -328,7 +334,7 @@ sub get_2da_rows_and_1stcol {
 
 sub new {
 
-    #this is a generic constructor method
+    # this is a generic constructor method
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
     my $self     = {@_};
@@ -358,14 +364,14 @@ sub get_column_names {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        @columns = split /\t/, $columnchunk;    #we now have column names
+        @columns = split /\t/, $columnchunk;    # we now have column names
     }
     return @columns;
 }
 
 sub read2da_for_spreadsheet {
 
-    #this sub receives the twoda_obj and the filename to read as parameters
+    # this sub receives the twoda_obj and the filename to read as parameters
     my $self         = shift;
     my $file_to_read = shift;
     if ( ref $file_to_read eq 'SCALAR' ) {
@@ -386,22 +392,22 @@ sub read2da_for_spreadsheet {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
 
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;                  #we now have the row headers
+            push @rows, $_;                  # we now have the row headers
         }
         my $pointer_cursor;
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         my $rix = 1;
         for my $r (@rows) {
@@ -415,7 +421,7 @@ sub read2da_for_spreadsheet {
                 seek $fh, $data_start_pos + $p, 0;
                 $_ = <$fh>;
                 chop;
-                $table{$r}{$c}   = $_;    #we now have the data for each cell
+                $table{$r}{$c}   = $_;    # we now have the data for each cell
                 $colwidths[$cix] = length($_) if length($_) > $colwidths[$cix];
                 $table2{"$rix,$cix"} = $_;
                 $table2{"0,$cix"}    = $c;
@@ -433,7 +439,7 @@ sub read2da_for_spreadsheet {
 
 sub read2da {
 
-    #this sub receives the twoda_obj and the filename to read as parameters
+    # this sub receives the twoda_obj and the filename to read as parameters
     my $self         = shift;
     my $file_to_read = shift;
     if ( ref $file_to_read eq 'SCALAR' ) {
@@ -445,14 +451,14 @@ sub read2da {
 
     my $filename = ( split( /\\/, $file_to_read ) )[-1];
 
-    #print "filename: $filename\n";
+    # print "filename: $filename\n";
 
     $self->{filename} = $filename;
 
     my %table;
     ( open my ($fh), "<", $file_to_read ) or return;
 
-    #open F, ">", "read_data.txt";
+    # open F, ">", "read_data.txt";
     binmode $fh;
     my $header;
     read $fh, $header, 9;
@@ -461,11 +467,11 @@ sub read2da {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
         $self->{columns} = \@columns;
 
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
 
@@ -473,7 +479,7 @@ sub read2da {
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;    #we now have the row headers
+            push @rows, $_;    # we now have the row headers
         }
         $self->{rows_array} = \@rows;
 
@@ -483,8 +489,8 @@ sub read2da {
         my $tell = tell($fh);
         my $show = ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
-        #print F "Data_Start_pos is: $data_start_pos, $tell and $show\n\n";
+        # print "$data_start_pos\n";
+        # print F "Data_Start_pos is: $data_start_pos, $tell and $show\n\n";
         $/ = "\000";
         for my $r (@rows) {    # Is the row of the 2da
             for my $c (@columns) {    # Is the column name of the 2da
@@ -493,10 +499,10 @@ sub read2da {
                 $p              = unpack( 'v', $p );
                 seek $fh, $data_start_pos + $p, 0;
 
-#print F "Data for row $r, column $c: Packed pos is $p, total pos is " . ($data_start_pos + $p) . "\n";
+# print F "Data for row $r, column $c: Packed pos is $p, total pos is " . ($data_start_pos + $p) . "\n";
                 $_ = <$fh>;
                 chop;
-                $table{$r}{$c} = $_;    #we now have the data for each cell
+                $table{$r}{$c} = $_;    # we now have the data for each cell
                 seek $fh, $pointer_cursor, 0;
             }
         }
@@ -504,7 +510,7 @@ sub read2da {
 
     $self->{table} = \%table;
 
-    #close F;
+    # close F;
     close $fh;
     return \%table;
 }
@@ -514,7 +520,7 @@ sub readFS {
     our @columns;
     our %table;
 
-    #this sub receives the twoda_obj and the filename to read as parameters
+    # this sub receives the twoda_obj and the filename to read as parameters
     my $self         = shift;
     my $file_to_read = shift;
     if ( ref $file_to_read eq 'SCALAR' ) {
@@ -524,7 +530,7 @@ sub readFS {
         return read2da_fh( $self, $file_to_read );
     }
 
-    #    my %table;
+    # my %table;
     ( open my ($fh), "<", $file_to_read ) or return;
     binmode $fh;
     my $header;
@@ -534,24 +540,25 @@ sub readFS {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        @columns = split /\t/, $columnchunk
-          ; #	print join "\n", @columns; print "\n";     #we now have column names
+        @columns = split /\t/, $columnchunk;
+
+        # print join "\n", @columns; print "\n";     #we now have column names
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
 
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;                  #we now have the row headers
+            push @rows, $_;                  # we now have the row headers
         }
 
-  #	if($file_to_read == "appearance.2da"){	print join "\n", @rows; print "\n"; }
+  # if($file_to_read == "appearance.2da"){	print join "\n", @rows; print "\n"; }
         my $pointer_cursor;
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         for my $r (@rows) {    # Is the row of the 2da
             for my $c (@columns) {    # Is the column name of the 2da
@@ -561,7 +568,7 @@ sub readFS {
                 seek $fh, $data_start_pos + $p, 0;
                 $_ = <$fh>;
                 chop;
-                $table{$r}{$c} = $_;    #we now have the data for each cell
+                $table{$r}{$c} = $_;    # we now have the data for each cell
                 seek $fh, $pointer_cursor, 0;
             }
         }
@@ -577,16 +584,15 @@ sub readFS {
         $s{rows}->{"Row_$ii"} = $ii;
     }
 
-    #	for my $i(@rows)
-    #	{
-    #		$s{"row $i"}= $table{$i};
-    #	}
-    #	my %t={columns=>\@columns, rows=>{\%s}};
+    # for my $i (@rows) {
+    #     $s{"row $i"} = $table{$i};
+    # }
+    # my %t = { columns => \@columns, rows => { \%s } };
 
-    #    $self->{columns} = @columns;
-    #    $self->{rows_array} = @rows;
-    #    $self->{rows}    = $rowcnt;
-    #    $self->{table}   = \%table;
+    # $self->{columns}    = @columns;
+    # $self->{rows_array} = @rows;
+    # $self->{rows}       = $rowcnt;
+    # $self->{table}      = \%table;
     return %s;
 }
 
@@ -611,10 +617,10 @@ sub read2da_asarray {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
         $self->{columns} = @columns;
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
 
@@ -622,7 +628,7 @@ sub read2da_asarray {
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;    #we now have the row headers
+            push @rows, $_;    # we now have the row headers
         }
         $self->{rows_array} = @rows;
 
@@ -630,7 +636,7 @@ sub read2da_asarray {
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         for my $r (@rows) {
             my %row;
@@ -644,7 +650,7 @@ sub read2da_asarray {
                 chop;
                 $row{$c} = $_;
 
-        #$table{$r}{$c}=$_;                  #we now have the data for each cell
+                # $table{$r}{$c}=$_;    # we now have the data for each cell
                 seek $fh, $pointer_cursor, 0;
             }
             push @table, \%row;
@@ -662,6 +668,7 @@ sub read2da_asarray {
 sub read2da_fh {
 
     # this sub receives the twoda object and the open filehandle as parameters
+
     my $self = shift;
     my $fh   = shift;
     my $header;
@@ -673,11 +680,11 @@ sub read2da_fh {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
         $self->{columns} = @columns;
 
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
 
@@ -685,7 +692,7 @@ sub read2da_fh {
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;    #we now have the row headers
+            push @rows, $_;    # we now have the row headers
         }
         $self->{rows_array} = @rows;
 
@@ -693,7 +700,7 @@ sub read2da_fh {
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         for my $r (@rows) {
             for my $c (@columns) {
@@ -703,7 +710,7 @@ sub read2da_fh {
                 seek $fh, $data_start_pos + $p, 0;
                 $_ = <$fh>;
                 chop;
-                $table{$r}{$c} = $_;    #we now have the data for each cell
+                $table{$r}{$c} = $_;    # we now have the data for each cell
                 seek $fh, $pointer_cursor, 0;
             }
         }
@@ -717,6 +724,7 @@ sub read2da_fh {
 sub read2da_asarray_fh {
 
     # this sub receives the twoda object and the open filehandle as parameters
+
     my $self = shift;
     my $fh   = shift;
     my $header;
@@ -728,11 +736,11 @@ sub read2da_asarray_fh {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
         $self->{columns} = @columns;
 
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
 
@@ -740,7 +748,7 @@ sub read2da_asarray_fh {
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;    #we now have the row headers
+            push @rows, $_;    # we now have the row headers
         }
         $self->{rows_array} = @rows;
 
@@ -748,7 +756,7 @@ sub read2da_asarray_fh {
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         for my $r (@rows) {
             my %row;
@@ -774,7 +782,9 @@ sub read2da_asarray_fh {
 
 sub read2da_scalar {
 
-#this sub receives the twoda_obj and a scalar reference (containing the twoda) as parameters
+    # this sub receives the twoda_obj and a scalar
+    # reference (containing the twoda) as parameters
+
     my $self       = shift;
     my $scalar_ref = shift;
     return unless ref $scalar_ref eq 'SCALAR';
@@ -787,11 +797,11 @@ sub read2da_scalar {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
         $self->{columns} = @columns;
 
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
 
@@ -799,7 +809,7 @@ sub read2da_scalar {
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;    #we now have the row headers
+            push @rows, $_;    # we now have the row headers
         }
         $self->{rows_array} = @rows;
 
@@ -807,7 +817,7 @@ sub read2da_scalar {
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         for my $r (@rows) {
             for my $c (@columns) {
@@ -817,7 +827,7 @@ sub read2da_scalar {
                 seek $fh, $data_start_pos + $p, 0;
                 $_ = <$fh>;
                 chop;
-                $table{$r}{$c} = $_;    #we now have the data for each cell
+                $table{$r}{$c} = $_;    # we now have the data for each cell
                 seek $fh, $pointer_cursor, 0;
             }
         }
@@ -832,7 +842,9 @@ sub read2da_scalar {
 
 sub read2da_asarray_scalar {
 
-#this sub receives the twoda_obj and a scalar reference (containing the twoda) as parameters
+    # this sub receives the twoda_obj and a scalar
+    # reference (containing the twoda) as parameters
+
     my $self       = shift;
     my $scalar_ref = shift;
     return unless ref $scalar_ref eq 'SCALAR';
@@ -845,11 +857,11 @@ sub read2da_asarray_scalar {
         local $/ = "\000";
         my $columnchunk = <$fh>;
         chop $columnchunk;
-        my @columns = split /\t/, $columnchunk;    #we now have column names
+        my @columns = split /\t/, $columnchunk;    # we now have column names
         $self->{columns} = @columns;
 
         read $fh, my ($rowcnt), 4;
-        $rowcnt = unpack( 'V', $rowcnt );    #we now know the number of rows
+        $rowcnt = unpack( 'V', $rowcnt );    # we now know the number of rows
         $/      = "\t";
         my @rows;
 
@@ -857,7 +869,7 @@ sub read2da_asarray_scalar {
         for ( 1 .. $rowcnt ) {
             $_ = <$fh>;
             chop;
-            push @rows, $_;    #we now have the row headers
+            push @rows, $_;    # we now have the row headers
         }
         $self->{rows_array} = @rows;
 
@@ -865,7 +877,7 @@ sub read2da_asarray_scalar {
         my $data_start_pos =
           tell($fh) + ( 2 * $rowcnt * ( scalar @columns ) ) + 2;
 
-        #print "$data_start_pos\n";
+        # print "$data_start_pos\n";
         $/ = "\000";
         for my $r (@rows) {
             my %row;
@@ -912,19 +924,24 @@ sub write_2da_from_spreadsheet {
 
 sub write2da {
 
-    #this sub receives the twoda_obj and the filename to read as parameters
+    # this sub receives the twoda_obj and the filename to read as parameters
+
     my $self         = shift;
     my $file_to_read = shift;
 
-#    if (ref $file_to_read eq 'SCALAR') { return read2da_scalar($self,$file_to_read) }
-#    if (ref $file_to_read eq 'GLOB')   { return read2da_fh($self,$file_to_read) }
+    # if (ref $file_to_read eq 'SCALAR') {
+    #     return read2da_scalar($self,$file_to_read)
+    # }
+    # if (ref $file_to_read eq 'GLOB')   {
+    #     return read2da_fh($self,$file_to_read)
+    # }
 
     our %save_hash  = ();
     our @save_array = ();
 
     open FH, ">", $file_to_read or return;
 
-    #    open F, ">", "write_data.txt";
+    # open F, ">", "write_data.txt";
 
     binmode FH;
     syswrite FH, "2DA V2.b" . v10;
@@ -941,7 +958,7 @@ sub write2da {
     my $tell = sysseek( FH, 0, 1 );
     my $show = ( 2 * $self->{rows} * ( scalar @{ $self->{columns} } ) ) + 2;
 
-    #    print F "Data_Start_pos is: $data_start_pos, $tell and $show\n\n";
+    # print F "Data_Start_pos is: $data_start_pos, $tell and $show\n\n";
 
     my $data_pos = 0;
     my ( $r, $c ) = ( undef, undef );
@@ -954,12 +971,12 @@ sub write2da {
                 syswrite FH,
                   pack( 'v', $save_hash{ $self->{table}->{$r}{$c} } );
 
-#                print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
+# print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
             }
             else {
                 $save_hash{ $self->{table}->{$r}{$c} } = $data_pos;
 
-#                print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
+# print F "Data for row $r, column $c: Packed pos is $data_pos, total pos is $data_start_pos\n";
 
                 $data_pos += length( $self->{table}->{$r}{$c} ) + 1;
                 push( @save_array, $self->{table}->{$r}{$c} );
@@ -968,9 +985,9 @@ sub write2da {
                   pack( 'v', $save_hash{ $self->{table}->{$r}{$c} } );
             }
 
-            #            $data_pos = length($self->{table}->{$r}{$c});
-            #            syswrite FH, pack('v', $data_start_pos);
-            #            $data_start_pos += length($self->{table}->{$r}{$c});
+            # $data_pos = length($self->{table}->{$r}{$c});
+            # syswrite FH, pack('v', $data_start_pos);
+            # $data_start_pos += length($self->{table}->{$r}{$c});
         }
     }
     syswrite FH, pack( 'xx', "" );
@@ -980,10 +997,10 @@ sub write2da {
         syswrite FH, pack( 'x', "" );
     }
 
-    #    close F;
+    # close F;
     close FH;
 }
 
 1;
 
-#&new &read_keys &fetch_resource &insert_resource &export_resource &import_resource
+# &new &read_keys &fetch_resource &insert_resource &export_resource &import_resource
