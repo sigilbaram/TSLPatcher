@@ -1,10 +1,8 @@
-#line 1 "Bioware/SSF.pm"
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-package Bioware::SSF;    #~~~~~~~~~~~~~~~
+package Bioware::SSF;
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+use strict;
+use warnings;
 
-#use strict;
 use File::Temp qw( tempfile );
 require Exporter;
 use vars qw ($VERSION @ISA @EXPORT);
@@ -60,9 +58,6 @@ my @strings = (
 );
 
 sub new {
-
-    #this is a generic constructor method
-
     my $invocant = shift;
     my $class    = ref($invocant) || $invocant;
     my $self     = {@_};
